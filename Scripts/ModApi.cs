@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using NtakliveBackupMod.Scripts.DI;
 using NtakliveBackupMod.Scripts.Extensions;
 using NtakliveBackupMod.Scripts.Services.Abstractions;
@@ -20,7 +21,7 @@ public class ModApi : IModApi
         ModEvents.GameStartDone.RegisterHandler(() => StartWatchdogForCurrentWorld(provider));
     }
 
-    private static void StartWatchdogForCurrentWorld(IServiceProvider provider)
+    private static async void StartWatchdogForCurrentWorld(IServiceProvider provider)
     {
         var worldProvider = provider.GetRequiredService<IWorldService>();
         var configuration = provider.GetRequiredService<Configuration>();
@@ -38,7 +39,13 @@ public class ModApi : IModApi
         }
 
         var backupWatchdog = provider.GetRequiredService<IBackupWatchdog>();
-        _ = backupWatchdog.Start(currentWorld, currentSaveInfo, delay, BackupMode.SaveAllAndBackup);
+        
+        using Task watchdogTask = backupWatchdog.Start(currentWorld, currentSaveInfo, delay, BackupMode.SaveAllAndBackup);
+        await watchdogTask;
+        if (watchdogTask.Exception != null)
+        {   
+            logger.Exception(watchdogTask.Exception);
+        }
     }
 
     private static SaveInfo GetCurrentSaveInfo(IServiceProvider provider)
