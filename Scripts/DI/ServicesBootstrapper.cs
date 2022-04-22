@@ -15,7 +15,7 @@ public static class ServicesBootstrapper
         string configPath = Path.Combine(Path.GetDirectoryName(fullPath)!, "settings.json");
 
         services.AddSingleton<IConfigurationProvider>(_ => new ConfigurationProvider(configPath));
-        services.AddSingleton<Configuration>(resolver => resolver.GetRequiredService<IConfigurationProvider>().GetConfiguration());
+        services.AddTransient<Configuration>(resolver => resolver.GetRequiredService<IConfigurationProvider>().GetConfiguration());
 
         services.AddSingleton<IArchiveService>(_ => new ArchiveService());
         services.AddSingleton<IFileService>(_ => new FileService());

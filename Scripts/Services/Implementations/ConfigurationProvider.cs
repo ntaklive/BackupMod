@@ -16,5 +16,9 @@ public class ConfigurationProvider : IConfigurationProvider
             .AddJsonFile(filePath).Build();
     }
 
-    public Configuration GetConfiguration() => _configurationRoot.Get<Configuration>();
+    public Configuration GetConfiguration()
+    {
+        _configurationRoot.Reload();
+        return _configurationRoot.Get<Configuration>();
+    }
 }

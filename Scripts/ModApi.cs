@@ -18,10 +18,10 @@ public class ModApi : IModApi
     {
         IServiceProvider provider = Bootstrapper.Initialize();
 
-        ModEvents.GameStartDone.RegisterHandler(() => StartWatchdogForCurrentWorld(provider));
+        ModEvents.GameStartDone.RegisterHandler(() => _ = StartWatchdogForCurrentWorld(provider));
     }
 
-    private static async void StartWatchdogForCurrentWorld(IServiceProvider provider)
+    private static async Task StartWatchdogForCurrentWorld(IServiceProvider provider)
     {
         var worldProvider = provider.GetRequiredService<IWorldService>();
         var configuration = provider.GetRequiredService<Configuration>();
