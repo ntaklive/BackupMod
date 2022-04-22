@@ -35,12 +35,16 @@ public class BackupWatchdog : IBackupWatchdog
 
     public async Task Start(World world, SaveInfo saveInfo, TimeSpan delay, BackupMode backupMode)
     {
-        if (delay.Seconds < 10)
+        if (delay.TotalSeconds < 10)
         {
             throw new InvalidOperationException("The auto backup delay must be greater than 10 seconds or equals.");
         }
 
         _logger.Warning("Watchdog have started.");
+        
+        string firstBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
+        _logger.Debug($"The first backup will be at {firstBackupTime}");
+        _chatService?.SendMessage($"The first backup will be at {firstBackupTime}");
 
         var cts = new CancellationTokenSource();
         _ = Task.Run(async () =>
