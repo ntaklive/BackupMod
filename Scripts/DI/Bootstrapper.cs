@@ -1,20 +1,17 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Implementations;
 
 namespace NtakliveBackupMod.Scripts.DI;
 
 public static class Bootstrapper
 {
-    public static IServiceProvider Initialize()
+    public static void Initialize()
     {
         var services = new ServiceCollection();
-
-        services.AddTransient(typeof(ILogger<>),typeof(LogWrapper<>));
-
+        
+        LoggerBootstrapper.RegisterLogger(services);
         ServicesBootstrapper.RegisterServices(services);
+        ConfigurationBootstrapper.RegisterConfiguration(services);
 
-        return services.BuildServiceProvider();
+        ServiceLocator.CreateFrom(services.BuildServiceProvider());
     }
 }

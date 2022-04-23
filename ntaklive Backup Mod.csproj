@@ -34,7 +34,11 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Include="Scripts\Commands\ConsoleCmdBackup.cs" />
         <Compile Include="Scripts\DI\Bootstrapper.cs" />
+        <Compile Include="Scripts\DI\ConfigurationBootstrapper.cs" />
+        <Compile Include="Scripts\DI\LoggerBootstrapper.cs" />
+        <Compile Include="Scripts\DI\ServiceLocator.cs" />
         <Compile Include="Scripts\DI\ServicesBootstrapper.cs" />
         <Compile Include="Scripts\Extensions\ServicesProviderExtensions.cs" />
         <Compile Include="Scripts\ModApi.cs" />

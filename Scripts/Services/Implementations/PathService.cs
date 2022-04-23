@@ -5,6 +5,11 @@ namespace NtakliveBackupMod.Scripts.Services.Implementations;
 
 public class PathService : IPathService
 {
+    public string GetDirectoryName(string path)
+    {
+        return Path.GetDirectoryName(path);
+    }
+
     public string GetFileNameWithoutExtension(string path)
     {
         return Path.GetFileNameWithoutExtension(path);

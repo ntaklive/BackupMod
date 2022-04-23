@@ -19,17 +19,12 @@ public class BackupWatchdog : IBackupWatchdog
     private readonly ILogger<BackupWatchdog> _logger;
 
     public BackupWatchdog(
-        Configuration configuration,
         IWorldBackupService backupService,
         IChatService chatService,
         ILogger<BackupWatchdog> logger)
     {
-        if (configuration.EnableChatMessages)
-        {
-            _chatService = chatService;
-        }
-
         _backupService = backupService;
+        _chatService = chatService;
         _logger = logger;
     }
 

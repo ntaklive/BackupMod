@@ -1,3 +1,5 @@
+using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+
 namespace NtakliveBackupMod.Scripts.Services.Abstractions;
 
 public interface IWorldService
@@ -9,4 +11,6 @@ public interface IWorldService
     public string GetCurrentPlayerDataLocalDirectory();
 
     public string GetCurrentGetPlayerDataDirectory();
+
+    public SaveInfo GetCurrentWorldSaveInfo();
 }
