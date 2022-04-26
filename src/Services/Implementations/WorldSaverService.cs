@@ -1,8 +1,8 @@
 #pragma warning disable S107
 
-using NtakliveBackupMod.Scripts.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
 public class WorldSaverService : IWorldSaverService
 {

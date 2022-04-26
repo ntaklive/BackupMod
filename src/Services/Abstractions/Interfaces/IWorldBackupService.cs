@@ -1,7 +1,7 @@
-using NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.Services.Abstractions.Enum;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Services.Abstractions;
+namespace NtakliveBackupMod.Services.Abstractions;
 
 public interface IWorldBackupService
 {

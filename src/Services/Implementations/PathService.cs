@@ -1,7 +1,7 @@
 using System.IO;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
 public class PathService : IPathService
 {

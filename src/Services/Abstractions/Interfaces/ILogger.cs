@@ -1,6 +1,6 @@
 using System;
 
-namespace NtakliveBackupMod.Scripts.Services.Abstractions;
+namespace NtakliveBackupMod.Services.Abstractions;
 
 public interface ILogger<T>
 {

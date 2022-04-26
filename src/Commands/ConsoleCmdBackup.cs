@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using NtakliveBackupMod.Scripts.DI;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.DI;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Enum;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Commands;
+namespace NtakliveBackupMod.Commands;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class ConsoleCmdBackup : ConsoleCmdAbstract

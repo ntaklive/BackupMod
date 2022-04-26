@@ -1,6 +1,6 @@
 using System;
 
-namespace NtakliveBackupMod.Scripts.Extensions;
+namespace NtakliveBackupMod.Extensions;
 
 public static class ServicesProviderExtensions
 {

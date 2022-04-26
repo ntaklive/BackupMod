@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Enum;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
 public class WorldBackupService : IWorldBackupService
 {

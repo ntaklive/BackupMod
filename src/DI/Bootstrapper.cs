@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NtakliveBackupMod.Scripts.DI;
+namespace NtakliveBackupMod.DI;
 
 public static class Bootstrapper
 {

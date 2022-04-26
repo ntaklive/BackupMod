@@ -1,4 +1,4 @@
-namespace NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+namespace NtakliveBackupMod.Services.Abstractions.Models;
 
 public class SaveInfo
 {

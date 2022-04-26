@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using NtakliveBackupMod.Scripts.DI;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.DI;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Enum;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts;
+namespace NtakliveBackupMod;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class ModApi : IModApi

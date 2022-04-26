@@ -1,7 +1,7 @@
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
 public class WorldService : IWorldService
 {

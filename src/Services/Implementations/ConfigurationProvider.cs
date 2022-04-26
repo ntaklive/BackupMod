@@ -1,10 +1,9 @@
 using Microsoft.Extensions.Configuration;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
-using IConfigurationProvider = NtakliveBackupMod.Scripts.Services.Abstractions.IConfigurationProvider;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
-public class ConfigurationProvider : IConfigurationProvider
+public class ConfigurationProvider : Abstractions.IConfigurationProvider
 {
     private readonly IConfigurationRoot _configurationRoot;
 

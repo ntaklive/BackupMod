@@ -5,11 +5,11 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Enum;
+using NtakliveBackupMod.Services.Abstractions.Models;
 
-namespace NtakliveBackupMod.Scripts.Services.Implementations;
+namespace NtakliveBackupMod.Services.Implementations;
 
 [SuppressMessage("ReSharper", "MethodSupportsCancellation")]
 public class BackupWatchdog : IBackupWatchdog

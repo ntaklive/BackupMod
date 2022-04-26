@@ -1,4 +1,4 @@
-namespace NtakliveBackupMod.Scripts.Services.Abstractions.Enum;
+namespace NtakliveBackupMod.Services.Abstractions.Enum;
 
 public enum BackupMode
 {

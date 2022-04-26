@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
-using NtakliveBackupMod.Scripts.Services.Abstractions;
-using NtakliveBackupMod.Scripts.Services.Abstractions.Models;
-using NtakliveBackupMod.Scripts.Services.Implementations;
+using NtakliveBackupMod.Services.Abstractions;
+using NtakliveBackupMod.Services.Abstractions.Models;
+using NtakliveBackupMod.Services.Implementations;
 
-namespace NtakliveBackupMod.Scripts.DI;
+namespace NtakliveBackupMod.DI;
 
 public static class ServicesBootstrapper
 {
