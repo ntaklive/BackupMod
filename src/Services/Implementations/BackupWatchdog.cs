@@ -74,7 +74,6 @@ public class BackupWatchdog : IBackupWatchdog
 
                 for (var i = 5; i > 0; i--)
                 {
-                    _logger.Debug($"Backup in {i}...");
                     _chatService?.SendMessage($"Backup in {i}...");
 
                     await Task.Delay(TimeSpan.FromSeconds(1));
@@ -100,9 +99,7 @@ public class BackupWatchdog : IBackupWatchdog
             {
                 _logger.Error("Something went wrong... Look at the exception message.");
                 _logger.Exception(exception);
-
-                _chatService?.SendMessage("Something went wrong... Look at the exception message in console (press F1).");
-
+                
                 break;
             }
 
