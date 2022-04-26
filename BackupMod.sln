@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntaklive Backup Mod", "ntaklive Backup Mod.csproj", "{4166C0E5-89BD-4F24-99B6-06B8FD5D008A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupMod", "BackupMod.csproj", "{4166C0E5-89BD-4F24-99B6-06B8FD5D008A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
