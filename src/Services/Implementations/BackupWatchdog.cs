@@ -107,14 +107,14 @@ public class BackupWatchdog : IBackupWatchdog
 
             string nextBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
 
-            _logger.Debug("The World backup has completed successfully!");
+            _logger.Debug("The world backup has completed successfully!");
             _logger.Debug($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
-            _logger.Debug($"The Backup file location: \"{backupFilePath}\".");
+            _logger.Debug($"The backup file location: \"{backupFilePath}\".");
             _logger.Debug($"The next backup will be at {nextBackupTime}");
 
             _chatService?.SendMessage("The world backup has completed successfully!");
             _chatService?.SendMessage($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
-            _chatService?.SendMessage($"The Backup file location: \"{backupFilePath}\".");
+            _chatService?.SendMessage($"The backup file location: \"{backupFilePath}\".");
             _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
         }
 
