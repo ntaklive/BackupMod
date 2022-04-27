@@ -24,7 +24,9 @@ public class LogWrapper<T> : ILogger<T>
 
     public void Exception(Exception exception)
     {
+        Log.Exception(exception);
+        
+        Log.Error("Full error message:");
         Log.Error(exception.ToString());
-        Log.Exception(null);
     }
 }
