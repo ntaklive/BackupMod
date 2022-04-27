@@ -12,11 +12,24 @@ namespace BackupMod;
 public class ModApi : IModApi
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "AsyncVoidLambda")]
     public void InitMod(Mod _modInstance)
     {
         Bootstrapper.Initialize();
 
-        ModEvents.GameStartDone.RegisterHandler(() => _ = StartWatchdogForCurrentWorld());
+        ModEvents.GameStartDone.RegisterHandler(async () =>
+        {
+            try
+            {
+                await StartWatchdogForCurrentWorld();
+            }
+            catch (Exception exception)
+            {
+                var logger = ServiceLocator.GetRequiredService<ILogger<ModApi>>();
+
+                logger.Exception(exception);
+            }
+        });
     }
 
     private static async Task StartWatchdogForCurrentWorld()
