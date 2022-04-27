@@ -5,7 +5,9 @@ using BackupMod.Services.Abstractions;
 namespace BackupMod.Services;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+[SuppressMessage("ReSharper", "UnusedVariable")]
+[SuppressMessage("ReSharper", "RedundantCast")]
+[SuppressMessage("ReSharper", "RedundantTypeArgumentsOfMethod")]
 public class ChatService : IChatService
 {
     public void SendMessage(string text)
