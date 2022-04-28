@@ -60,7 +60,11 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
     private void BackupInfoInternal()
     {
         Configuration configuration = _configurationProvider.GetConfiguration();
+
+        var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
         
+        _logger.Debug($"BackupMod v{assemblyVersion.Substring(0, assemblyVersion.Length - 2)} by ntaklive");
+        _logger.Debug("Current settings:");
         _logger.Debug($"AutoBackupDelay: {configuration.AutoBackupDelay.ToString()}");
         _logger.Debug($"BackupsLimit: {configuration.BackupsLimit.ToString()}");
         _logger.Debug($"EnableChatMessages: {configuration.EnableChatMessages.ToString()}");
