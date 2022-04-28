@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using BackupMod.Services.Abstractions;
@@ -10,12 +11,24 @@ namespace BackupMod.Services;
 [SuppressMessage("ReSharper", "RedundantTypeArgumentsOfMethod")]
 public class ChatService : IChatService
 {
+    private readonly ILogger<ChatService> _logger;
+    private readonly ConnectionManager _connectionManager;
+    
+    public ChatService(
+        IConnectionManagerProvider connectionManagerProvider,
+        ILogger<ChatService> logger)
+    {
+        _logger = logger;
+        _connectionManager = connectionManagerProvider.GetConnectionManager();
+    }
+    
     public void SendMessage(string text)
     {
         ChatMessageServerWithoutLog(null, EChatType.Global, -1, text, "BackupMod", false, null);
     }
 
-    private static void ChatMessageServerWithoutLog(
+    // The official Alpha 20's implementation but just without logging
+    private void ChatMessageServerWithoutLog(
         ClientInfo _cInfo,
         EChatType _chatType,
         int _senderEntityId,
@@ -24,30 +37,37 @@ public class ChatService : IChatService
         bool _localizeMain,
         List<int> _recipientEntityIds)
     {
-        if (SingletonMonoBehaviour<ConnectionManager>.Instance.IsServer)
+        try
         {
-            ModEvents.ChatMessage.Invoke(_cInfo, _chatType, _senderEntityId, _msg, _mainName, _localizeMain, _recipientEntityIds);
-            GameManager.Instance.ChatMessageClient(_chatType, _senderEntityId, _msg, _mainName, _localizeMain, _recipientEntityIds);
-            string _txt = string.Format("Chat (from '{0}', entity id '{1}', to '{2}'): '{3}': {4}",
-                (object) (_cInfo?.PlatformId != null ? _cInfo.PlatformId.CombinedString : "-non-player-"),
-                (object) _senderEntityId, (object) _chatType.ToStringCached<EChatType>(),
-                _localizeMain ? (object) Localization.Get(_mainName) : (object) _mainName,
-                (object) Utils.FilterBbCode(_msg));
-            if (_recipientEntityIds != null)
+            if (_connectionManager.IsServer)
             {
-                foreach (int recipientEntityId in _recipientEntityIds)
-                    SingletonMonoBehaviour<ConnectionManager>.Instance.Clients.ForEntityId(recipientEntityId)
-                        ?.SendPackage((NetPackage) NetPackageManager.GetPackage<NetPackageChat>().Setup(_chatType,
-                            _senderEntityId, _msg, _mainName, _localizeMain, (List<int>) null));
+                ModEvents.ChatMessage.Invoke(_cInfo, _chatType, _senderEntityId, _msg, _mainName, _localizeMain, _recipientEntityIds);
+                GameManager.Instance.ChatMessageClient(_chatType, _senderEntityId, _msg, _mainName, _localizeMain, _recipientEntityIds);
+                string _txt = string.Format("Chat (from '{0}', entity id '{1}', to '{2}'): '{3}': {4}",
+                    (object) (_cInfo?.PlatformId != null ? _cInfo.PlatformId.CombinedString : "-non-player-"),
+                    (object) _senderEntityId, (object) _chatType.ToStringCached<EChatType>(),
+                    _localizeMain ? (object) Localization.Get(_mainName) : (object) _mainName,
+                    (object) Utils.FilterBbCode(_msg));
+                if (_recipientEntityIds != null)
+                {
+                    foreach (int recipientEntityId in _recipientEntityIds)
+                        _connectionManager.Clients.ForEntityId(recipientEntityId)
+                            ?.SendPackage((NetPackage) NetPackageManager.GetPackage<NetPackageChat>().Setup(_chatType,
+                                _senderEntityId, _msg, _mainName, _localizeMain, (List<int>) null));
+                }
+                else
+                    _connectionManager.SendPackage(
+                        (NetPackage) NetPackageManager.GetPackage<NetPackageChat>().Setup(_chatType, _senderEntityId, _msg,
+                            _mainName, _localizeMain, (List<int>) null), true);
             }
             else
-                SingletonMonoBehaviour<ConnectionManager>.Instance.SendPackage(
-                    (NetPackage) NetPackageManager.GetPackage<NetPackageChat>().Setup(_chatType, _senderEntityId, _msg,
-                        _mainName, _localizeMain, (List<int>) null), true);
+                _connectionManager.SendToServer((NetPackage) NetPackageManager
+                    .GetPackage<NetPackageChat>().Setup(_chatType, _senderEntityId, _msg, _mainName, _localizeMain,
+                        _recipientEntityIds));
         }
-        else
-            SingletonMonoBehaviour<ConnectionManager>.Instance.SendToServer((NetPackage) NetPackageManager
-                .GetPackage<NetPackageChat>().Setup(_chatType, _senderEntityId, _msg, _mainName, _localizeMain,
-                    _recipientEntityIds));
+        catch
+        {
+            _logger.Warning("Some message cannot be sent. But if you are leaving the world, it doesn't matter.");
+        }
     }
 }

@@ -12,7 +12,12 @@ public static class ServicesBootstrapper
         services.AddSingleton<IChatService>(resolver =>
         {
             var configuration = resolver.GetRequiredService<Configuration>();
-            return configuration.EnableChatMessages ? new ChatService() : null;
+            return configuration.EnableChatMessages
+                ? new ChatService(
+                    resolver.GetRequiredService<IConnectionManagerProvider>(),
+                    resolver.GetRequiredService<ILogger<ChatService>>()
+                )
+                : null;
         });
         services.AddSingleton<IArchiveService>(_ => new ArchiveService());
         services.AddSingleton<IFileService>(_ => new FileService());
