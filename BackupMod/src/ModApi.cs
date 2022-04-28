@@ -45,7 +45,7 @@ public class ModApi : IModApi
 
         if (configuration.BackupOnWorldLoaded)
         {
-            backupService.Backup(currentSaveInfo, BackupMode.BackupOnly);
+            await backupService.BackupAsync(currentSaveInfo, BackupMode.BackupOnly);
             logger.Debug("Initial backup has completed successfully.");
         }
 
