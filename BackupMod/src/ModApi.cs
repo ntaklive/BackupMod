@@ -51,7 +51,7 @@ public class ModApi : IModApi
 
         var backupWatchdog = ServiceLocator.GetRequiredService<IBackupWatchdog>();
         
-        using Task watchdogTask = backupWatchdog.Start(currentWorld, currentSaveInfo, delay, BackupMode.SaveAllAndBackup);
+        using Task watchdogTask = backupWatchdog.StartAsync(currentWorld, currentSaveInfo, delay, BackupMode.SaveAllAndBackup);
         await watchdogTask;
         if (watchdogTask.Exception != null)
         {   

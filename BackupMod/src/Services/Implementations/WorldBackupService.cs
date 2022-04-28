@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
 using BackupMod.Services.Abstractions.Models;
@@ -99,5 +100,10 @@ public class WorldBackupService : IWorldBackupService
         _directoryService.Delete(tempFolderPath, true);
 
         return zipFilepath;
+    }
+
+    public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
+    {
+        return Task.Run(() => Backup(saveInfo, mode));
     }
 }

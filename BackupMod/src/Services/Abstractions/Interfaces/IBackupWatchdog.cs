@@ -7,5 +7,5 @@ namespace BackupMod.Services.Abstractions;
 
 public interface IBackupWatchdog
 {
-    public Task Start(World world, SaveInfo saveInfo, TimeSpan delay, BackupMode backupMode);
+    public Task StartAsync(World world, SaveInfo saveInfo, TimeSpan delay, BackupMode backupMode);
 }
