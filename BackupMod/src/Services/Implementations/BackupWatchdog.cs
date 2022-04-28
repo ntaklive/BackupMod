@@ -109,7 +109,6 @@ public class BackupWatchdog : IBackupWatchdog
             }
             catch (Exception exception)
             {
-                _logger.Error("Something went wrong... Look at the exception message.");
                 _logger.Exception(exception);
 
                 break;
