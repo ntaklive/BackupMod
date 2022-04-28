@@ -13,7 +13,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
     private readonly IWorldBackupService _backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
     private readonly IWorldService _worldService = ServiceLocator.GetRequiredService<IWorldService>();
     private readonly IChatService _chatService = ServiceLocator.GetRequiredService<IChatService>();
-    private readonly Configuration _configuration = ServiceLocator.GetRequiredService<Configuration>();
+    private readonly IConfigurationProvider _configurationProvider = ServiceLocator.GetRequiredService<IConfigurationProvider>();
     private readonly ILogger<ConsoleCmdBackup> _logger = ServiceLocator.GetRequiredService<ILogger<ConsoleCmdBackup>>();
 
     public override bool IsExecuteOnClient => false;
@@ -62,11 +62,13 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
     private void BackupInfoInternal()
     {
-        _logger.Debug($"AutoBackupDelay: {_configuration.AutoBackupDelay.ToString()}");
-        _logger.Debug($"BackupsLimit: {_configuration.BackupsLimit.ToString()}");
-        _logger.Debug($"EnableChatMessages: {_configuration.EnableChatMessages.ToString()}");
-        _logger.Debug($"BackupOnWorldLoaded: {_configuration.BackupOnWorldLoaded.ToString()}");
-        _logger.Debug($"CustomBackupsFolder: {_configuration.CustomBackupsFolder}");
+        Configuration configuration = _configurationProvider.GetConfiguration();
+        
+        _logger.Debug($"AutoBackupDelay: {configuration.AutoBackupDelay.ToString()}");
+        _logger.Debug($"BackupsLimit: {configuration.BackupsLimit.ToString()}");
+        _logger.Debug($"EnableChatMessages: {configuration.EnableChatMessages.ToString()}");
+        _logger.Debug($"BackupOnWorldLoaded: {configuration.BackupOnWorldLoaded.ToString()}");
+        _logger.Debug($"CustomBackupsFolder: {configuration.CustomBackupsFolder}");
     }
     
     private void BackupInternal()
