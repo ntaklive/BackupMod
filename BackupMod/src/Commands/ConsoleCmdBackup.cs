@@ -74,10 +74,11 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
     private async Task BackupInternal()
     {
-        var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
-        
+       
         if (_worldService.GetCurrentWorld() != null)
         {
+            var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
+            
             SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
 
             string backupFilePath = await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
