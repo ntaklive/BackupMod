@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Threading.Tasks;
 using BackupMod.DI;
 using BackupMod.Services.Abstractions;
@@ -59,7 +60,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
     private void BackupInfoInternal()
     {
         Configuration configuration = _configurationProvider.GetConfiguration();
-
+        
         _logger.Debug($"AutoBackupDelay: {configuration.AutoBackupDelay.ToString()}");
         _logger.Debug($"BackupsLimit: {configuration.BackupsLimit.ToString()}");
         _logger.Debug($"EnableChatMessages: {configuration.EnableChatMessages.ToString()}");
@@ -75,9 +76,11 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         {
             SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
 
-            await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
+            string backupFilePath = await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
 
             _logger.Debug("The manual backup was successfully completed.");
+            _logger.Debug($"The backup file location: \"{backupFilePath}\".");
+            
             _chatService?.SendMessage("The manual backup was successfully completed.");
         }
         else

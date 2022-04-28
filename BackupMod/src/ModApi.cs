@@ -45,8 +45,9 @@ public class ModApi : IModApi
 
         if (configuration.BackupOnWorldLoaded)
         {
-            await backupService.BackupAsync(currentSaveInfo, BackupMode.BackupOnly);
+            string backupFilePath = await backupService.BackupAsync(currentSaveInfo, BackupMode.BackupOnly);
             logger.Debug("Initial backup has completed successfully.");
+            logger.Debug($"The backup file location: \"{backupFilePath}\".");
         }
 
         var backupWatchdog = ServiceLocator.GetRequiredService<IBackupWatchdog>();
