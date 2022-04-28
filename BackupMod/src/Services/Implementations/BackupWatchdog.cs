@@ -105,7 +105,6 @@ public class BackupWatchdog : IBackupWatchdog
 
                 _chatService?.SendMessage("The world backup has completed successfully!");
                 _chatService?.SendMessage($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
-                _chatService?.SendMessage($"The backup file location: \"{backupFilePath}\".");
                 _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
             }
             catch (Exception exception)
