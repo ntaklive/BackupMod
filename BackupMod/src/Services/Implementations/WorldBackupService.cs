@@ -104,6 +104,6 @@ public class WorldBackupService : IWorldBackupService
 
     public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
     {
-        return Task.Run(() => Backup(saveInfo, mode));
+        return Task.Factory.StartNew(() => Backup(saveInfo, mode));
     }
 }
