@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using BackupMod.DI;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
@@ -10,7 +11,6 @@ namespace BackupMod.Commands;
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class ConsoleCmdBackup : ConsoleCmdAbstract
 {
-    private readonly IWorldBackupService _backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
     private readonly IWorldService _worldService = ServiceLocator.GetRequiredService<IWorldService>();
     private readonly IChatService _chatService = ServiceLocator.GetService<IChatService>();
     private readonly IConfigurationProvider _configurationProvider = ServiceLocator.GetRequiredService<IConfigurationProvider>();
@@ -20,19 +20,19 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
     public override bool AllowedInMainMenu => true;
 
-    public override string[] GetCommands() => new string[2]
+    public override string[] GetCommands() => new[]
     {
         "backup",
         "bp"
     };
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public override void Execute(List<string> _params, CommandSenderInfo _senderInfo)
+    public override async void Execute(List<string> _params, CommandSenderInfo _senderInfo)
     {
         switch (_params.Count)
         {
             case 0:
-                BackupInternal();
+                await BackupInternal();
 
                 return;
             case 1:
@@ -67,13 +67,15 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         _logger.Debug($"CustomBackupsFolder: {configuration.CustomBackupsFolder}");
     }
 
-    private void BackupInternal()
+    private async Task BackupInternal()
     {
+        var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
+        
         if (_worldService.GetCurrentWorld() != null)
         {
             SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
 
-            _backupService.Backup(saveInfo, BackupMode.SaveAllAndBackup);
+            await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
 
             _logger.Debug("The manual backup was successfully completed.");
             _chatService?.SendMessage("The manual backup was successfully completed.");
