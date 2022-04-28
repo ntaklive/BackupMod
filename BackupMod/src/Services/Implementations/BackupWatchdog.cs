@@ -84,6 +84,7 @@ public class BackupWatchdog : IBackupWatchdog
             }
 
             _logger.Debug("The world backup is starting...");
+            _chatService?.SendMessage("The world backup is starting...");
 
             try
             {
