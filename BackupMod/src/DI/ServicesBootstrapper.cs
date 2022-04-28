@@ -9,7 +9,7 @@ public static class ServicesBootstrapper
 {
     public static void RegisterServices(IServiceCollection services)
     {
-        services.AddSingleton<IChatService>(resolver =>
+        services.AddTransient<IChatService>(resolver =>
         {
             var configuration = resolver.GetRequiredService<Configuration>();
             return configuration.EnableChatMessages
@@ -45,7 +45,7 @@ public static class ServicesBootstrapper
             resolver.GetRequiredService<IBlock>(),
             resolver.GetRequiredService<IItem>()
         ));
-        services.AddSingleton<IWorldBackupService>(resolver => new WorldBackupService(
+        services.AddTransient<IWorldBackupService>(resolver => new WorldBackupService(
             resolver.GetRequiredService<Configuration>(),
             resolver.GetRequiredService<IWorldSaverService>(),
             resolver.GetRequiredService<IDirectoryService>(),
@@ -53,7 +53,7 @@ public static class ServicesBootstrapper
             resolver.GetRequiredService<IArchiveService>(),
             resolver.GetRequiredService<IFileService>()
         ));
-        services.AddSingleton<IBackupWatchdog>(resolver => new BackupWatchdog(
+        services.AddTransient<IBackupWatchdog>(resolver => new BackupWatchdog(
             resolver.GetRequiredService<IWorldBackupService>(),
             resolver.GetService<IChatService>(),
             resolver.GetRequiredService<ILogger<BackupWatchdog>>()
