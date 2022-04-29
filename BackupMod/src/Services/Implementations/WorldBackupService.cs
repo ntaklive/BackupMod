@@ -17,6 +17,8 @@ public class WorldBackupService : IWorldBackupService
     private readonly IPathService _pathService;
     private readonly IArchiveService _archiveService;
     private readonly IFileService _fileService;
+    
+    private readonly string _archiveExtension;
 
     public WorldBackupService(
         Configuration configuration,
@@ -32,6 +34,8 @@ public class WorldBackupService : IWorldBackupService
         _pathService = pathService;
         _archiveService = archiveService;
         _fileService = fileService;
+
+        _archiveExtension = ".zip";
     }
 
     public string Backup(SaveInfo saveInfo, BackupMode mode)
@@ -41,25 +45,57 @@ public class WorldBackupService : IWorldBackupService
             _saverService.SaveAll();
         }
 
-        string backupsFolderPath =
-            string.IsNullOrWhiteSpace(_configuration.CustomBackupsFolder)
-            ? _pathService.Combine(saveInfo.WorldFolderPath, "Backups")
-            : _pathService.Combine(_configuration.CustomBackupsFolder, saveInfo.WorldName);
-        if (!new DirectoryInfo(backupsFolderPath).Exists)
+        string currentSaveBackupsFolderPath = GetBackupsFolderPath(saveInfo);
+        if (!new DirectoryInfo(currentSaveBackupsFolderPath).Exists)
         {
-            new DirectoryInfo(backupsFolderPath).Create();
+            new DirectoryInfo(currentSaveBackupsFolderPath).Create();
         }
+        
+        DeleteRedundantBackupFiles(saveInfo);
+        DeleteAllTempFolders(saveInfo);
 
-        string currentMapBackupsFolderPath = _pathService.Combine(backupsFolderPath, saveInfo.SaveName);
-        if (!new DirectoryInfo(currentMapBackupsFolderPath).Exists)
-        {
-            new DirectoryInfo(currentMapBackupsFolderPath).Create();
-        }
+        var backupName = $"{saveInfo.SaveName}_{DateTime.Now:yyyy-dd-M--HH-mm-ss}";
 
+        string tempFolderPath = _pathService.Combine(currentSaveBackupsFolderPath, $"temp_{backupName}");
+        _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
+
+        string zipFilepath = _pathService.Combine(currentSaveBackupsFolderPath, $"{backupName}{_archiveExtension}");
+        _archiveService.CompressFolderToZip(tempFolderPath, zipFilepath, false);
+
+        _directoryService.Delete(tempFolderPath, true);
+
+        return zipFilepath;
+    }
+
+    public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
+    {
+        return Task.Factory.StartNew(() => Backup(saveInfo, mode));
+    }
+
+    public void Restore(SaveInfo saveInfo, BackupInfo backupInfo)
+    {
+        _directoryService.Delete(saveInfo.SaveFolderPath, true);
+        
+        _archiveService.DecompressZipToFolder(backupInfo.Filepath, saveInfo.SaveFolderPath);
+    }
+
+    public Task RestoreAsync(SaveInfo saveInfo, BackupInfo backupInfo)
+    {
+        return Task.Factory.StartNew(() => Restore(saveInfo, backupInfo));
+    }
+
+    public BackupInfo[] GetAllBackups(SaveInfo saveInfo)
+    {
         var backups = new List<BackupInfo>();
-        foreach (string file in _directoryService.GetFiles(currentMapBackupsFolderPath, $"{saveInfo.SaveName}_*.zip", SearchOption.TopDirectoryOnly))
+
+        string backupsFolderPath = GetAllBackupsFolderPath(saveInfo);
+        
+        string[] backupZipFilePaths = _directoryService.GetFiles(backupsFolderPath, $"{saveInfo.SaveName}_*{_archiveExtension}",
+            SearchOption.TopDirectoryOnly);
+        
+        foreach (string filepath in backupZipFilePaths)
         {
-            var fileInfo = new FileInfo(file);
+            var fileInfo = new FileInfo(filepath);
 
             DateTime timestamp = fileInfo.LastWriteTimeUtc;
 
@@ -74,36 +110,54 @@ public class WorldBackupService : IWorldBackupService
             backups.Add(backupInfo);
         }
 
-        if (backups.Count >= _configuration.BackupsLimit)
-        {
-            _fileService.Delete(backups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First().Filepath);
-        }
+        return backups.ToArray();
+    }
 
-        foreach (string directory in _directoryService.GetDirectories(currentMapBackupsFolderPath))
+    public void DeleteAllTempFolders(SaveInfo saveInfo)
+    {
+        string backupsFolderPath = GetAllBackupsFolderPath(saveInfo);
+        
+        string[] directoriesPaths = _directoryService.GetDirectories(backupsFolderPath);
+        
+        foreach (string directoryPath in directoriesPaths)
         {
-            var directoryInfo = new DirectoryInfo(directory);
+            var directoryInfo = new DirectoryInfo(directoryPath);
 
             if (directoryInfo.Name.StartsWith("temp_"))
             {
                 _directoryService.Delete(directoryInfo.FullName, true);
             }
         }
-
-        var backupName = $"{saveInfo.SaveName}_{DateTime.Now:yyyy-dd-M--HH-mm-ss}";
-
-        string tempFolderPath = _pathService.Combine(currentMapBackupsFolderPath, $"temp_{backupName}");
-        _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
-
-        string zipFilepath = _pathService.Combine(currentMapBackupsFolderPath, $"{backupName}.zip");
-        _archiveService.CompressFolderToZip(tempFolderPath, zipFilepath, false);
-
-        _directoryService.Delete(tempFolderPath, true);
-
-        return zipFilepath;
     }
 
-    public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
+    public string GetAllBackupsFolderPath(SaveInfo saveInfo)
     {
-        return Task.Factory.StartNew(() => Backup(saveInfo, mode));
+        return string.IsNullOrWhiteSpace(_configuration.CustomBackupsFolder)
+                ? _pathService.Combine(saveInfo.WorldFolderPath, "Backups")
+                : _pathService.Combine(_configuration.CustomBackupsFolder, saveInfo.WorldName);
+    }
+
+    public string GetBackupsFolderPath(SaveInfo saveInfo)
+    {
+        return _pathService.Combine(GetAllBackupsFolderPath(saveInfo), saveInfo.SaveName);
+    }
+
+    public void DeleteRedundantBackupFiles(SaveInfo saveInfo)
+    {
+        while (true)
+        {
+            BackupInfo[] backups = GetAllBackups(saveInfo);
+
+            if (backups.Length >= _configuration.BackupsLimit)
+            {
+                string oldestBackupFilePath = backups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First().Filepath;
+                
+                _fileService.Delete(oldestBackupFilePath);
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
