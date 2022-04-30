@@ -5,36 +5,19 @@ namespace BackupMod.Services;
 
 public class WorldService : IWorldService
 {
-    private readonly IDirectoryService _directoryService;
+    private readonly ISaveInfoFactory _saveInfoFactory;
 
-    public WorldService(
-        IDirectoryService directoryService)
+    public WorldService(ISaveInfoFactory saveInfoFactory)
     {
-        _directoryService = directoryService;
+        _saveInfoFactory = saveInfoFactory;
     }
     
     public World GetCurrentWorld() => GameManager.Instance.World;
-    public string GetCurrentWorldSaveDirectory() => GameIO.GetSaveGameDir();
+    public string GetCurrentWorldSaveFolderPath() => GameIO.GetSaveGameDir();
 
-    public string GetCurrentPlayerDataLocalDirectory() => GameIO.GetPlayerDataLocalDir();
+    public string GetCurrentPlayerDataLocalFolderPath() => GameIO.GetPlayerDataLocalDir();
 
-    public string GetCurrentGetPlayerDataDirectory() => GameIO.GetPlayerDataDir();
+    public string GetCurrentGetPlayerDataFolderPath() => GameIO.GetPlayerDataDir();
     
-    public SaveInfo GetCurrentWorldSaveInfo()
-    {
-        string saveFolderPath = GetCurrentWorldSaveDirectory();
-        string worldFolderPath = _directoryService.GetParentDirectoryPath(saveFolderPath);
-        string saveName = _directoryService.GetDirectoryName(saveFolderPath);
-        string worldName = _directoryService.GetDirectoryName(worldFolderPath);
-
-        var saveInfo = new SaveInfo
-        {
-            SaveFolderPath = saveFolderPath,
-            WorldFolderPath = worldFolderPath,
-            SaveName = saveName,
-            WorldName = worldName,
-        };
-
-        return saveInfo;
-    }
+    public SaveInfo GetCurrentWorldSaveInfo() => _saveInfoFactory.CreateFromSaveFolderPath(GetCurrentWorldSaveFolderPath());
 }

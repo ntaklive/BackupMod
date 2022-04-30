@@ -84,7 +84,7 @@ public class WorldSaverService : IWorldSaverService
     {
         World world = _worldService.GetCurrentWorld();
 
-        string currentPlayerDataFolderPath = _worldService.GetCurrentWorldSaveDirectory();
+        string currentPlayerDataFolderPath = _worldService.GetCurrentWorldSaveFolderPath();
 
         if (world == null)
         {
@@ -117,7 +117,7 @@ public class WorldSaverService : IWorldSaverService
     {
         PersistentPlayerList players = _playersProvider.GetCurrentPersistentPlayerList();
 
-        string currentWorldSaveFolderPath = _worldService.GetCurrentWorldSaveDirectory();
+        string currentWorldSaveFolderPath = _worldService.GetCurrentWorldSaveFolderPath();
         players.Write(currentWorldSaveFolderPath + "/players.xml");
     }
 }

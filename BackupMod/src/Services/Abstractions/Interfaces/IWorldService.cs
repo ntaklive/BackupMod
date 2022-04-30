@@ -6,11 +6,11 @@ public interface IWorldService
 {
     public World GetCurrentWorld();
 
-    public string GetCurrentWorldSaveDirectory();
+    public string GetCurrentWorldSaveFolderPath();
 
-    public string GetCurrentPlayerDataLocalDirectory();
+    public string GetCurrentPlayerDataLocalFolderPath();
 
-    public string GetCurrentGetPlayerDataDirectory();
+    public string GetCurrentGetPlayerDataFolderPath();
 
     public SaveInfo GetCurrentWorldSaveInfo();
 }

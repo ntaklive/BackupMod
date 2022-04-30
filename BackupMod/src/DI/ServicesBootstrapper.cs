@@ -32,6 +32,9 @@ public static class ServicesBootstrapper
         services.AddSingleton<IBlock>(_ => new Services.Block());
         services.AddSingleton<IItem>(_ => new Item());
         services.AddSingleton<IWorldService>(resolver => new WorldService(
+            resolver.GetRequiredService<ISaveInfoFactory>()
+        ));
+        services.AddSingleton<ISaveInfoFactory>(resolver => new SaveInfoFactory(
             resolver.GetRequiredService<IDirectoryService>()
         ));
         services.AddSingleton<IWorldSaverService>(resolver => new WorldSaverService(
