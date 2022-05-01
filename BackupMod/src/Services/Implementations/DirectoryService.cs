@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using BackupMod.Services.Abstractions;
 
 namespace BackupMod.Services;
@@ -40,12 +41,12 @@ public class DirectoryService : IDirectoryService
 
     public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
-        return Directory.GetFiles(path, searchPattern, searchOption);
+        return Directory.GetFiles(path, searchPattern, searchOption).Select(Utils.PathHelper.FixFolderPathSeparators).ToArray();
     }
 
     public string GetParentDirectoryPath(string path)
     {
-        return new DirectoryInfo(path).Parent.FullName;
+        return Utils.PathHelper.FixFolderPathSeparators(new DirectoryInfo(path).Parent!.FullName);
     }
 
     public string GetDirectoryName(string path)
@@ -60,6 +61,6 @@ public class DirectoryService : IDirectoryService
 
     public string[] GetDirectories(string path)
     {
-        return Directory.GetDirectories(path);
+        return Directory.GetDirectories(path).Select(Utils.PathHelper.FixFolderPathSeparators).ToArray();
     }
 }
