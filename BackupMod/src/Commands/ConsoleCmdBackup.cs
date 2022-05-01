@@ -15,11 +15,6 @@ namespace BackupMod.Commands;
 public class ConsoleCmdBackup : ConsoleCmdAbstract
 {
     private readonly IWorldService _worldService = ServiceLocator.GetRequiredService<IWorldService>();
-    private readonly IDirectoryService _directoryService = ServiceLocator.GetRequiredService<IDirectoryService>();
-
-    private readonly IGameDirectoriesProvider _gameDirectoriesProvider =
-        ServiceLocator.GetRequiredService<IGameDirectoriesProvider>();
-
     private readonly ISavesProvider _savesProvider = ServiceLocator.GetRequiredService<ISavesProvider>();
     private readonly IChatService _chatService = ServiceLocator.GetService<IChatService>();
     private readonly ILogger<ConsoleCmdBackup> _logger = ServiceLocator.GetRequiredService<ILogger<ConsoleCmdBackup>>();
@@ -266,11 +261,11 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         _chatService?.SendMessage("The manual backup was successfully completed.");
     }
 
-    private void LogInvalidArgument(string argumentName, string argumentValue) =>
-        _logger.Error($"{argumentValue} is an invalid {argumentName}.");
+    private void LogInvalidArgument(string argumentName, string argumentValue) => _logger.Error($"'{argumentValue}' is an invalid {argumentName}.");
 
     private void LogUnknownCommand() => _logger.Error("Unknown command. Check that the command is entered correctly.");
 
     private void LogWrongArgumentsAmount() => _logger.Error("Unknown command. Wrong amount of arguments.");
+    
     private void LogThereIsNoBackups() => _logger.Error("There is no backups. First you should make a backup of any save");
 }
