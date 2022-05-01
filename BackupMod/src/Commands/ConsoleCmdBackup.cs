@@ -111,7 +111,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
         if (worldId == null || saveId == null || backupId == null)
         {
-            _logger.Debug("Please specify a backup to restore. Hint: '/backup restore *worldId* *saveId* *backupId*'.");
+            _logger.Debug("Please specify a backup to restore. Hint: 'backup restore *worldId* *saveId* *backupId*'.");
 
             PrintAvailableBackups(worlds);
 
