@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +5,6 @@ using BackupMod.Extensions;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Models;
 using BackupMod.Utils;
-using UnityEngine;
 
 namespace BackupMod.Services;
 
