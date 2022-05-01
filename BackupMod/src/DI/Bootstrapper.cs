@@ -11,6 +11,7 @@ public static class Bootstrapper
         LoggerBootstrapper.RegisterLogger(services);
         ServicesBootstrapper.RegisterServices(services);
         ConfigurationBootstrapper.RegisterConfiguration(services);
+        FoldersBootstrapper.CreateRequiredFolders(services);
 
         ServiceLocator.CreateFrom(services.BuildServiceProvider());
     }

@@ -19,6 +19,7 @@ public static class ServicesBootstrapper
                 )
                 : null;
         });
+        
         services.AddSingleton<IArchiveService>(_ => new ArchiveService());
         services.AddSingleton<IFileService>(_ => new FileService());
         services.AddSingleton<IDirectoryService>(_ => new DirectoryService());
@@ -31,11 +32,23 @@ public static class ServicesBootstrapper
         services.AddSingleton<IPlayerInputRecordingSystemProvider>(_ => new PlayerInputRecordingSystemProvider());
         services.AddSingleton<IBlock>(_ => new Services.Block());
         services.AddSingleton<IItem>(_ => new Item());
+        
+        services.AddSingleton<IGameDirectoriesProvider>(resolver => new GameDirectoriesProvider(
+            resolver.GetRequiredService<Configuration>(),
+            resolver.GetRequiredService<IPathService>()
+        ));
         services.AddSingleton<IWorldService>(resolver => new WorldService(
             resolver.GetRequiredService<ISaveInfoFactory>()
         ));
         services.AddSingleton<ISaveInfoFactory>(resolver => new SaveInfoFactory(
+            resolver.GetRequiredService<IWorldInfoFactory>(),
             resolver.GetRequiredService<IDirectoryService>()
+        ));
+        services.AddSingleton<IWorldInfoFactory>(resolver => new WorldInfoFactory(
+            resolver.GetRequiredService<IDirectoryService>(),
+            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IArchiveService>(),
+            resolver.GetRequiredService<IGameDirectoriesProvider>()
         ));
         services.AddSingleton<IWorldSaverService>(resolver => new WorldSaverService(
             resolver.GetRequiredService<IWorldService>(),
@@ -50,6 +63,7 @@ public static class ServicesBootstrapper
         ));
         services.AddTransient<IWorldBackupService>(resolver => new WorldBackupService(
             resolver.GetRequiredService<Configuration>(),
+            resolver.GetRequiredService<IGameDirectoriesProvider>(),
             resolver.GetRequiredService<IWorldSaverService>(),
             resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<IPathService>(),
