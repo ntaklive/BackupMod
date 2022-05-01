@@ -53,3 +53,6 @@ Server only. To load in single-player mode, you must disable EAC.
 # Links
 [Official] [community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/)  
 [Unofficial] [7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
+
+# Support
+[!["Buy Me A Coffee"](docs/buymeacoffee.svg)](https://www.buymeacoffee.com/gbraad)
