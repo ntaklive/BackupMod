@@ -20,5 +20,5 @@ public class WorldService : IWorldService
 
     public string GetCurrentGetPlayerDataFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetPlayerDataDir());
     
-    public SaveInfo GetCurrentWorldSaveInfo() => _saveInfoFactory.CreateFromSaveFolderPath(GetCurrentWorldSaveFolderPath());
+    public SaveInfo GetCurrentWorldSaveInfo() => _saveInfoFactory.GetFromSaveFolderPath(GetCurrentWorldSaveFolderPath());
 }

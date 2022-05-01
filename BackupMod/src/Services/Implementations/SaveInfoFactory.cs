@@ -7,23 +7,23 @@ namespace BackupMod.Services;
 
 public class SaveInfoFactory : ISaveInfoFactory
 {
-    private readonly IWorldInfoFactory _worldInfoFactory;
     private readonly IDirectoryService _directoryService;
+    private readonly ISavesProvider _savesProvider;
 
     public SaveInfoFactory(
-        IWorldInfoFactory worldInfoFactory,
-        IDirectoryService directoryService)
+        IDirectoryService directoryService,
+        ISavesProvider savesProvider)
     {
-        _worldInfoFactory = worldInfoFactory;
         _directoryService = directoryService;
+        _savesProvider = savesProvider;
     }
 
-    public SaveInfo CreateFromSaveFolderPath(string saveFolderPath)
+    public SaveInfo GetFromSaveFolderPath(string saveFolderPath)
     {
-        string saveFolderPathFixed = PathHelper.FixFolderPathSeparators(saveFolderPath);
+        string worldFolderPath = _directoryService.GetParentDirectoryPath(saveFolderPath);
         
-        WorldInfo world = _worldInfoFactory.CreateFromWorldFolderPath(_directoryService.GetParentDirectoryPath(saveFolderPathFixed));
+        WorldInfo world = _savesProvider.GetAllWorlds().First(world => world.WorldFolderPath == worldFolderPath);
         
-        return world.Saves.First(save => save.SaveFolderPath == saveFolderPathFixed);
+        return world.Saves.First(save => save.SaveFolderPath == saveFolderPath);
     }
 }

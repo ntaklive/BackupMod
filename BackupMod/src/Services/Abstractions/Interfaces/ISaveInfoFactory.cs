@@ -4,5 +4,5 @@ namespace BackupMod.Services.Abstractions;
 
 public interface ISaveInfoFactory
 {
-    public SaveInfo CreateFromSaveFolderPath(string saveFolderPath);
+    public SaveInfo GetFromSaveFolderPath(string saveFolderPath);
 }

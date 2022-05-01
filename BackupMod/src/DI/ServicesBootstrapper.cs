@@ -41,13 +41,13 @@ public static class ServicesBootstrapper
             resolver.GetRequiredService<ISaveInfoFactory>()
         ));
         services.AddSingleton<ISaveInfoFactory>(resolver => new SaveInfoFactory(
-            resolver.GetRequiredService<IWorldInfoFactory>(),
-            resolver.GetRequiredService<IDirectoryService>()
-        ));
-        services.AddSingleton<IWorldInfoFactory>(resolver => new WorldInfoFactory(
             resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<ISavesProvider>()
+        ));
+        services.AddSingleton<ISavesProvider>(resolver => new SavesProvider(
             resolver.GetRequiredService<IArchiveService>(),
+            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<IGameDirectoriesProvider>()
         ));
         services.AddSingleton<IWorldSaverService>(resolver => new WorldSaverService(

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,52 @@ public class WorldBackupService : IWorldBackupService
             _saverService.SaveAll();
         }
 
+        CreateRequiredFolders(saveInfo);
+        DeleteRedundantBackups(saveInfo);        
+        DeleteTempFolders(saveInfo);
+        
+        return BackupInternal(saveInfo);
+    }
+
+    public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
+    {
+        return Task.Factory.StartNew(() => Backup(saveInfo, mode));
+    }
+
+    public void Restore(BackupInfo backupInfo)
+    {
+        var saveDirectory = new DirectoryInfo(backupInfo.SaveInfo.SaveFolderPath);
+        if (saveDirectory.Exists)
+        {
+            _directoryService.Delete(backupInfo.SaveInfo.SaveFolderPath, true);
+        }
+
+        _archiveService.DecompressToFolder(backupInfo.Filepath, backupInfo.SaveInfo.SaveFolderPath);
+    }
+
+    public Task RestoreAsync(BackupInfo backupInfo)
+    {
+        return Task.Factory.StartNew(() => Restore(backupInfo));
+    }
+
+    private string BackupInternal(SaveInfo saveInfo)
+    {
+        var backupNameWithExtension = $"{saveInfo.SaveName}_{DateTime.Now:yyyy-dd-M--HH-mm-ss}{_archiveService.Extension}";
+        string backupNameWithoutExtension = backupNameWithExtension.Split('.')[0];
+        
+        // The path of the backup file is identical to the path of the backup folder
+        string backupFilePath = _pathService.Combine(saveInfo.BackupsFolderPath, backupNameWithExtension);
+        string tempFolderPath = _pathService.Combine(saveInfo.BackupsFolderPath, $"temp_{backupNameWithoutExtension}");
+        
+        _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
+        _archiveService.CompressFolder(tempFolderPath, backupFilePath, false);
+        _directoryService.Delete(tempFolderPath, true);
+
+        return backupFilePath;
+    }
+
+    private void CreateRequiredFolders(SaveInfo saveInfo)
+    {
         string allBackupsFolderPath = _directories.GetBackupsFolderPath();
         var allBackupsFolder = new DirectoryInfo(allBackupsFolderPath);
         if (!allBackupsFolder.Exists)
@@ -63,54 +110,26 @@ public class WorldBackupService : IWorldBackupService
         {
             saveBackupsFolder.Create();
         }
+    }
 
+    private void DeleteRedundantBackups(SaveInfo saveInfo)
+    {
+        List<BackupInfo> backups = saveInfo.Backups.ToList();
         while (true)
         {
-            BackupInfo[] backups = saveInfo.Backups;
-
-            if (backups.Length >= _configuration.BackupsLimit)
+            if (backups.Count >= _configuration.BackupsLimit)
             {
-                string oldestBackupFilePath = backups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First().Filepath;
+                BackupInfo oldestBackup = backups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First();
 
-                _fileService.Delete(oldestBackupFilePath);
+                _fileService.Delete(oldestBackup.Filepath);
+
+                backups.Remove(oldestBackup);
             }
             else
             {
                 break;
             }
         }
-        
-        DeleteTempFolders(saveInfo);
-
-        var backupNameWithExtension = $"{saveInfo.SaveName}_{DateTime.Now:yyyy-dd-M--HH-mm-ss}{_archiveService.Extension}";
-        string backupNameWithoutExtension = backupNameWithExtension.Split('.')[0];
-        
-        // The path of the backup file is identical to the path of the backup folder
-        string backupFilePath = _pathService.Combine(saveBackupsFolderPath, backupNameWithExtension);
-        string tempFolderPath = _pathService.Combine(saveBackupsFolderPath, $"temp_{backupNameWithoutExtension}");
-        
-        _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
-        _archiveService.CompressFolder(tempFolderPath, backupFilePath, false);
-        _directoryService.Delete(tempFolderPath, true);
-
-        return backupFilePath;
-    }
-
-    public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode)
-    {
-        return Task.Factory.StartNew(() => Backup(saveInfo, mode));
-    }
-
-    public void Restore(BackupInfo backupInfo)
-    {
-        _directoryService.Delete(backupInfo.SaveInfo.SaveFolderPath, true);
-
-        _archiveService.DecompressToFolder(backupInfo.Filepath, backupInfo.SaveInfo.SaveFolderPath);
-    }
-
-    public Task RestoreAsync(BackupInfo backupInfo)
-    {
-        return Task.Factory.StartNew(() => Restore(backupInfo));
     }
     
     private void DeleteTempFolders(SaveInfo saveInfo)

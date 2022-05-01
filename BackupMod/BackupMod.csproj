@@ -93,9 +93,9 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayersProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\ISaveInfoFactory.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\ISavesProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IThreadManager.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldBackupService.cs" />
-        <Compile Include="src\Services\Abstractions\Interfaces\IWorldInfoFactory.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaverService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
         <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
@@ -119,9 +119,9 @@
         <Compile Include="src\Services\Implementations\PlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Implementations\PlayersProvider.cs" />
         <Compile Include="src\Services\Implementations\SaveInfoFactory.cs" />
+        <Compile Include="src\Services\Implementations\SavesProvider.cs" />
         <Compile Include="src\Services\Implementations\ThreadManager.cs" />
         <Compile Include="src\Services\Implementations\WorldBackupService.cs" />
-        <Compile Include="src\Services\Implementations\WorldInfoFactory.cs" />
         <Compile Include="src\Services\Implementations\WorldSaverService.cs" />
         <Compile Include="src\Services\Implementations\WorldService.cs" />
         <Compile Include="src\Utils\PathHelper.cs" />
