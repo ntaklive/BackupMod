@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BackupMod.Extensions;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Models;
+using BackupMod.Utils;
+using UnityEngine;
 
 namespace BackupMod.Services;
 
@@ -27,42 +31,52 @@ public class SavesProvider : ISavesProvider
 
     public IEnumerable<WorldInfo> GetAllWorlds()
     {
-        string allBackupsFolder = _gameDirectoriesProvider.GetBackupsFolderPath();
-        string[] worldsBackupsPaths = _directoryService.GetDirectories(allBackupsFolder);
+        string allBackupsFolderPath = _gameDirectoriesProvider.GetBackupsFolderPath();
+        string allSavesFolderPath = _gameDirectoriesProvider.GetSavesFolderPath();
 
-        foreach (string worldBackupFolderPath in worldsBackupsPaths)
+        string[] allAvailableWorldsPaths =
+            Enumerable.Concat(
+                    _directoryService.GetDirectories(allBackupsFolderPath),
+                    _directoryService.GetDirectories(allSavesFolderPath)
+                )
+                .Select(str => PathHelper.FixFolderPathSeparators(str)
+                    .Replace(
+                        _gameDirectoriesProvider.GetBackupsFolderPath(),
+                        _gameDirectoriesProvider.GetSavesFolderPath()
+                    ))
+                .Distinct()
+                .ToArray();
+
+        var worlds = new List<WorldInfo>();
+        foreach (string worldFolderPath in allAvailableWorldsPaths)
         {
-            string worldName = _directoryService.GetDirectoryName(worldBackupFolderPath);
+            string worldName = _directoryService.GetDirectoryName(worldFolderPath);
 
-            string worldFolderPath = _pathService.Combine(_gameDirectoriesProvider.GetSavesFolderPath(), worldName);
-            var worldFolder = new DirectoryInfo(worldFolderPath);
-            if (!worldFolder.Exists)
+            string worldBackupsFolderPath =
+                _pathService.Combine(_gameDirectoriesProvider.GetBackupsFolderPath(), worldName);
+            var worldBackupsFolder = new DirectoryInfo(worldBackupsFolderPath);
+            if (!worldBackupsFolder.Exists)
             {
-                worldFolder.Create();
+                worldBackupsFolder.Create();
             }
-            
-            var saves = new List<SaveInfo>();
-            foreach (string saveBackupFolderPath in _directoryService.GetDirectories(worldBackupFolderPath))
-            {
-                string saveName = _directoryService.GetDirectoryName(saveBackupFolderPath);
 
-                string saveBackupsFolderPath = _pathService.Combine(_gameDirectoriesProvider.GetBackupsFolderPath(), worldName, saveName);
-                var backupsFolder = new DirectoryInfo(saveBackupsFolderPath);
-                if (!backupsFolder.Exists)
+            var saves = new List<SaveInfo>();
+            foreach (string saveFolderPath in _directoryService.GetDirectories(worldFolderPath))
+            {
+                string saveName = _directoryService.GetDirectoryName(saveFolderPath);
+
+                string saveBackupsFolderPath =
+                    _pathService.Combine(_gameDirectoriesProvider.GetBackupsFolderPath(), worldName, saveName);
+                var saveBackupsFolder = new DirectoryInfo(saveBackupsFolderPath);
+                if (!saveBackupsFolder.Exists)
                 {
-                    backupsFolder.Create();
-                }
-                
-                string saveFolderPath = _pathService.Combine(_gameDirectoriesProvider.GetSavesFolderPath(), worldName, saveName);
-                var saveFolder = new DirectoryInfo(saveBackupsFolderPath);
-                if (!saveFolder.Exists)
-                {
-                    saveFolder.Create();
+                    saveBackupsFolder.Create();
                 }
 
                 var backups = new List<BackupInfo>();
 
-                string[] backupZipFilePaths = _directoryService.GetFiles(saveBackupsFolderPath, $"{saveName}_*{_archiveService.Extension}", SearchOption.TopDirectoryOnly);
+                string[] backupZipFilePaths = _directoryService.GetFiles(saveBackupsFolderPath,
+                    $"{saveName}_*{_archiveService.Extension}", SearchOption.TopDirectoryOnly);
                 foreach (string filepath in backupZipFilePaths)
                 {
                     var fileInfo = new FileInfo(filepath);
@@ -100,7 +114,9 @@ public class SavesProvider : ISavesProvider
 
             world.Saves.ForEach(info => info.World = world);
 
-            yield return world;
+            worlds.Add(world);
         }
+
+        return worlds;
     }
 }
