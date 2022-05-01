@@ -126,7 +126,14 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int worldsAmount = worlds.Length;
         if (worldId >= worldsAmount || worldId < 0)
         {
-            _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount - 1}.");
+            if (worldsAmount != 0)
+            {
+                _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
             
             return;
         }
@@ -134,7 +141,14 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int savesAmount = worlds[worldId.Value].Saves.Length;
         if (saveId >= savesAmount || saveId < 0)
         {
-            _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount - 1}.");
+            if (savesAmount != 0)
+            {
+                _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
             
             return;
         }
@@ -142,7 +156,14 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int backupAmount = worlds[worldId.Value].Saves[saveId.Value].Backups.Length;
         if (backupId >= backupAmount || backupId < 0)
         {
-            _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount - 1}.");
+            if (backupAmount != 0)
+            {
+                _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
             
             return;
         }
@@ -167,16 +188,14 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
     {
         int worldsAmount = worlds.Count;
 
-        if (worldsAmount != 0)
+        _logger.Debug("Available backups:");
+
+        if (worldsAmount == 0)
         {
-            _logger.Debug("Available backups:");
+            _logger.Warning("There is no worlds.");
+            _logger.Warning("First, you should make a backup of any save.");
         }
-        else
-        {
-            _logger.Debug("There is no worlds.");
-            _logger.Debug("First, you should make a backup of any save.");
-        }
-        
+
         for (var i = 0; i < worldsAmount; i++)
         {
             WorldInfo world = worlds[i];
@@ -253,4 +272,5 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
     private void LogUnknownCommand() => _logger.Error("Unknown command. Check that the command is entered correctly.");
 
     private void LogWrongArgumentsAmount() => _logger.Error("Unknown command. Wrong amount of arguments.");
+    private void LogThereIsNoBackups() => _logger.Error("There is no backups. First you should make a backup of any save");
 }
