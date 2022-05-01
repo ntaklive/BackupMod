@@ -219,7 +219,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
                 {
                     BackupInfo backup = save.Backups[k];
 
-                    _logger.Debug($"        [{k}]: {backup.Timestamp:yyyy-dd-M--HH-mm-ss}");
+                    _logger.Debug($"        [{k}]: {backup.Timestamp:MM.dd.yyyy HH:mm:ss}");
                 }
             }
         }
