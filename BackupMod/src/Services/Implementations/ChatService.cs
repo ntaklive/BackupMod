@@ -47,7 +47,7 @@ public class ChatService : IChatService
                     (object) (_cInfo?.PlatformId != null ? _cInfo.PlatformId.CombinedString : "-non-player-"),
                     (object) _senderEntityId, (object) _chatType.ToStringCached<EChatType>(),
                     _localizeMain ? (object) Localization.Get(_mainName) : (object) _mainName,
-                    (object) Utils.FilterBbCode(_msg));
+                    (object) global::Utils.FilterBbCode(_msg));
                 if (_recipientEntityIds != null)
                 {
                     foreach (int recipientEntityId in _recipientEntityIds)
