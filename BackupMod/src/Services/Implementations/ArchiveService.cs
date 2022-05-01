@@ -6,13 +6,15 @@ namespace BackupMod.Services;
 
 public class ArchiveService : IArchiveService
 {
-    public void CompressFolderToZip(string folderPath, string zipPath, bool includeBaseDirectory = true)
+    public string Extension => ".zip";
+    
+    public void CompressFolder(string folderPath, string archivePath, bool includeBaseDirectory = true)
     {
-        ZipFile.CreateFromDirectory(folderPath, zipPath, CompressionLevel.Optimal, includeBaseDirectory, Encoding.UTF8);
+        ZipFile.CreateFromDirectory(folderPath, archivePath, CompressionLevel.Optimal, includeBaseDirectory, Encoding.UTF8);
     }
 
-    public void DecompressZipToFolder(string zipPath, string folderPath)
+    public void DecompressToFolder(string archivePath, string folderPath)
     {
-        ZipFile.ExtractToDirectory(zipPath, folderPath, Encoding.UTF8);
+        ZipFile.ExtractToDirectory(archivePath, folderPath, Encoding.UTF8);
     }
 }
