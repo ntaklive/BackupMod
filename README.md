@@ -1,7 +1,7 @@
 # BackupMod
 ![BackupModDemonstrationScreenV1.0.0](docs/demo.jpg)
 
-A 7 days to die modlet which makes it possible to automatically backup your game saves
+A 7 days to die modlet which makes it possible to automatically backup and restore your game saves
 
 # Settings
 
@@ -37,7 +37,8 @@ By default, your backups for each save will be saved in the '%AppData%\Roaming\7
 You can use the '**backup**' command or its shortened version - the '**bp**' command
 
 '**backup**' - perform a forceful backup  
-'**backup info**' - show the current configuration of the mod
+'**backup info**' - show the current configuration of the mod  
+'**backup restore**' - restore a save from a backup
 
 # Installation
 1. Extract the downloaded .zip archive
@@ -50,5 +51,5 @@ Required game version: Alpha 20
 Server only. To load in single-player mode, you must disable EAC.
 
 # Links
-[community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/)
-[7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
+[Official] [community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/)  
+[Unofficial] [7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
