@@ -10,17 +10,7 @@ public interface IWorldBackupService
     
     public Task<string> BackupAsync(SaveInfo saveInfo, BackupMode mode);
 
-    public void Restore(SaveInfo saveInfo, BackupInfo backupInfo);
+    public void Restore(BackupInfo backupInfo);
     
-    public Task RestoreAsync(SaveInfo saveInfo, BackupInfo backupInfo);
-
-    public BackupInfo[] GetAllBackups(SaveInfo saveInfo);
-
-    public void DeleteAllTempFolders(SaveInfo saveInfo);
-
-    public string GetBackupsFolderPath(SaveInfo saveInfo);
-    
-    public string GetAllBackupsFolderPath(SaveInfo saveInfo);
-
-    public void DeleteRedundantBackupFiles(SaveInfo saveInfo);
+    public Task RestoreAsync(BackupInfo backupInfo);
 }
