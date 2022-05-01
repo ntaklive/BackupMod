@@ -1,5 +1,6 @@
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Models;
+using BackupMod.Utils;
 
 namespace BackupMod.Services;
 
@@ -13,11 +14,11 @@ public class WorldService : IWorldService
     }
     
     public World GetCurrentWorld() => GameManager.Instance.World;
-    public string GetCurrentWorldSaveFolderPath() => GameIO.GetSaveGameDir();
+    public string GetCurrentWorldSaveFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetSaveGameDir());
 
-    public string GetCurrentPlayerDataLocalFolderPath() => GameIO.GetPlayerDataLocalDir();
+    public string GetCurrentPlayerDataLocalFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetPlayerDataLocalDir());
 
-    public string GetCurrentGetPlayerDataFolderPath() => GameIO.GetPlayerDataDir();
+    public string GetCurrentGetPlayerDataFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetPlayerDataDir());
     
     public SaveInfo GetCurrentWorldSaveInfo() => _saveInfoFactory.CreateFromSaveFolderPath(GetCurrentWorldSaveFolderPath());
 }
