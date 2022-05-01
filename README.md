@@ -1,5 +1,5 @@
 # BackupMod
-![BackupModDemonstrationScreenV1.0.0](docs/demo.jpg)
+![BackupModDemonstrationScreenV1.0.0](docs/demo.png)
 
 A 7 days to die modlet which makes it possible to automatically backup and restore your game saves
 
