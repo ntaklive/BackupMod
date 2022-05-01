@@ -126,7 +126,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int worldsAmount = worlds.Length;
         if (worldId >= worldsAmount || worldId < 0)
         {
-            _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount}.");
+            _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount - 1}.");
             
             return;
         }
@@ -134,7 +134,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int savesAmount = worlds[worldId.Value].Saves.Length;
         if (saveId >= savesAmount || saveId < 0)
         {
-            _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount}.");
+            _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount - 1}.");
             
             return;
         }
@@ -142,7 +142,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         int backupAmount = worlds[worldId.Value].Saves[saveId.Value].Backups.Length;
         if (backupId >= backupAmount || backupId < 0)
         {
-            _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount}.");
+            _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount - 1}.");
             
             return;
         }
