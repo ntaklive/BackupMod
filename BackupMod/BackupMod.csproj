@@ -67,9 +67,11 @@
         <Compile Include="src\Commands\ConsoleCmdBackup.cs" />
         <Compile Include="src\DI\Bootstrapper.cs" />
         <Compile Include="src\DI\ConfigurationBootstrapper.cs" />
+        <Compile Include="src\DI\FoldersBootstrapper.cs" />
         <Compile Include="src\DI\LoggerBootstrapper.cs" />
         <Compile Include="src\DI\ServiceLocator.cs" />
         <Compile Include="src\DI\ServicesBootstrapper.cs" />
+        <Compile Include="src\Extensions\EnumerableExtensions.cs" />
         <Compile Include="src\Extensions\ServicesProviderExtensions.cs" />
         <Compile Include="src\ModApi.cs" />
         <Compile Include="src\Properties\AssemblyInfo.cs" />
@@ -82,6 +84,7 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IDirectoryService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IFileService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IGameDirectoriesProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IGamePrefsProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IItem.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\ILogger.cs" />
@@ -89,13 +92,16 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IPlatformManager.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayersProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\ISaveInfoFactory.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IThreadManager.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldBackupService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IWorldInfoFactory.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaverService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
         <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
         <Compile Include="src\Services\Abstractions\Models\Configuration.cs" />
         <Compile Include="src\Services\Abstractions\Models\SaveInfo.cs" />
+        <Compile Include="src\Services\Abstractions\Models\WorldInfo.cs" />
         <Compile Include="src\Services\Implementations\ArchiveService.cs" />
         <Compile Include="src\Services\Implementations\BackupWatchdog.cs" />
         <Compile Include="src\Services\Implementations\Block.cs" />
@@ -104,6 +110,7 @@
         <Compile Include="src\Services\Implementations\ConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Implementations\DirectoryService.cs" />
         <Compile Include="src\Services\Implementations\FileService.cs" />
+        <Compile Include="src\Services\Implementations\GameDirectoriesProvider.cs" />
         <Compile Include="src\Services\Implementations\GamePrefsProvider.cs" />
         <Compile Include="src\Services\Implementations\Item.cs" />
         <Compile Include="src\Services\Implementations\LogWrapper.cs" />
@@ -111,10 +118,13 @@
         <Compile Include="src\Services\Implementations\PlatformManager.cs" />
         <Compile Include="src\Services\Implementations\PlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Implementations\PlayersProvider.cs" />
+        <Compile Include="src\Services\Implementations\SaveInfoFactory.cs" />
         <Compile Include="src\Services\Implementations\ThreadManager.cs" />
         <Compile Include="src\Services\Implementations\WorldBackupService.cs" />
+        <Compile Include="src\Services\Implementations\WorldInfoFactory.cs" />
         <Compile Include="src\Services\Implementations\WorldSaverService.cs" />
         <Compile Include="src\Services\Implementations\WorldService.cs" />
+        <Compile Include="src\Utils\PathHelper.cs" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Costura, Version=5.7.0.0, Culture=neutral, PublicKeyToken=null">
