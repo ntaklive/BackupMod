@@ -33,7 +33,7 @@ public static class ServicesBootstrapper
         services.AddSingleton<IBlock>(_ => new Services.Block());
         services.AddSingleton<IItem>(_ => new Item());
         
-        services.AddSingleton<IGameDirectoriesProvider>(resolver => new GameDirectoriesProvider(
+        services.AddTransient<IGameDirectoriesProvider>(resolver => new GameDirectoriesProvider(
             resolver.GetRequiredService<Configuration>(),
             resolver.GetRequiredService<IPathService>()
         ));

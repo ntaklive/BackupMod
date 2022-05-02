@@ -48,6 +48,12 @@ public class SavesProvider : ISavesProvider
         var worlds = new List<WorldInfo>();
         foreach (string worldFolderPath in allAvailableWorldsPaths)
         {
+            var worldFolder = new DirectoryInfo(worldFolderPath);
+            if (!worldFolder.Exists)
+            {
+                worldFolder.Create();
+            }
+            
             string worldName = _directoryService.GetDirectoryName(worldFolderPath);
 
             string worldBackupsFolderPath =
@@ -61,6 +67,12 @@ public class SavesProvider : ISavesProvider
             var saves = new List<SaveInfo>();
             foreach (string saveFolderPath in _directoryService.GetDirectories(worldFolderPath))
             {
+                var saveFolder = new DirectoryInfo(saveFolderPath);
+                if (!saveFolder.Exists)
+                {
+                    saveFolder.Create();
+                }
+                
                 string saveName = _directoryService.GetDirectoryName(saveFolderPath);
 
                 string saveBackupsFolderPath =
