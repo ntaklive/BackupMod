@@ -8,13 +8,16 @@ public class GameDirectoriesProvider : IGameDirectoriesProvider
 {
     private readonly Configuration _configuration;
     private readonly IPathService _pathService;
+    private readonly IDirectoryService _directoryService;
 
     public GameDirectoriesProvider(
         Configuration configuration,
-        IPathService pathService)
+        IPathService pathService,
+        IDirectoryService directoryService)
     {
         _configuration = configuration;
         _pathService = pathService;
+        _directoryService = directoryService;
     }
 
     public string GetBackupsFolderPath() =>
@@ -26,6 +29,6 @@ public class GameDirectoriesProvider : IGameDirectoriesProvider
 
     public string GetSavesFolderPath() =>
         PathHelper.FixFolderPathSeparators(
-            _pathService.Combine(GameIO.GetUserGameDataDir(), "Saves")
-        );
+            _directoryService.GetParentDirectoryPath(
+                _directoryService.GetParentDirectoryPath(GameIO.GetSaveGameDir())));
 }

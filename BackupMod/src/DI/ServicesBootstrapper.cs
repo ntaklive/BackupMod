@@ -35,7 +35,8 @@ public static class ServicesBootstrapper
         
         services.AddTransient<IGameDirectoriesProvider>(resolver => new GameDirectoriesProvider(
             resolver.GetRequiredService<Configuration>(),
-            resolver.GetRequiredService<IPathService>()
+            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IDirectoryService>()
         ));
         services.AddSingleton<IWorldService>(resolver => new WorldService(
             resolver.GetRequiredService<ISaveInfoFactory>()
