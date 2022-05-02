@@ -7,7 +7,7 @@ A 7 days to die modlet which makes it possible to automatically backup and resto
 
 You can configure the modlet by modifying the 'settings.json' file.
 If you changed the configuration when you were in game, you should re-enter to your world to apply changed settings.
-By default, your backups for each save will be saved in the '%AppData%\Roaming\7DaysToDie\Saves\\%WorldName%\Backups\\%SaveName%' folder.
+By default, your backups for each save will be saved in the '%AppData%/Roaming/7DaysToDie/Backups/%WorldName%/%SaveName%' folder.
 
 ```
 // World backup files limit.
