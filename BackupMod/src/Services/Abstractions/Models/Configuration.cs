@@ -15,15 +15,17 @@ public class Configuration
     {
         General = new GeneralConfiguration(backupsLimit: 10, customBackupsFolder: ""),
         AutoBackup = new AutoBackupConfiguration(enabled: true, delay: 1200),
-        Archive = new ArchiveConfiguration(enabled: false, customArchiveFolder: ""),
+        Archive = new ArchiveConfiguration(enabled: false, backupsLimit: 10, customArchiveFolder: ""),
         Events = new EventsConfiguration(backupOnWorldLoaded: true),
         Utilities = new UtilitiesConfiguration(chatNotificationsEnabled: true)
     };
 
     public sealed class GeneralConfiguration
     {
-        public GeneralConfiguration() {}
-        
+        public GeneralConfiguration()
+        {
+        }
+
         public GeneralConfiguration(int backupsLimit, string customBackupsFolder)
         {
             BackupsLimit = backupsLimit;
@@ -36,8 +38,10 @@ public class Configuration
 
     public class AutoBackupConfiguration
     {
-        public AutoBackupConfiguration() {}
-        
+        public AutoBackupConfiguration()
+        {
+        }
+
         public AutoBackupConfiguration(bool enabled, int delay)
         {
             Enabled = enabled;
@@ -50,22 +54,28 @@ public class Configuration
 
     public class ArchiveConfiguration
     {
-        public ArchiveConfiguration() {}
-        
-        public ArchiveConfiguration(bool enabled, string customArchiveFolder)
+        public ArchiveConfiguration()
+        {
+        }
+
+        public ArchiveConfiguration(bool enabled, int backupsLimit, string customArchiveFolder)
         {
             Enabled = enabled;
+            BackupsLimit = backupsLimit;
             CustomArchiveFolder = customArchiveFolder;
         }
 
         public bool Enabled { get; set; }
+        public int BackupsLimit { get; set; }
         public string CustomArchiveFolder { get; set; }
     }
 
     public class EventsConfiguration
     {
-        public EventsConfiguration() {}
-        
+        public EventsConfiguration()
+        {
+        }
+
         public EventsConfiguration(bool backupOnWorldLoaded)
         {
             BackupOnWorldLoaded = backupOnWorldLoaded;
@@ -76,8 +86,10 @@ public class Configuration
 
     public class UtilitiesConfiguration
     {
-        public UtilitiesConfiguration() {}
-        
+        public UtilitiesConfiguration()
+        {
+        }
+
         public UtilitiesConfiguration(bool chatNotificationsEnabled)
         {
             ChatNotificationsEnabled = chatNotificationsEnabled;

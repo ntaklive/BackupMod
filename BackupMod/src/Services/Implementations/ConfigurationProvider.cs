@@ -33,6 +33,14 @@ public class ConfigurationProvider : Abstractions.IConfigurationProvider
 
                 configuration.General.BackupsLimit = Configuration.Default.General.BackupsLimit;
             }
+            
+            if (configuration.Archive.BackupsLimit <= 0)
+            {
+                _logger.Error("Archive.BackupsLimit value must be greater than 0.");
+                _logger.Warning("The default value will be used until then.");
+
+                configuration.Archive.BackupsLimit = Configuration.Default.Archive.BackupsLimit;
+            }
 
             if (configuration.AutoBackup.Delay < 10)
             {
@@ -48,6 +56,14 @@ public class ConfigurationProvider : Abstractions.IConfigurationProvider
                 _logger.Warning("The default value will be used until then.");
                 
                 configuration.General.CustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
+            }
+            
+            if (configuration.Archive.CustomArchiveFolder == null)
+            {
+                _logger.Error("Archive.CustomArchiveFolder value must exist.");
+                _logger.Warning("The default value will be used until then.");
+                
+                configuration.Archive.CustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
             }
 
             return configuration;

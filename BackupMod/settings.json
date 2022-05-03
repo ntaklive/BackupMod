@@ -13,6 +13,7 @@
   
   "AutoBackup": {
     // Is automatic backup enabled
+    // Default: true
     "Enabled": true,
     
     // Auto backup delay (seconds)
@@ -23,6 +24,10 @@
   "Archive": {
     // Keep the last backup of the day
     "Enabled": false,
+
+    // Backups limit
+    // Default: 10
+    "BackupsLimit": 10,
     
     // Custom archive folder path.
     // IMPORTANT: You must escape all '\' characters or use '/'

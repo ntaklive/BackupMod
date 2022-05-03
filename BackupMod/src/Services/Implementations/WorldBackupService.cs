@@ -118,10 +118,7 @@ public class WorldBackupService : IWorldBackupService
     private void DeleteRedundantBackups(SaveInfo saveInfo)
     {
         List<BackupInfo> backups = saveInfo.Backups.Where(backup => backup.Filepath.StartsWith(_directories.GetBackupsFolderPath())).ToList();
-        foreach (BackupInfo backupInfo in backups)
-        {
-            Log.Warning(backupInfo.Filepath);
-        }
+        List<BackupInfo> archiveBackups = saveInfo.Backups.Where(backup => backup.Filepath.StartsWith(_directories.GetArchiveFolderPath())).ToList();
         
         while (true)
         {
@@ -132,11 +129,23 @@ public class WorldBackupService : IWorldBackupService
                 _fileService.Delete(oldestBackup.Filepath);
 
                 backups.Remove(oldestBackup);
+                
+                continue;
             }
-            else
+
+            if (_configuration.Archive.Enabled &&
+                archiveBackups.Count > _configuration.Archive.BackupsLimit)
             {
-                break;
+                BackupInfo oldestBackup = archiveBackups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First();
+
+                _fileService.Delete(oldestBackup.Filepath);
+
+                archiveBackups.Remove(oldestBackup);
+                
+                continue;
             }
+
+            break;
         }
     }
     
