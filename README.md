@@ -68,8 +68,8 @@ You can use the '**backup**' command or its shortened version - the '**bp**' com
 
 '**backup**' - perform a forceful backup  
 '**backup info**' - show the current configuration of the mod  
-'**backup list**' - show all available backups
-'**backup restore**' - restore a save from a backup
+'**backup list**' - show all available backups  
+'**backup restore**' - restore a save from a backup  
 '**backup delete**' - delete a backup
 
 # Installation
@@ -83,7 +83,8 @@ Required game version: Alpha 20
 Server only. To load in single-player mode, you must disable EAC.
 
 # Links
-[Official] [community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/)  
+[Official] [Official TFP 7 Days To Die Forum](https://community.7daystodie.com/topic/28451-backup-mod/)  
+[Official] [Nexus Mods](https://www.nexusmods.com/7daystodie/mods/2210)  
 [Unofficial] [7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
 
 # Support
