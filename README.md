@@ -83,7 +83,8 @@ Required game version: Alpha 20
 Server only. To load in single-player mode, you must disable EAC.
 
 # Links
-[Official] [community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/)  
+[Official] [community.7daystodie.com](https://community.7daystodie.com/topic/28451-backup-mod/) 
+[Official] [Nexus Mods](https://www.nexusmods.com/7daystodie/mods/2210) 
 [Unofficial] [7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
 
 # Support
