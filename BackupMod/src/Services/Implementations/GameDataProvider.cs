@@ -44,8 +44,17 @@ public class GameDataProvider : IGameDataProvider
                         _gameDirectoriesService.GetBackupsFolderPath(),
                         _gameDirectoriesService.GetSavesFolderPath()
                     ))
+                .Where(str => str != _gameDirectoriesService.GetSavesFolderPath() && str != _gameDirectoriesService.GetArchiveFolderPath())
                 .Distinct()
                 .ToArray();
+
+#if DEBUG
+        Log.Warning("All available paths:");
+        foreach (string path in allAvailableWorldsPaths)
+        {
+            Log.Warning(path);
+        }
+#endif
 
         return GetWorldsFromFolders(allAvailableWorldsPaths);
     }
