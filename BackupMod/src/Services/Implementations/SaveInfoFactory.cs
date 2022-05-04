@@ -20,7 +20,7 @@ public class SaveInfoFactory : ISaveInfoFactory
     public SaveInfo GetFromSaveFolderPath(string saveFolderPath)
     {
         string worldFolderPath = _directoryService.GetParentDirectoryPath(saveFolderPath);
-        
+
 #if DEBUG
         Log.Warning($"{nameof(GameIO.GetSaveGameDir)}:{GameIO.GetSaveGameDir()}");
         Log.Warning($"{nameof(GameIO.GetUserGameDataDir)}:{GameIO.GetUserGameDataDir()}");
