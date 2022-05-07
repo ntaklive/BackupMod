@@ -40,10 +40,8 @@ public class ModApi : IModApi
         var logger = ServiceLocator.GetRequiredService<ILogger<ModApi>>();
 
         SaveInfo currentSaveInfo = worldService.GetCurrentWorldSaveInfo();
-        World currentWorld = worldService.GetCurrentWorld();
-        TimeSpan delay = TimeSpan.FromSeconds(configuration.AutoBackupDelay);
-
-        if (configuration.BackupOnWorldLoaded)
+        
+        if (configuration.Events.BackupOnWorldLoaded)
         {
             string backupFilePath = await backupService.BackupAsync(currentSaveInfo, BackupMode.BackupOnly);
             logger.Debug("Initial backup has completed successfully.");
@@ -52,7 +50,7 @@ public class ModApi : IModApi
 
         var backupWatchdog = ServiceLocator.GetRequiredService<IBackupWatchdog>();
         
-        using Task watchdogTask = backupWatchdog.StartAsync(currentWorld, currentSaveInfo, delay, BackupMode.SaveAllAndBackup);
+        using Task watchdogTask = backupWatchdog.StartAsync();
         await watchdogTask;
         if (watchdogTask.Exception != null)
         {   

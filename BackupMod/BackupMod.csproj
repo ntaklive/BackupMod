@@ -84,7 +84,7 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IDirectoryService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IFileService.cs" />
-        <Compile Include="src\Services\Abstractions\Interfaces\IGameDirectoriesProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IGameDirectoriesService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IGamePrefsProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IItem.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\ILogger.cs" />
@@ -93,7 +93,7 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPlayersProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\ISaveInfoFactory.cs" />
-        <Compile Include="src\Services\Abstractions\Interfaces\ISavesProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IGameDataProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IThreadManager.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldBackupService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaverService.cs" />
@@ -110,7 +110,7 @@
         <Compile Include="src\Services\Implementations\ConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Implementations\DirectoryService.cs" />
         <Compile Include="src\Services\Implementations\FileService.cs" />
-        <Compile Include="src\Services\Implementations\GameDirectoriesProvider.cs" />
+        <Compile Include="src\Services\Implementations\GameDirectoriesService.cs" />
         <Compile Include="src\Services\Implementations\GamePrefsProvider.cs" />
         <Compile Include="src\Services\Implementations\Item.cs" />
         <Compile Include="src\Services\Implementations\LogWrapper.cs" />
@@ -119,7 +119,7 @@
         <Compile Include="src\Services\Implementations\PlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Implementations\PlayersProvider.cs" />
         <Compile Include="src\Services\Implementations\SaveInfoFactory.cs" />
-        <Compile Include="src\Services\Implementations\SavesProvider.cs" />
+        <Compile Include="src\Services\Implementations\GameDataProvider.cs" />
         <Compile Include="src\Services\Implementations\ThreadManager.cs" />
         <Compile Include="src\Services\Implementations\WorldBackupService.cs" />
         <Compile Include="src\Services\Implementations\WorldSaverService.cs" />

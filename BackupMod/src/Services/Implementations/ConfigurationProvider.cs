@@ -26,28 +26,28 @@ public class ConfigurationProvider : Abstractions.IConfigurationProvider
             
             var configuration = configurationRoot.Get<Configuration>();
 
-            if (configuration.BackupsLimit <= 0)
+            if (configuration.General.BackupsLimit <= 0)
             {
-                _logger.Error("BackupsLimit value must be greater than 0.");
+                _logger.Error("General.BackupsLimit value must be greater than 0.");
                 _logger.Warning("The default value will be used until then.");
 
-                configuration.BackupsLimit = Configuration.Default.BackupsLimit;
+                configuration.General.BackupsLimit = Configuration.Default.General.BackupsLimit;
             }
 
-            if (configuration.AutoBackupDelay < 10)
+            if (configuration.AutoBackup.Delay < 10)
             {
-                _logger.Error("AutoBackupDelay value must be greater than 10 or equals.");
+                _logger.Error("AutoBackup.Delay value must be greater than 10 or equals.");
                 _logger.Warning("The default value will be used until then.");
                 
-                configuration.AutoBackupDelay = Configuration.Default.AutoBackupDelay;
+                configuration.AutoBackup.Delay = Configuration.Default.AutoBackup.Delay;
             }
 
-            if (configuration.CustomBackupsFolder == null)
+            if (configuration.General.CustomBackupsFolder == null)
             {
-                _logger.Error("CustomBackupsFolder value must exist.");
+                _logger.Error("General.CustomBackupsFolder value must exist.");
                 _logger.Warning("The default value will be used until then.");
                 
-                configuration.CustomBackupsFolder = Configuration.Default.CustomBackupsFolder;
+                configuration.General.CustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
             }
 
             return configuration;

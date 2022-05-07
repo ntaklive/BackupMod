@@ -12,7 +12,7 @@ namespace BackupMod.Services;
 public class WorldBackupService : IWorldBackupService
 {
     private readonly Configuration _configuration;
-    private readonly IGameDirectoriesProvider _directories;
+    private readonly IGameDirectoriesService _directories;
     private readonly IWorldSaverService _saverService;
     private readonly IDirectoryService _directoryService;
     private readonly IPathService _pathService;
@@ -21,7 +21,7 @@ public class WorldBackupService : IWorldBackupService
     
     public WorldBackupService(
         Configuration configuration,
-        IGameDirectoriesProvider directories,
+        IGameDirectoriesService directories,
         IWorldSaverService saverService,
         IDirectoryService directoryService,
         IPathService pathService,
@@ -44,8 +44,8 @@ public class WorldBackupService : IWorldBackupService
             _saverService.SaveAll();
         }
 
-        CreateRequiredFolders(saveInfo);
-        DeleteRedundantBackups(saveInfo);        
+        _directories.CreateRequiredFolders(saveInfo);
+        DeleteRedundantBackups(saveInfo);
         DeleteTempFolders(saveInfo);
         
         return BackupInternal(saveInfo);
@@ -79,45 +79,43 @@ public class WorldBackupService : IWorldBackupService
         
         // The path of the backup file is identical to the path of the backup folder
         string backupFilePath = _pathService.Combine(saveInfo.BackupsFolderPath, backupNameWithExtension);
+        string archiveFilePath = _pathService.Combine(saveInfo.ArchiveFolderPath, backupNameWithExtension);
         string tempFolderPath = _pathService.Combine(saveInfo.BackupsFolderPath, $"temp_{backupNameWithoutExtension}");
         
         _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
         _archiveService.CompressFolder(tempFolderPath, backupFilePath, false);
+
+        if (_configuration.Archive.Enabled)
+        {
+            FileInfo thisDateBackupFile = _directoryService
+                .GetFiles(saveInfo.ArchiveFolderPath, "*", SearchOption.TopDirectoryOnly)
+                .Select(path => new FileInfo(path))
+                .FirstOrDefault(file => file.CreationTime.ToShortDateString() == DateTime.Today.ToShortDateString());
+            
+            if (thisDateBackupFile != null)
+            {
+                _fileService.Delete(thisDateBackupFile.FullName);
+            }
+            
+            _fileService.Copy(backupFilePath, archiveFilePath, false);
+        }
+        
         _directoryService.Delete(tempFolderPath, true);
 
         return backupFilePath;
     }
 
-    private void CreateRequiredFolders(SaveInfo saveInfo)
-    {
-        string allBackupsFolderPath = _directories.GetBackupsFolderPath();
-        var allBackupsFolder = new DirectoryInfo(allBackupsFolderPath);
-        if (!allBackupsFolder.Exists)
-        {
-            allBackupsFolder.Create();
-        }
-        
-        string worldBackupsFolderPath = _directoryService.GetParentDirectoryPath(saveInfo.BackupsFolderPath);
-        var worldBackupsFolder = new DirectoryInfo(worldBackupsFolderPath);
-        if (!worldBackupsFolder.Exists)
-        {
-            worldBackupsFolder.Create();
-        }
-        
-        string saveBackupsFolderPath = saveInfo.BackupsFolderPath;
-        var saveBackupsFolder = new DirectoryInfo(saveBackupsFolderPath);
-        if (!saveBackupsFolder.Exists)
-        {
-            saveBackupsFolder.Create();
-        }
-    }
-
     private void DeleteRedundantBackups(SaveInfo saveInfo)
     {
-        List<BackupInfo> backups = saveInfo.Backups.ToList();
+        List<BackupInfo> backups = saveInfo.Backups.Where(backup => backup.Filepath.StartsWith(_directories.GetBackupsFolderPath())).ToList();
+        foreach (BackupInfo backupInfo in backups)
+        {
+            Log.Warning(backupInfo.Filepath);
+        }
+        
         while (true)
         {
-            if (backups.Count >= _configuration.BackupsLimit)
+            if (backups.Count >= _configuration.General.BackupsLimit)
             {
                 BackupInfo oldestBackup = backups.OrderBy(info => info.Timestamp.ToFileTimeUtc()).First();
 

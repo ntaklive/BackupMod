@@ -4,6 +4,8 @@ namespace BackupMod.Utils;
 
 public static class PathHelper
 {
+    public static char DirectorySeparatorChar => Path.AltDirectorySeparatorChar;
+    
     public static string FixFolderPathSeparators(string folderPath)
     {
         return folderPath

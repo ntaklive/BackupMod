@@ -1,23 +1,45 @@
 {
-  // World backup files' limit.
-  // Default: 5
-  "BackupsLimit" : 5,
-
-  // Auto backup delay (seconds).
-  // Default: 600 (10 minutes)
-  "AutoBackupDelay" : 600,
-
-  // Enable in-chat notifications.
-  // Default: true
-  "EnableChatMessages" : true,
-
-  // Custom backups folder path.
-  // IMPORTANT: You must escape all '\' characters or use '/'
-  // Example: "C:\\Backups".
-  // Default: ""
-  "CustomBackupsFolder" : "",
-
-  // Backup when entering the world
-  // Default: true
-  "BackupOnWorldLoaded" : true
+  "General": {
+    // Backups limit
+    // Default: 10
+    "BackupsLimit": 10,
+    
+    // Custom backups folder path
+    // IMPORTANT: You must escape all '\' characters or use '/'
+    // Example: "C:\\7DaysToDie\\Backups"
+    // Default: ""
+    "CustomBackupsFolder": ""
+  },
+  
+  "AutoBackup": {
+    // Is automatic backup enabled
+    "Enabled": true,
+    
+    // Auto backup delay (seconds)
+    // Default: 1200 (20 minutes)
+    "Delay": 1200
+  },
+  
+  "Archive": {
+    // Keep the last backup of the day
+    "Enabled": false,
+    
+    // Custom archive folder path.
+    // IMPORTANT: You must escape all '\' characters or use '/'
+    // Example: "C:\\7DaysToDie\\Archive".
+    // Default: ""
+    "CustomArchiveFolder": ""
+  },
+  
+  "Events": {
+    // Backup when entering the world
+    // Default: true
+    "BackupOnWorldLoaded": true
+  },
+  
+  "Utilities": {
+    // Chat notifications
+    // Default: true
+    "ChatNotificationsEnabled": true
+  }
 }

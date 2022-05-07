@@ -14,22 +14,30 @@ namespace BackupMod.Services;
 [SuppressMessage("ReSharper", "MethodSupportsCancellation")]
 public class BackupWatchdog : IBackupWatchdog
 {
+    private readonly Configuration _configuration;
+    private readonly IWorldService _worldService;
     private readonly IWorldBackupService _backupService;
     private readonly IChatService _chatService;
     private readonly ILogger<BackupWatchdog> _logger;
 
     public BackupWatchdog(
+        Configuration configuration,
+        IWorldService worldService,
         IWorldBackupService backupService,
         IChatService chatService,
         ILogger<BackupWatchdog> logger)
     {
+        _configuration = configuration;
+        _worldService = worldService;
         _backupService = backupService;
         _chatService = chatService;
         _logger = logger;
     }
 
-    public async Task StartAsync(World world, SaveInfo saveInfo, TimeSpan delay, BackupMode backupMode)
+    public async Task StartAsync()
     {
+        World world = _worldService.GetCurrentWorld();
+
         var cts = new CancellationTokenSource();
         _ = Task.Run(async () =>
         {
@@ -48,7 +56,7 @@ public class BackupWatchdog : IBackupWatchdog
             return Task.CompletedTask;
         });
 
-        await StartAsyncInternal(saveInfo, delay, backupMode, cts.Token);
+        await StartAsyncInternal(cts.Token);
     }
     
     private static bool IsWorldAccessible(World world)
@@ -56,8 +64,10 @@ public class BackupWatchdog : IBackupWatchdog
         return world != null && !world.IsRemote();
     }
 
-    private async Task StartAsyncInternal(SaveInfo saveInfo, TimeSpan delay, BackupMode backupMode, CancellationToken cancellationToken)
+    private async Task StartAsyncInternal(CancellationToken cancellationToken)
     {
+        TimeSpan delay = TimeSpan.FromSeconds(_configuration.AutoBackup.Delay);
+        
         _logger.Debug("Watchdog have started.");
 
         string firstBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
@@ -90,7 +100,8 @@ public class BackupWatchdog : IBackupWatchdog
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                string backupFilePath = await _backupService.BackupAsync(saveInfo, backupMode);
+                SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
+                string backupFilePath = await _backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
 
                 stopwatch.Stop();
                 

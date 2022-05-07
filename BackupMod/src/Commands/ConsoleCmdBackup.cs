@@ -15,7 +15,8 @@ namespace BackupMod.Commands;
 public class ConsoleCmdBackup : ConsoleCmdAbstract
 {
     private readonly IWorldService _worldService = ServiceLocator.GetRequiredService<IWorldService>();
-    private readonly ISavesProvider _savesProvider = ServiceLocator.GetRequiredService<ISavesProvider>();
+    private readonly IGameDataProvider _gameDataProvider = ServiceLocator.GetRequiredService<IGameDataProvider>();
+    private readonly IGameDirectoriesService _gameDirectoriesService = ServiceLocator.GetRequiredService<IGameDirectoriesService>();
     private readonly IChatService _chatService = ServiceLocator.GetService<IChatService>();
     private readonly ILogger<ConsoleCmdBackup> _logger = ServiceLocator.GetRequiredService<ILogger<ConsoleCmdBackup>>();
 
@@ -107,7 +108,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
             return;
         }
 
-        WorldInfo[] worlds = _savesProvider.GetAllWorlds().ToArray();
+        WorldInfo[] worlds = _gameDataProvider.GetWorldsData().ToArray();
 
         if (worldId == null || saveId == null || backupId == null)
         {
@@ -219,7 +220,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
                 {
                     BackupInfo backup = save.Backups[k];
 
-                    _logger.Debug($"        [{k}]: {backup.Timestamp:MM.dd.yyyy HH:mm:ss}");
+                    _logger.Debug($"        [{k}]: {backup.Timestamp:MM.dd.yyyy HH:mm:ss}{(backup.Filepath.Contains(_gameDirectoriesService.GetArchiveFolderPath()) ? " (archived)" : string.Empty) }");
                 }
             }
         }
@@ -233,11 +234,14 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
         _logger.Debug($"BackupMod v{assemblyVersion.Substring(0, assemblyVersion.Length - 2)} by ntaklive");
         _logger.Debug("Current settings:");
-        _logger.Debug($"AutoBackupDelay: {configuration.AutoBackupDelay.ToString()}");
-        _logger.Debug($"BackupsLimit: {configuration.BackupsLimit.ToString()}");
-        _logger.Debug($"EnableChatMessages: {configuration.EnableChatMessages.ToString()}");
-        _logger.Debug($"BackupOnWorldLoaded: {configuration.BackupOnWorldLoaded.ToString()}");
-        _logger.Debug($"CustomBackupsFolder: {configuration.CustomBackupsFolder}");
+        _logger.Debug($"General.BackupsLimit: {configuration.General.BackupsLimit.ToString()}");
+        _logger.Debug($"General.CustomBackupsFolder: {configuration.General.CustomBackupsFolder}");
+        _logger.Debug($"AutoBackup.Enabled: {configuration.AutoBackup.Enabled.ToString()}");
+        _logger.Debug($"AutoBackup.Delay: {configuration.AutoBackup.Delay.ToString()}");
+        _logger.Debug($"Archive.Enabled: {configuration.Archive.Enabled.ToString()}");
+        _logger.Debug($"Archive.CustomArchiveFolder: {configuration.Archive.CustomArchiveFolder}");
+        _logger.Debug($"Events.BackupOnWorldLoaded: {configuration.Events.BackupOnWorldLoaded.ToString()}");
+        _logger.Debug($"Utilities.ChatNotificationsEnabled: {configuration.Utilities.ChatNotificationsEnabled.ToString()}");
     }
 
     private async Task BackupInternal()

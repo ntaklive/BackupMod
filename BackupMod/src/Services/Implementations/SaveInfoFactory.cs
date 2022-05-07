@@ -7,14 +7,14 @@ namespace BackupMod.Services;
 public class SaveInfoFactory : ISaveInfoFactory
 {
     private readonly IDirectoryService _directoryService;
-    private readonly ISavesProvider _savesProvider;
+    private readonly IGameDataProvider _gameDataProvider;
 
     public SaveInfoFactory(
         IDirectoryService directoryService,
-        ISavesProvider savesProvider)
+        IGameDataProvider gameDataProvider)
     {
         _directoryService = directoryService;
-        _savesProvider = savesProvider;
+        _gameDataProvider = gameDataProvider;
     }
 
     public SaveInfo GetFromSaveFolderPath(string saveFolderPath)
@@ -31,7 +31,7 @@ public class SaveInfoFactory : ISaveInfoFactory
         Log.Warning("World folder path: " + worldFolderPath);
         Log.Warning("Save folder path: " + saveFolderPath);
         Log.Warning("-----------");
-        foreach (WorldInfo allWorld in _savesProvider.GetAllWorlds())
+        foreach (WorldInfo allWorld in _gameDataProvider.GetWorldsData())
         {
             Log.Warning("Available worlds:");
             Log.Warning("World name: " + allWorld.WorldName);
@@ -49,7 +49,7 @@ public class SaveInfoFactory : ISaveInfoFactory
         }
 #endif
 
-        WorldInfo world = _savesProvider.GetAllWorlds().First(world => world.WorldFolderPath == worldFolderPath);
+        WorldInfo world = _gameDataProvider.GetWorldsData().First(world => world.WorldFolderPath == worldFolderPath);
         
         return world.Saves.First(save => save.SaveFolderPath == saveFolderPath);
     }

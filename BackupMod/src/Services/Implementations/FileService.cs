@@ -9,4 +9,9 @@ public class FileService : IFileService
     {
         File.Delete(filepath);
     }
+
+    public void Copy(string sourceFilepath, string destinationFilepath, bool overwrite)
+    {
+        File.Copy(sourceFilepath, destinationFilepath, overwrite);
+    }
 }

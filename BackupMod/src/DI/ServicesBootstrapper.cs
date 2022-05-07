@@ -12,7 +12,7 @@ public static class ServicesBootstrapper
         services.AddTransient<IChatService>(resolver =>
         {
             var configuration = resolver.GetRequiredService<Configuration>();
-            return configuration.EnableChatMessages
+            return configuration.Utilities.ChatNotificationsEnabled
                 ? new ChatService(
                     resolver.GetRequiredService<IConnectionManagerProvider>(),
                     resolver.GetRequiredService<ILogger<ChatService>>()
@@ -33,7 +33,7 @@ public static class ServicesBootstrapper
         services.AddSingleton<IBlock>(_ => new Services.Block());
         services.AddSingleton<IItem>(_ => new Item());
         
-        services.AddTransient<IGameDirectoriesProvider>(resolver => new GameDirectoriesProvider(
+        services.AddTransient<IGameDirectoriesService>(resolver => new GameDirectoriesService(
             resolver.GetRequiredService<Configuration>(),
             resolver.GetRequiredService<IPathService>(),
             resolver.GetRequiredService<IDirectoryService>()
@@ -43,13 +43,13 @@ public static class ServicesBootstrapper
         ));
         services.AddSingleton<ISaveInfoFactory>(resolver => new SaveInfoFactory(
             resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<ISavesProvider>()
+            resolver.GetRequiredService<IGameDataProvider>()
         ));
-        services.AddSingleton<ISavesProvider>(resolver => new SavesProvider(
+        services.AddSingleton<IGameDataProvider>(resolver => new GameDataProvider(
             resolver.GetRequiredService<IArchiveService>(),
             resolver.GetRequiredService<IPathService>(),
             resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<IGameDirectoriesProvider>()
+            resolver.GetRequiredService<IGameDirectoriesService>()
         ));
         services.AddSingleton<IWorldSaverService>(resolver => new WorldSaverService(
             resolver.GetRequiredService<IWorldService>(),
@@ -64,7 +64,7 @@ public static class ServicesBootstrapper
         ));
         services.AddTransient<IWorldBackupService>(resolver => new WorldBackupService(
             resolver.GetRequiredService<Configuration>(),
-            resolver.GetRequiredService<IGameDirectoriesProvider>(),
+            resolver.GetRequiredService<IGameDirectoriesService>(),
             resolver.GetRequiredService<IWorldSaverService>(),
             resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<IPathService>(),
@@ -72,6 +72,8 @@ public static class ServicesBootstrapper
             resolver.GetRequiredService<IFileService>()
         ));
         services.AddTransient<IBackupWatchdog>(resolver => new BackupWatchdog(
+            resolver.GetRequiredService<Configuration>(),
+            resolver.GetRequiredService<IWorldService>(),
             resolver.GetRequiredService<IWorldBackupService>(),
             resolver.GetService<IChatService>(),
             resolver.GetRequiredService<ILogger<BackupWatchdog>>()

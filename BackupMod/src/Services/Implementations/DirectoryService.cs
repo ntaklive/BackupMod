@@ -41,17 +41,23 @@ public class DirectoryService : IDirectoryService
 
     public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
-        return Directory.GetFiles(path, searchPattern, searchOption).Select(Utils.PathHelper.FixFolderPathSeparators).ToArray();
+        return Directory.GetFiles(path, searchPattern, searchOption)
+            .Select(Utils.PathHelper.FixFolderPathSeparators)
+            .ToArray();
     }
 
     public string GetParentDirectoryPath(string path)
     {
-        return Utils.PathHelper.FixFolderPathSeparators(new DirectoryInfo(path).Parent!.FullName);
+        string fixedPath = Utils.PathHelper.FixFolderPathSeparators(path);
+        
+        return fixedPath.Substring(0, fixedPath.LastIndexOf(Utils.PathHelper.DirectorySeparatorChar));
     }
 
     public string GetDirectoryName(string path)
     {
-        return new DirectoryInfo(path).Name;
+        string fixedPath = Utils.PathHelper.FixFolderPathSeparators(path);
+        
+        return fixedPath.Substring(fixedPath.LastIndexOf(Utils.PathHelper.DirectorySeparatorChar) + 1, fixedPath.Length - fixedPath.LastIndexOf(Utils.PathHelper.DirectorySeparatorChar) - 1);
     }
 
     public void Delete(string path, bool recursive)

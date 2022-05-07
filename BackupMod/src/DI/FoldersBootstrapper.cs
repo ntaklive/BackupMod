@@ -10,12 +10,20 @@ public static class FoldersBootstrapper
     {
         ServiceProvider resolver = services.BuildServiceProvider();
 
-        var directories = resolver.GetRequiredService<IGameDirectoriesProvider>();
+        var directories = resolver.GetRequiredService<IGameDirectoriesService>();
 
         string backupsFolderPath = directories.GetBackupsFolderPath();
-        if (!new DirectoryInfo(backupsFolderPath).Exists)
+        var backupsFolder = new DirectoryInfo(backupsFolderPath);
+        if (!backupsFolder.Exists)
         {
-            new DirectoryInfo(backupsFolderPath).Create();
+            backupsFolder.Create();
+        }
+        
+        string archiveFolderPath = directories.GetArchiveFolderPath();
+        var archiveFolder = new DirectoryInfo(archiveFolderPath);
+        if (!archiveFolder.Exists)
+        {
+            archiveFolder.Create();
         }
     }
 }
