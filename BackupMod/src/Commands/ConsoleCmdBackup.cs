@@ -41,51 +41,60 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
                 return;
             case 1:
             {
-                if (_params[0] == "info")
+                switch (_params[0])
                 {
-                    BackupInfoInternal();
-                }
-                else if (_params[0] == "restore")
-                {
-                    BackupRestoreInternal(null, null, null);
-                }
-                else
-                {
-                    LogUnknownCommand();
+                    case "info":
+                        BackupInfoInternal();
+                        break;
+                    case "restore":
+                        await BackupRestoreInternal(null, null, null);
+                        break;
+                    case "delete":
+                        await BackupDeleteInternal(null, null, null);
+                        break;
+                    case "list":
+                        BackupListInternal();
+                        break;
+                    default:
+                        LogUnknownCommand();
+                        break;
                 }
 
                 return;
             }
             case 4:
             {
-                if (_params[0] == "restore")
+                switch (_params[0])
                 {
-                    if (!int.TryParse(_params[1], out int worldId))
+                    case "restore":
                     {
-                        LogInvalidArgument("world id", _params[1]);
+                        if (!TryParseArguments(
+                                _params[1], _params[2], _params[3],
+                                out int worldId, out int saveId, out int backupId)
+                           )
+                        {
+                            return;
+                        }
 
-                        return;
+                        await BackupRestoreInternal(worldId, saveId, backupId);
+                        break;
                     }
-
-                    if (!int.TryParse(_params[2], out int saveId))
+                    case "delete":
                     {
-                        LogInvalidArgument("save id", _params[2]);
+                        if (!TryParseArguments(
+                                _params[1], _params[2], _params[3],
+                                out int worldId, out int saveId, out int backupId)
+                           )
+                        {
+                            return;
+                        }
 
-                        return;
+                        await BackupDeleteInternal(worldId, saveId, backupId);
+                        break;
                     }
-
-                    if (!int.TryParse(_params[3], out int backupId))
-                    {
-                        LogInvalidArgument("backup id", _params[3]);
-
-                        return;
-                    }
-
-                    BackupRestoreInternal(worldId, saveId, backupId);
-                }
-                else
-                {
-                    LogUnknownCommand();
+                    default:
+                        LogUnknownCommand();
+                        break;
                 }
 
                 return;
@@ -97,9 +106,45 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         }
     }
 
+
     public override string GetDescription() => "some commands to simplify the creation of backups (command from the BackupMod)";
 
-    private void BackupRestoreInternal(int? worldId, int? saveId, int? backupId)
+    private bool TryParseArguments(string worldIdParam, string saveIdParam, string backupIdParam, out int worldId, out int  saveId, out int  backupId)
+    {
+        var isValid = true;
+        
+        if (!int.TryParse(worldIdParam, out worldId))
+        {
+            LogInvalidArgument("world id", worldIdParam);
+
+            isValid = false;
+        }
+
+        if (!int.TryParse(saveIdParam, out saveId))
+        {
+            LogInvalidArgument("save id", saveIdParam);
+
+            isValid = false;
+        }
+
+        if (!int.TryParse(backupIdParam, out backupId))
+        {
+            LogInvalidArgument("backup id", backupIdParam);
+
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    
+    private void BackupListInternal()
+    {
+        WorldInfo[] worlds = _gameDataProvider.GetWorldsData().ToArray();
+        
+        PrintAvailableBackups(worlds);
+    }
+
+    private async Task BackupRestoreInternal(int? worldId, int? saveId, int? backupId)
     {
         if (_worldService.GetCurrentWorld() != null)
         {
@@ -119,48 +164,8 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
             return;
         }
 
-        int worldsAmount = worlds.Length;
-        if (worldId >= worldsAmount || worldId < 0)
+        if (!TryValidateArguments(worlds, worldId, saveId, backupId))
         {
-            if (worldsAmount != 0)
-            {
-                _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount - 1}.");
-            }
-            else
-            {
-                LogThereIsNoBackups();
-            }
-            
-            return;
-        }
-
-        int savesAmount = worlds[worldId.Value].Saves.Length;
-        if (saveId >= savesAmount || saveId < 0)
-        {
-            if (savesAmount != 0)
-            {
-                _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount - 1}.");
-            }
-            else
-            {
-                LogThereIsNoBackups();
-            }
-            
-            return;
-        }
-
-        int backupAmount = worlds[worldId.Value].Saves[saveId.Value].Backups.Length;
-        if (backupId >= backupAmount || backupId < 0)
-        {
-            if (backupAmount != 0)
-            {
-                _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount - 1}.");
-            }
-            else
-            {
-                LogThereIsNoBackups();
-            }
-            
             return;
         }
 
@@ -168,7 +173,9 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
 
         try
         {
-            backupService.RestoreAsync(worlds[worldId.Value].Saves[saveId.Value].Backups[backupId.Value]);
+            BackupInfo selectedBackup = worlds[worldId.Value].Saves[saveId.Value].Backups[backupId.Value];
+            
+            await backupService.RestoreAsync(selectedBackup);
         }
         catch (Exception exception)
         {
@@ -178,6 +185,86 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         }
         
         _logger.Debug("The selected save's backup was successfully restored.");
+    }
+    
+    private async Task BackupDeleteInternal(int? worldId, int? saveId, int? backupId)
+    {
+        if (_worldService.GetCurrentWorld() != null)
+        {
+            _logger.Error("This command can only be executed in the main menu.");
+
+            return;
+        }
+
+        WorldInfo[] worlds = _gameDataProvider.GetWorldsData().ToArray();
+
+        if (worldId == null || saveId == null || backupId == null)
+        {
+            _logger.Debug("Please specify a backup to delete. Hint: 'backup delete *worldId* *saveId* *backupId*'.");
+
+            PrintAvailableBackups(worlds);
+
+            return;
+        }
+
+        if (!TryValidateArguments(worlds, worldId, saveId, backupId))
+        {
+            return;
+        }
+
+        var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
+
+        try
+        {
+            await backupService.DeleteAsync(worlds[worldId.Value].Saves[saveId.Value].Backups[backupId.Value]);
+        }
+        catch (Exception exception)
+        {
+            _logger.Exception(exception);
+            
+            return;
+        }
+        
+        _logger.Debug("The selected save's backup was successfully deleted.");
+    }
+
+    private void BackupInfoInternal()
+    {
+        var configuration = ServiceLocator.GetRequiredService<Configuration>();
+
+        var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        _logger.Debug($"BackupMod v{assemblyVersion.Substring(0, assemblyVersion.Length - 2)} by ntaklive");
+        _logger.Debug("Current settings:");
+        _logger.Debug($"General.BackupsLimit: {configuration.General.BackupsLimit.ToString()}");
+        _logger.Debug($"General.CustomBackupsFolder: {configuration.General.CustomBackupsFolder}");
+        _logger.Debug($"AutoBackup.Enabled: {configuration.AutoBackup.Enabled.ToString()}");
+        _logger.Debug($"AutoBackup.Delay: {configuration.AutoBackup.Delay.ToString()}");
+        _logger.Debug($"Archive.Enabled: {configuration.Archive.Enabled.ToString()}");
+        _logger.Debug($"Archive.CustomArchiveFolder: {configuration.Archive.CustomArchiveFolder}");
+        _logger.Debug($"Events.BackupOnWorldLoaded: {configuration.Events.BackupOnWorldLoaded.ToString()}");
+        _logger.Debug($"Utilities.ChatNotificationsEnabled: {configuration.Utilities.ChatNotificationsEnabled.ToString()}");
+    }
+
+    private async Task BackupInternal()
+    {
+        if (_worldService.GetCurrentWorld() == null)
+        {
+            _logger.Error("This command can only be executed when a game is started.");
+
+            return;
+        }
+
+        var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
+
+        SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
+
+        string backupFilePath = await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
+
+        _logger.Debug("The manual backup was successfully completed.");
+        _logger.Debug($"The backup file location: \"{backupFilePath}\".");
+
+        _chatService?.SendMessage("The manual backup was successfully completed.");
     }
     
     private void PrintAvailableBackups(IReadOnlyList<WorldInfo> worlds)
@@ -226,43 +313,57 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         }
     }
 
-    private void BackupInfoInternal()
+    [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
+    private bool TryValidateArguments(IReadOnlyList<WorldInfo> worlds, int? worldId, int? saveId, int? backupId)
     {
-        var configuration = ServiceLocator.GetRequiredService<Configuration>();
-
-        var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-        _logger.Debug($"BackupMod v{assemblyVersion.Substring(0, assemblyVersion.Length - 2)} by ntaklive");
-        _logger.Debug("Current settings:");
-        _logger.Debug($"General.BackupsLimit: {configuration.General.BackupsLimit.ToString()}");
-        _logger.Debug($"General.CustomBackupsFolder: {configuration.General.CustomBackupsFolder}");
-        _logger.Debug($"AutoBackup.Enabled: {configuration.AutoBackup.Enabled.ToString()}");
-        _logger.Debug($"AutoBackup.Delay: {configuration.AutoBackup.Delay.ToString()}");
-        _logger.Debug($"Archive.Enabled: {configuration.Archive.Enabled.ToString()}");
-        _logger.Debug($"Archive.CustomArchiveFolder: {configuration.Archive.CustomArchiveFolder}");
-        _logger.Debug($"Events.BackupOnWorldLoaded: {configuration.Events.BackupOnWorldLoaded.ToString()}");
-        _logger.Debug($"Utilities.ChatNotificationsEnabled: {configuration.Utilities.ChatNotificationsEnabled.ToString()}");
-    }
-
-    private async Task BackupInternal()
-    {
-        if (_worldService.GetCurrentWorld() == null)
+        var isValid = true;
+        
+        int worldsAmount = worlds.Count;
+        if (worldId >= worldsAmount || worldId < 0)
         {
-            _logger.Error("This command can only be executed when a game is started.");
+            if (worldsAmount != 0)
+            {
+                _logger.Error($"Invalid world id. Please specify a world id in the range 0-{worldsAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
 
-            return;
+            isValid = false;
         }
 
-        var backupService = ServiceLocator.GetRequiredService<IWorldBackupService>();
+        int savesAmount = worlds[worldId.Value].Saves.Length;
+        if (saveId >= savesAmount || saveId < 0)
+        {
+            if (savesAmount != 0)
+            {
+                _logger.Error($"Invalid save id. Please specify a save id in the range 0-{savesAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
+            
+            isValid = false;
+        }
 
-        SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
+        int backupAmount = worlds[worldId.Value].Saves[saveId.Value].Backups.Length;
+        if (backupId >= backupAmount || backupId < 0)
+        {
+            if (backupAmount != 0)
+            {
+                _logger.Error($"Invalid backup id. Please specify a backup id in the range 0-{backupAmount - 1}.");
+            }
+            else
+            {
+                LogThereIsNoBackups();
+            }
+            
+            isValid = false;
+        }
 
-        string backupFilePath = await backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
-
-        _logger.Debug("The manual backup was successfully completed.");
-        _logger.Debug($"The backup file location: \"{backupFilePath}\".");
-
-        _chatService?.SendMessage("The manual backup was successfully completed.");
+        return isValid;
     }
 
     private void LogInvalidArgument(string argumentName, string argumentValue) => _logger.Error($"'{argumentValue}' is an invalid {argumentName}.");
