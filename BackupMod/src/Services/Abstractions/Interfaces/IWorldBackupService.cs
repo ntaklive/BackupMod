@@ -13,4 +13,8 @@ public interface IWorldBackupService
     public void Restore(BackupInfo backupInfo);
     
     public Task RestoreAsync(BackupInfo backupInfo);
+    
+    public void Delete(BackupInfo backupInfo);
+    
+    public Task DeleteAsync(BackupInfo backupInfo);
 }

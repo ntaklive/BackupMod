@@ -72,6 +72,16 @@ public class WorldBackupService : IWorldBackupService
         return Task.Factory.StartNew(() => Restore(backupInfo));
     }
 
+    public void Delete(BackupInfo backupInfo)
+    {
+        _fileService.Delete(backupInfo.Filepath);
+    }
+
+    public Task DeleteAsync(BackupInfo backupInfo)
+    {
+        return Task.Factory.StartNew(() => Delete(backupInfo));
+    }
+
     private string BackupInternal(SaveInfo saveInfo)
     {
         var backupNameWithExtension = $"{saveInfo.SaveName}_{DateTime.Now:yyyy-dd-M--HH-mm-ss}{_archiveService.Extension}";
