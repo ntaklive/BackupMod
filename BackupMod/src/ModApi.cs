@@ -17,6 +17,8 @@ public class ModApi : IModApi
     {
         Bootstrapper.Initialize();
 
+        var logger = ServiceLocator.GetRequiredService<ILogger<ModApi>>();
+        
         ModEvents.GameStartDone.RegisterHandler(async () =>
         {
             try
@@ -25,8 +27,6 @@ public class ModApi : IModApi
             }
             catch (Exception exception)
             {
-                var logger = ServiceLocator.GetRequiredService<ILogger<ModApi>>();
-
                 logger.Exception(exception);
             }
         });
@@ -50,7 +50,7 @@ public class ModApi : IModApi
 
         var backupWatchdog = ServiceLocator.GetRequiredService<IBackupWatchdog>();
         
-        using Task watchdogTask = backupWatchdog.StartAsync();
+        Task watchdogTask = backupWatchdog.StartAsync();
         await watchdogTask;
         if (watchdogTask.Exception != null)
         {   
