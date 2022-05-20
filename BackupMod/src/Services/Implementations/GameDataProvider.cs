@@ -29,25 +29,61 @@ public class GameDataProvider : IGameDataProvider
         _gameDirectoriesService = gameDirectoriesService;
     }
     
-    public WorldInfo[] GetWorldsData()
+    
+    public IEnumerable<WorldInfo> GetWorldsData()
     {
+        string allArchivesFolderPath = _gameDirectoriesService.GetArchiveFolderPath();
         string allBackupsFolderPath = _gameDirectoriesService.GetBackupsFolderPath();
         string allSavesFolderPath = _gameDirectoriesService.GetSavesFolderPath();
 
         string[] allAvailableWorldsPaths =
-            Enumerable.Concat(
-                    _directoryService.GetDirectories(allBackupsFolderPath),
-                    _directoryService.GetDirectories(allSavesFolderPath)
+            _directoryService.GetDirectories(allSavesFolderPath)
+                .Concat(_directoryService.GetDirectories(allBackupsFolderPath))
+                .Concat(_directoryService.GetDirectories(allArchivesFolderPath))
+                .Where(str =>
+                    str != allSavesFolderPath &&
+                    str != allArchivesFolderPath &&
+                    str != allBackupsFolderPath
                 )
-                .Select(str => PathHelper.FixFolderPathSeparators(str)
-                    .Replace(
-                        _gameDirectoriesService.GetBackupsFolderPath(),
-                        _gameDirectoriesService.GetSavesFolderPath()
-                    ))
-                .Where(str => str != _gameDirectoriesService.GetSavesFolderPath() && str != _gameDirectoriesService.GetArchiveFolderPath())
-                .Distinct()
                 .ToArray();
 
+        var allAvailableWorldsInSavesFolder = new List<string>(allAvailableWorldsPaths.Length / 3);
+        allAvailableWorldsPaths.ForEach(worldPath =>
+        {
+            string worldPathInSavesFolder = worldPath
+                .Replace(
+                    allBackupsFolderPath,
+                    allSavesFolderPath
+                )
+                .Replace(
+                    allArchivesFolderPath,
+                    allSavesFolderPath
+                );
+            
+            _directoryService.CreateDirectory(worldPathInSavesFolder);
+
+            string[] saves = _directoryService.GetDirectories(worldPath);
+            foreach (string savePath in saves)
+            {
+                string savePathInSavesFolder = savePath
+                    .Replace(
+                        allBackupsFolderPath,
+                        allSavesFolderPath
+                    )
+                    .Replace(
+                        allArchivesFolderPath,
+                        allSavesFolderPath
+                    );
+                
+                _directoryService.CreateDirectory(savePathInSavesFolder);
+
+                if (!allAvailableWorldsInSavesFolder.Contains(worldPathInSavesFolder))
+                {
+                    allAvailableWorldsInSavesFolder.Add(worldPathInSavesFolder);
+                }
+            }
+        });
+        
 #if DEBUG
         Log.Warning("All available paths:");
         foreach (string path in allAvailableWorldsPaths)
@@ -56,22 +92,14 @@ public class GameDataProvider : IGameDataProvider
         }
 #endif
 
-        return GetWorldsFromFolders(allAvailableWorldsPaths);
+        return GetWorldsFromFolders(allAvailableWorldsInSavesFolder);
     }
-
-    private static void CreateDirectoryIfRequired(string path)
-    {
-        var directory = new DirectoryInfo(path);
-        if (!directory.Exists)
-        {
-            directory.Create();
-        }
-    }
-
+    
     private BackupInfo[] GetSaveBackupsFromFolder(string path)
     {
         var backups = new List<BackupInfo>();
-        foreach (string filepath in _directoryService.GetFiles(path, $"*{_archiveService.Extension}", SearchOption.TopDirectoryOnly))
+        foreach (string filepath in _directoryService.GetFiles(path, $"*{_archiveService.Extension}",
+                     SearchOption.TopDirectoryOnly))
         {
             var fileInfo = new FileInfo(filepath);
 
@@ -98,8 +126,8 @@ public class GameDataProvider : IGameDataProvider
 
             string saveBackupsFolderPath = _pathService.Combine(_gameDirectoriesService.GetBackupsFolderPath(), worldName, saveName);
             string saveArchiveFolderPath = _pathService.Combine(_gameDirectoriesService.GetArchiveFolderPath(), worldName, saveName);
-            CreateDirectoryIfRequired(saveBackupsFolderPath);
-            CreateDirectoryIfRequired(saveArchiveFolderPath);
+            _directoryService.CreateDirectory(saveBackupsFolderPath);
+            _directoryService.CreateDirectory(saveArchiveFolderPath);
 
             var save = new SaveInfo
             {
@@ -124,7 +152,7 @@ public class GameDataProvider : IGameDataProvider
         return saves.ToArray();
     }
 
-    public WorldInfo[] GetWorldsFromFolders(string[] paths)
+    private IEnumerable<WorldInfo> GetWorldsFromFolders(IEnumerable<string> paths)
     {
         var worlds = new List<WorldInfo>();
         foreach (string worldFolderPath in paths)
@@ -133,9 +161,9 @@ public class GameDataProvider : IGameDataProvider
 
             string worldBackupsFolderPath = _pathService.Combine(_gameDirectoriesService.GetBackupsFolderPath(), worldName);
             string worldArchiveFolderPath = _pathService.Combine(_gameDirectoriesService.GetArchiveFolderPath(), worldName);
-            CreateDirectoryIfRequired(worldBackupsFolderPath);
-            CreateDirectoryIfRequired(worldArchiveFolderPath);
-            
+            _directoryService.CreateDirectory(worldBackupsFolderPath);
+            _directoryService.CreateDirectory(worldArchiveFolderPath);
+
             var world = new WorldInfo
             {
                 WorldName = worldName,
