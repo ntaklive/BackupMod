@@ -44,46 +44,22 @@ public class GameDirectoriesService : IGameDirectoriesService
     {
         // Backups
         string allBackupsFolderPath = GetBackupsFolderPath();
-        var allBackupsFolder = new DirectoryInfo(allBackupsFolderPath);
-        if (!allBackupsFolder.Exists)
-        {
-            allBackupsFolder.Create();
-        }
+        _directoryService.CreateDirectory(allBackupsFolderPath);
         
         string worldBackupsFolderPath = _directoryService.GetParentDirectoryPath(saveInfo.BackupsFolderPath);
-        var worldBackupsFolder = new DirectoryInfo(worldBackupsFolderPath);
-        if (!worldBackupsFolder.Exists)
-        {
-            worldBackupsFolder.Create();
-        }
+        _directoryService.CreateDirectory(worldBackupsFolderPath);
         
         string saveBackupsFolderPath = saveInfo.BackupsFolderPath;
-        var saveBackupsFolder = new DirectoryInfo(saveBackupsFolderPath);
-        if (!saveBackupsFolder.Exists)
-        {
-            saveBackupsFolder.Create();
-        }
+        _directoryService.CreateDirectory(saveBackupsFolderPath);
         
         // Archive
         string archiveFolderPath = GetArchiveFolderPath();
-        var archiveFolder = new DirectoryInfo(archiveFolderPath);
-        if (!archiveFolder.Exists)
-        {
-            archiveFolder.Create();
-        }
+        _directoryService.CreateDirectory(archiveFolderPath);
         
         string worldArchiveFolderPath = _directoryService.GetParentDirectoryPath(saveInfo.ArchiveFolderPath);
-        var worldArchiveFolder = new DirectoryInfo(worldArchiveFolderPath);
-        if (!worldArchiveFolder.Exists)
-        {
-            worldArchiveFolder.Create();
-        }
+        _directoryService.CreateDirectory(worldArchiveFolderPath);
         
         string saveArchiveFolderPath = saveInfo.ArchiveFolderPath;
-        var saveArchiveFolder = new DirectoryInfo(saveArchiveFolderPath);
-        if (!saveArchiveFolder.Exists)
-        {
-            saveArchiveFolder.Create();
-        }
+        _directoryService.CreateDirectory(saveArchiveFolderPath);
     }
 }
