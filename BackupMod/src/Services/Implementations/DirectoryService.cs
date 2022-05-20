@@ -6,7 +6,7 @@ namespace BackupMod.Services;
 
 public class DirectoryService : IDirectoryService
 {
-    public void Copy(string sourceDirectory, string destinationDirectory, bool recursive)
+    public void CopyDirectory(string sourceDirectory, string destinationDirectory, bool recursive)
     {
         // Get information about the source directory
         var dir = new DirectoryInfo(sourceDirectory);
@@ -34,7 +34,7 @@ public class DirectoryService : IDirectoryService
             foreach (DirectoryInfo subDir in dirs)
             {
                 string newDestinationDir = Path.Combine(destinationDirectory, subDir.Name);
-                Copy(subDir.FullName, newDestinationDir, true);
+                CopyDirectory(subDir.FullName, newDestinationDir, true);
             }
         }
     }
@@ -60,9 +60,18 @@ public class DirectoryService : IDirectoryService
         return fixedPath.Substring(fixedPath.LastIndexOf(Utils.PathHelper.DirectorySeparatorChar) + 1, fixedPath.Length - fixedPath.LastIndexOf(Utils.PathHelper.DirectorySeparatorChar) - 1);
     }
 
-    public void Delete(string path, bool recursive)
+    public void DeleteDirectory(string path, bool recursive)
     {
         Directory.Delete(path, recursive);
+    }
+
+    public void CreateDirectory(string path)
+    {
+        var directory = new DirectoryInfo(path);
+        if (!directory.Exists)
+        {
+            directory.Create();
+        }
     }
 
     public string[] GetDirectories(string path)

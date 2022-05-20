@@ -61,7 +61,7 @@ public class WorldBackupService : IWorldBackupService
         var saveDirectory = new DirectoryInfo(backupInfo.SaveInfo.SaveFolderPath);
         if (saveDirectory.Exists)
         {
-            _directoryService.Delete(backupInfo.SaveInfo.SaveFolderPath, true);
+            _directoryService.DeleteDirectory(backupInfo.SaveInfo.SaveFolderPath, true);
         }
 
         _archiveService.DecompressToFolder(backupInfo.Filepath, backupInfo.SaveInfo.SaveFolderPath);
@@ -92,7 +92,7 @@ public class WorldBackupService : IWorldBackupService
         string archiveFilePath = _pathService.Combine(saveInfo.ArchiveFolderPath, backupNameWithExtension);
         string tempFolderPath = _pathService.Combine(saveInfo.BackupsFolderPath, $"temp_{backupNameWithoutExtension}");
         
-        _directoryService.Copy(saveInfo.SaveFolderPath, tempFolderPath, true);
+        _directoryService.CopyDirectory(saveInfo.SaveFolderPath, tempFolderPath, true);
         _archiveService.CompressFolder(tempFolderPath, backupFilePath, false);
 
         if (_configuration.Archive.Enabled)
@@ -110,7 +110,7 @@ public class WorldBackupService : IWorldBackupService
             _fileService.Copy(backupFilePath, archiveFilePath, false);
         }
         
-        _directoryService.Delete(tempFolderPath, true);
+        _directoryService.DeleteDirectory(tempFolderPath, true);
 
         return backupFilePath;
     }
@@ -164,7 +164,7 @@ public class WorldBackupService : IWorldBackupService
         {
             var directoryInfo = new DirectoryInfo(directoryPath);
 
-            _directoryService.Delete(directoryInfo.FullName, true);
+            _directoryService.DeleteDirectory(directoryInfo.FullName, true);
         }
     }
 }
