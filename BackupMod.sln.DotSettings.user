@@ -1,0 +1,20 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005CBackupMod_005Clib_005CSystem_002EIO_002ECompression_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005CBackupMod_005Clib_005CSystem_002EIO_002ECompression_002EFileSystem_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CAssembly_002DCSharp_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CLogLibrary_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CSystem_002ECore_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CSystem_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002EAudioModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=20470383_002D4208_002D4900_002Dbea0_002Daf9e5d73f099/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BackupModTests&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="E:\7DaysToDie mods\BackupMod\BackupModTests" Presentation="&amp;lt;BackupModTests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=49bb7ee9_002D3e84_002D4abd_002Db391_002D59bf7b1aa62b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9197f52c_002D3934_002D42f6_002Daaf5_002Ded69a8fd22ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BackupModTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="E:\7DaysToDie mods\BackupMod\BackupModTests" Presentation="&amp;lt;BackupModTests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>
