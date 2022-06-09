@@ -23,10 +23,10 @@ public static class ServicesBootstrapper
         services.AddSingleton<IArchiveService>(_ => new ArchiveService());
         services.AddSingleton<IFileService>(_ => new FileService());
         services.AddSingleton<IDirectoryService>(_ => new DirectoryService());
+        services.AddSingleton<IPathService>(_ => new PathService());
         services.AddSingleton<IPlayersProvider>(_ => new PlayersProvider());
         services.AddSingleton<IGamePrefsProvider>(_ => new GamePrefsProvider());
         services.AddSingleton<IPlatformManager>(_ => new PlatformManager());
-        services.AddSingleton<IPathService>(_ => new PathService());
         services.AddSingleton<IConnectionManagerProvider>(_ => new ConnectionManagerProvider());
         services.AddSingleton<IThreadManager>(_ => new Services.ThreadManager());
         services.AddSingleton<IPlayerInputRecordingSystemProvider>(_ => new PlayerInputRecordingSystemProvider());

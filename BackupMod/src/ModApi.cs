@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using BackupMod.DI;
+using BackupMod.FilUnderscore;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
 using BackupMod.Services.Abstractions.Models;
@@ -16,6 +17,7 @@ public class ModApi : IModApi
     public void InitMod(Mod _modInstance)
     {
         Bootstrapper.Initialize();
+        ModManagerBootstrapper.Initialize(_modInstance);
 
         var logger = ServiceLocator.GetRequiredService<ILogger<ModApi>>();
         
