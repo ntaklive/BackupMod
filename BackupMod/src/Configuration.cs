@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace BackupMod.Services.Abstractions.Models;
+namespace BackupMod;
 
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 public class Configuration

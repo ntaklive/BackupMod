@@ -5,5 +5,6 @@
         <Description value="This modlet makes it possible to automatically backup your game saves"/>
         <Author value="ntaklive"/>
         <Version value="1.1.6"/>
+        <Website value="https://github.com/ntaklive/BackupMod" />
     </ModInfo>
 </xml>

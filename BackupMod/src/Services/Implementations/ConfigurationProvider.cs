@@ -1,19 +1,25 @@
+using System;
 using BackupMod.Services.Abstractions;
-using BackupMod.Services.Abstractions.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace BackupMod.Services;
 
-public class ConfigurationProvider : Abstractions.IConfigurationProvider
+public class ConfigurationService : IConfigurationService
 {
     private readonly string _filePath;
-    private readonly ILogger<ConfigurationProvider> _logger;
+    private readonly IFileService _fileService;
+    private readonly IJsonSerializer _jsonSerializer;
+    private readonly ILogger<ConfigurationService> _logger;
 
-    public ConfigurationProvider(
+    public ConfigurationService(
         string filePath,
-        ILogger<ConfigurationProvider> logger)
+        IFileService fileService,
+        IJsonSerializer jsonSerializer,
+        ILogger<ConfigurationService> logger)
     {
         _filePath = filePath;
+        _fileService = fileService;
+        _jsonSerializer = jsonSerializer;
         _logger = logger;
     }
 
@@ -21,8 +27,7 @@ public class ConfigurationProvider : Abstractions.IConfigurationProvider
     {
         try
         {
-            IConfigurationRoot configurationRoot = new ConfigurationBuilder()
-                .AddJsonFile(_filePath).Build();
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder().AddJsonFile(_filePath).Build();
             
             var configuration = configurationRoot.Get<Configuration>();
 
@@ -76,6 +81,24 @@ public class ConfigurationProvider : Abstractions.IConfigurationProvider
             _logger.Error("The default configuration will be used until then.");
             
             return Configuration.Default;
+        }
+    }
+
+    public bool TryUpdateConfiguration(Configuration configuration)
+    {
+        try
+        {
+            string json = _jsonSerializer.Serialize(configuration);
+            _fileService.WriteAllText(_filePath, json);
+
+            return true;
+        }
+        catch (Exception exception)
+        {
+            _logger.Error("Cannot update the configuration.");
+            _logger.Exception(exception);
+            
+            return false;
         }
     }
 }

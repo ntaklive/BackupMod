@@ -17,11 +17,14 @@ public static class ConfigurationBootstrapper
         string fullPath = Assembly.GetExecutingAssembly().Location;
         string configPath = pathService.Combine(pathService.GetDirectoryName(fullPath)!, "settings.json");
 
-        services.AddSingleton<IConfigurationProvider>(resolver => new ConfigurationProvider(
+        services.AddSingleton<IConfigurationService>(provider => new ConfigurationService(
             configPath,
-            resolver.GetRequiredService<ILogger<ConfigurationProvider>>()
+            provider.GetRequiredService<IFileService>(),
+            provider.GetRequiredService<IJsonSerializer>(),
+            provider.GetRequiredService<ILogger<ConfigurationService>>()
         ));
-        
-        services.AddTransient<Configuration>(resolver => resolver.GetRequiredService<IConfigurationProvider>().GetConfiguration());
+
+        services.AddTransient<Configuration>(resolver =>
+            resolver.GetRequiredService<IConfigurationService>().GetConfiguration());
     }
 }

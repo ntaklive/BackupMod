@@ -41,6 +41,9 @@
             xcopy "$(SolutionDir)BackupMod\bin\Release\*.*" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             xcopy "$(SolutionDir)BackupMod\lib\*.*" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             xcopy "$(SolutionDir)BackupMod\ModInfo.xml" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
+            xcopy "$(SolutionDir)BackupMod\Manifest.xml" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
+            mkdir "$(SolutionDir)BackupMod\bin\Publish\config"
+            xcopy "$(SolutionDir)BackupMod\config\localization.txt" "$(SolutionDir)BackupMod\bin\Publish\config" /Y /I
         </PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
@@ -51,8 +54,13 @@
         </AdditionalFiles>
     </ItemGroup>
     <ItemGroup>
+        <AdditionalFiles Include="config\localization.txt">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AdditionalFiles>
         <Content Include="FodyWeavers.xml" />
-        <Content Include="Manifest.xml" />
+        <AdditionalFiles Include="Manifest.xml">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AdditionalFiles>
         <Content Include="sdk\Alpha20.3b3\Assembly-CSharp.dll" />
         <Content Include="sdk\Alpha20.3b3\LogLibrary.dll" />
         <Content Include="sdk\Alpha20.3b3\System.Core.dll" />
@@ -66,6 +74,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="src\Commands\ConsoleCmdBackup.cs" />
+        <Compile Include="src\Configuration.cs" />
         <Compile Include="src\DI\Bootstrapper.cs" />
         <Compile Include="src\DI\ConfigurationBootstrapper.cs" />
         <Compile Include="src\FilUnderscore\ModManagerBootstrapper.cs" />
@@ -83,13 +92,14 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IBackupWatchdog.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IBlock.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IChatService.cs" />
-        <Compile Include="src\Services\Abstractions\Interfaces\IConfigurationProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IConfigurationService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IDirectoryService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IFileService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IGameDirectoriesService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IGamePrefsProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IItem.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IJsonSerializer.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\ILogger.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPathService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IPlatformManager.cs" />
@@ -102,7 +112,6 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaverService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
         <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
-        <Compile Include="src\Services\Abstractions\Models\Configuration.cs" />
         <Compile Include="src\Services\Abstractions\Models\SaveInfo.cs" />
         <Compile Include="src\Services\Abstractions\Models\WorldInfo.cs" />
         <Compile Include="src\Services\Implementations\ArchiveService.cs" />
@@ -116,6 +125,7 @@
         <Compile Include="src\Services\Implementations\GameDirectoriesService.cs" />
         <Compile Include="src\Services\Implementations\GamePrefsProvider.cs" />
         <Compile Include="src\Services\Implementations\Item.cs" />
+        <Compile Include="src\Services\Implementations\JsonSerializer.cs" />
         <Compile Include="src\Services\Implementations\LogWrapper.cs" />
         <Compile Include="src\Services\Implementations\PathService.cs" />
         <Compile Include="src\Services\Implementations\PlatformManager.cs" />

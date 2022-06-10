@@ -11,4 +11,5 @@ public interface IDirectoryService
     public string GetDirectoryName(string path);
     public void DeleteDirectory(string path, bool recursive);
     public void CopyDirectory(string sourceDirectory, string destinationDirectory, bool recursive);
+    bool IsDirectoryExists(string directory);
 }

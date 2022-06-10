@@ -1,7 +1,10 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using BackupMod.Services;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Models;
 using Microsoft.Extensions.DependencyInjection;
+using JsonSerializer = BackupMod.Services.JsonSerializer;
 
 namespace BackupMod.DI;
 
@@ -9,16 +12,20 @@ public static class ServicesBootstrapper
 {
     public static void RegisterServices(IServiceCollection services)
     {
-        services.AddTransient<IChatService>(resolver =>
+        services.AddTransient<IChatService>(provider =>
         {
-            var configuration = resolver.GetRequiredService<Configuration>();
+            var configuration = provider.GetRequiredService<Configuration>();
             return configuration.Utilities.ChatNotificationsEnabled
                 ? new ChatService(
-                    resolver.GetRequiredService<IConnectionManagerProvider>(),
-                    resolver.GetRequiredService<ILogger<ChatService>>()
+                    provider.GetRequiredService<IConnectionManagerProvider>(),
+                    provider.GetRequiredService<ILogger<ChatService>>()
                 )
                 : null;
         });
+
+        services.AddSingleton<IJsonSerializer>(_ => new JsonSerializer(new JsonSerializerOptions()
+            {WriteIndented = true, Converters = {new JsonStringEnumConverter()}}
+        ));
         
         services.AddSingleton<IArchiveService>(_ => new ArchiveService());
         services.AddSingleton<IFileService>(_ => new FileService());
@@ -33,50 +40,50 @@ public static class ServicesBootstrapper
         services.AddSingleton<IBlock>(_ => new Services.Block());
         services.AddSingleton<IItem>(_ => new Item());
         
-        services.AddTransient<IGameDirectoriesService>(resolver => new GameDirectoriesService(
-            resolver.GetRequiredService<Configuration>(),
-            resolver.GetRequiredService<IPathService>(),
-            resolver.GetRequiredService<IDirectoryService>()
+        services.AddTransient<IGameDirectoriesService>(provider => new GameDirectoriesService(
+            provider.GetRequiredService<Configuration>(),
+            provider.GetRequiredService<IPathService>(),
+            provider.GetRequiredService<IDirectoryService>()
         ));
-        services.AddSingleton<IWorldService>(resolver => new WorldService(
-            resolver.GetRequiredService<ISaveInfoFactory>()
+        services.AddSingleton<IWorldService>(provider => new WorldService(
+            provider.GetRequiredService<ISaveInfoFactory>()
         ));
-        services.AddSingleton<ISaveInfoFactory>(resolver => new SaveInfoFactory(
-            resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<IGameDataProvider>()
+        services.AddSingleton<ISaveInfoFactory>(provider => new SaveInfoFactory(
+            provider.GetRequiredService<IDirectoryService>(),
+            provider.GetRequiredService<IGameDataProvider>()
         ));
-        services.AddSingleton<IGameDataProvider>(resolver => new GameDataProvider(
-            resolver.GetRequiredService<IArchiveService>(),
-            resolver.GetRequiredService<IPathService>(),
-            resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<IGameDirectoriesService>()
+        services.AddSingleton<IGameDataProvider>(provider => new GameDataProvider(
+            provider.GetRequiredService<IArchiveService>(),
+            provider.GetRequiredService<IPathService>(),
+            provider.GetRequiredService<IDirectoryService>(),
+            provider.GetRequiredService<IGameDirectoriesService>()
         ));
-        services.AddSingleton<IWorldSaverService>(resolver => new WorldSaverService(
-            resolver.GetRequiredService<IWorldService>(),
-            resolver.GetRequiredService<IPlayersProvider>(),
-            resolver.GetRequiredService<IPlayerInputRecordingSystemProvider>(),
-            resolver.GetRequiredService<IGamePrefsProvider>(),
-            resolver.GetRequiredService<IConnectionManagerProvider>(),
-            resolver.GetRequiredService<IThreadManager>(),
-            resolver.GetRequiredService<IPlatformManager>(),
-            resolver.GetRequiredService<IBlock>(),
-            resolver.GetRequiredService<IItem>()
+        services.AddSingleton<IWorldSaverService>(provider => new WorldSaverService(
+            provider.GetRequiredService<IWorldService>(),
+            provider.GetRequiredService<IPlayersProvider>(),
+            provider.GetRequiredService<IPlayerInputRecordingSystemProvider>(),
+            provider.GetRequiredService<IGamePrefsProvider>(),
+            provider.GetRequiredService<IConnectionManagerProvider>(),
+            provider.GetRequiredService<IThreadManager>(),
+            provider.GetRequiredService<IPlatformManager>(),
+            provider.GetRequiredService<IBlock>(),
+            provider.GetRequiredService<IItem>()
         ));
-        services.AddTransient<IWorldBackupService>(resolver => new WorldBackupService(
-            resolver.GetRequiredService<Configuration>(),
-            resolver.GetRequiredService<IGameDirectoriesService>(),
-            resolver.GetRequiredService<IWorldSaverService>(),
-            resolver.GetRequiredService<IDirectoryService>(),
-            resolver.GetRequiredService<IPathService>(),
-            resolver.GetRequiredService<IArchiveService>(),
-            resolver.GetRequiredService<IFileService>()
+        services.AddTransient<IWorldBackupService>(provider => new WorldBackupService(
+            provider.GetRequiredService<Configuration>(),
+            provider.GetRequiredService<IGameDirectoriesService>(),
+            provider.GetRequiredService<IWorldSaverService>(),
+            provider.GetRequiredService<IDirectoryService>(),
+            provider.GetRequiredService<IPathService>(),
+            provider.GetRequiredService<IArchiveService>(),
+            provider.GetRequiredService<IFileService>()
         ));
-        services.AddTransient<IBackupWatchdog>(resolver => new BackupWatchdog(
-            resolver.GetRequiredService<Configuration>(),
-            resolver.GetRequiredService<IWorldService>(),
-            resolver.GetRequiredService<IWorldBackupService>(),
-            resolver.GetService<IChatService>(),
-            resolver.GetRequiredService<ILogger<BackupWatchdog>>()
+        services.AddTransient<IBackupWatchdog>(provider => new BackupWatchdog(
+            provider.GetRequiredService<Configuration>(),
+            provider.GetRequiredService<IWorldService>(),
+            provider.GetRequiredService<IWorldBackupService>(),
+            provider.GetService<IChatService>(),
+            provider.GetRequiredService<ILogger<BackupWatchdog>>()
         ));
     }
 }

@@ -1,3 +1,6 @@
+using BackupMod.DI;
+using BackupMod.Services.Abstractions;
+
 namespace BackupMod.FilUnderscore;
 
 /// <summary>
@@ -6,28 +9,226 @@ namespace BackupMod.FilUnderscore;
 /// </summary>
 public static class ModManagerBootstrapper
 {
-    private static int _test123 = 0; // Note: This value will be the default setting when reset.
-    
+    private static readonly IConfigurationService ConfigurationService = ServiceLocator.GetRequiredService<IConfigurationService>();
+    private static readonly IDirectoryService DirectoryService = ServiceLocator.GetRequiredService<IDirectoryService>();
+
+    private static int _generalBackupsLimit = Configuration.Default.General.BackupsLimit;
+    private static string _generalCustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
+    private static bool _autoBackupEnabled = Configuration.Default.AutoBackup.Enabled;
+    private static int _autoBackupDelay = Configuration.Default.AutoBackup.Delay;
+    private static bool _archiveEnabled = Configuration.Default.Archive.Enabled;
+    private static int _archiveBackupsLimit = Configuration.Default.Archive.BackupsLimit;
+    private static string _archiveCustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
+    private static bool _eventsBackupOnWorldLoaded = Configuration.Default.Events.BackupOnWorldLoaded;
+    private static bool _utilitiesChatNotificationsEnabled = Configuration.Default.Utilities.ChatNotificationsEnabled;
+
     public static void Initialize(Mod modInstance)
     {
-        
         if (!ModManagerAPI.IsModManagerLoaded()) return;
-        
+
         ModManagerAPI.ModSettings modSettings = ModManagerAPI.GetModSettings(modInstance);
-            
+
+        modSettings.CreateTab("general_tab", "general_tab");
+        modSettings.CreateTab("autoBackup_tab", "autoBackup_tab");
+        modSettings.CreateTab("archive_tab", "archive_tab");
+        modSettings.CreateTab("events_tab", "events_tab");
+        modSettings.CreateTab("utilities_tab", "utilities_tab");
+
+        // General
         modSettings.Hook(
-            "test123",                                     // This is the Mod Setting key. This must always be unique for all settings for the mod.
-            "xuiModSettingTest123",                        // This is the localization key for the setting's label. The value is fetched from the Localization.txt file in your mod's Config folder.
-            value => _test123 = value,                 // This is the value setter, it updates the value of the variable we have hooked onto.
-            () => _test123,                            // This is the value getter, it gets the value of the variable we have hooked onto.
-            toStr => (toStr.ToString(), toStr.ToString()), // This is the string representation of the currently applied setting.
-            str =>                                         // This is the converter from the String representation of the setting, back to the variable type of the setting.
-            {
-                bool success = int.TryParse(str, out int val); // Attempt to convert the input to an integer. 
-                // If success is true, the input will be accepted.
-                // If success is false, the input will be rejected, and the text will change to red to indicate
-                // to the user that an invalid input has been entered and will not be saved.
-                return (val, success);
-            });
+                "general_backupsLimit",
+                "general_backupsLimit",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.General.BackupsLimit = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _generalBackupsLimit = value;
+                },
+                () => _generalBackupsLimit,
+                value => (value.ToString(), value.ToString()),
+                str =>
+                {
+                    bool success = int.TryParse(str, out int val);
+                    return (val, success);
+                })
+            .SetTab("general_tab")
+            .SetMinimumMaximumAndIncrementValues(1, 999, 1);
+
+        modSettings.Hook(
+                "general_customBackupsFolder",
+                "general_customBackupsFolder",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.General.CustomBackupsFolder = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _generalCustomBackupsFolder = value;
+                },
+                () => _generalCustomBackupsFolder,
+                value => (value.ToString(), value.ToString()),
+                str =>
+                {
+                    bool success = string.IsNullOrEmpty(str) || DirectoryService.IsDirectoryExists(str);
+                    return (str, success);
+                })
+            .SetTab("general_tab");
+
+        // AutoBackup
+        modSettings.Hook(
+                "autoBackup_enabled",
+                "autoBackup_enabled",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.AutoBackup.Enabled = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _autoBackupEnabled = value;
+                },
+                () => _autoBackupEnabled,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("autoBackup_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
+
+        modSettings.Hook(
+                "autoBackup_delay",
+                "autoBackup_delay",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.AutoBackup.Delay = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _autoBackupDelay = value;
+                },
+                () => _autoBackupDelay,
+                value => (value.ToString(), value.ToString()),
+                str =>
+                {
+                    bool success = int.TryParse(str, out int val) && val is >= 10 and < 86400;
+                    return (val, success);
+                })
+            .SetTab("autoBackup_tab");
+
+        // Archive
+        modSettings.Hook(
+                "archive_enabled",
+                "archive_enabled",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Archive.Enabled = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _archiveEnabled = value;
+                },
+                () => _archiveEnabled,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("archive_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
+
+        modSettings.Hook(
+                "archive_backupsLimit",
+                "archive_backupsLimit",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Archive.BackupsLimit = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _archiveBackupsLimit = value;
+                },
+                () => _archiveBackupsLimit,
+                value => (value.ToString(), value.ToString()),
+                str =>
+                {
+                    bool success = int.TryParse(str, out int val);
+                    return (val, success);
+                })
+            .SetTab("archive_tab")
+            .SetMinimumMaximumAndIncrementValues(1, 999, 1);
+
+        modSettings.Hook(
+                "archive_customArchiveFolder",
+                "archive_customArchiveFolder",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Archive.CustomArchiveFolder = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _archiveCustomArchiveFolder = value;
+                },
+                () => _archiveCustomArchiveFolder,
+                value => (value.ToString(), value.ToString()),
+                str =>
+                {
+                    bool success = string.IsNullOrEmpty(str) || DirectoryService.IsDirectoryExists(str);
+                    return (str, success);
+                })
+            .SetTab("archive_tab");
+
+        // Events
+        modSettings.Hook(
+                "events_backupOnWorldLoaded",
+                "events_backupOnWorldLoaded",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Events.BackupOnWorldLoaded = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _eventsBackupOnWorldLoaded = value;
+                },
+                () => _eventsBackupOnWorldLoaded,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("events_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
+
+        // Utilities
+        modSettings.Hook(
+                "utilities_chatNotificationsEnabled",
+                "utilities_chatNotificationsEnabled",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Utilities.ChatNotificationsEnabled = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _utilitiesChatNotificationsEnabled = value;
+                },
+                () => _utilitiesChatNotificationsEnabled,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("utilities_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
     }
 }
