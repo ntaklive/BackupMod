@@ -41,15 +41,31 @@ public class BackupWatchdog : IBackupWatchdog
         var cts = new CancellationTokenSource();
         _ = Task.Run(async () =>
         {
+            var hasBackupOnServerIsEmptyAlreadyMade = false;
+            
             while (!cts.IsCancellationRequested)
             {
                 await Task.Delay(1000);
 
                 if (!IsWorldAccessible(world))
                 {
-                    _logger.Debug("Cannot backup a remote/unloaded world.");
+                    _logger.Debug("Cannot backup a remote/unloaded world");
                     cts.Cancel();
                     break;
+                }
+                
+                if (_configuration.Events.BackupOnServerIsEmpty)
+                {
+                    if (hasBackupOnServerIsEmptyAlreadyMade && _worldService.GetPlayersCount() != 0)
+                    {
+                        hasBackupOnServerIsEmptyAlreadyMade = false;
+                    }
+                    else if (!hasBackupOnServerIsEmptyAlreadyMade && _worldService.GetPlayersCount() == 0)
+                    {
+                        hasBackupOnServerIsEmptyAlreadyMade = true;
+
+                        _ = BackupAsync();
+                    }
                 }
             }
 
@@ -68,15 +84,14 @@ public class BackupWatchdog : IBackupWatchdog
     {
         TimeSpan delay = TimeSpan.FromSeconds(_configuration.AutoBackup.Delay);
         
-        _logger.Debug("Watchdog have started.");
-
-        string firstBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
-        
-        _logger.Debug($"The first backup will be at {firstBackupTime}");
-        _chatService?.SendMessage($"The first backup will be at {firstBackupTime}");
+        _logger.Debug("Watchdog have started");
         
         while (!cancellationToken.IsCancellationRequested)
         {
+            string nextBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
+            _logger.Debug($"The next backup will be at {nextBackupTime}");
+            _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
+            
             try
             {
                 await Task.Delay(delay.Subtract(TimeSpan.FromSeconds(5)), cancellationToken);
@@ -85,31 +100,20 @@ public class BackupWatchdog : IBackupWatchdog
                 {
                     _chatService?.SendMessage($"Backup in {i}...");
 
-                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                    await Task.Delay(1000, cancellationToken);
+                }
+
+                if (_configuration.AutoBackup.SkipIfThereIsNoPlayers && _worldService.GetPlayersCount() == 0)
+                {
+                    _logger.Debug("There is no players on the server. Backup was skipped");
+                    
+                    continue;
                 }
                 
                 _logger.Debug("The world backup is starting...");
                 _chatService?.SendMessage("The world backup is starting...");
 
-                var stopwatch = Stopwatch.StartNew();
-
-                SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
-                string backupFilePath = await _backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
-
-                stopwatch.Stop();
-                
-                TimeSpan timeSpent = stopwatch.Elapsed;
-
-                string nextBackupTime = DateTime.Now.Add(delay).ToShortTimeString();
-
-                _logger.Debug("The world backup has completed successfully!");
-                _logger.Debug($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
-                _logger.Debug($"The backup file location: \"{backupFilePath}\".");
-                _logger.Debug($"The next backup will be at {nextBackupTime}");
-
-                _chatService?.SendMessage("The world backup has completed successfully!");
-                _chatService?.SendMessage($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
-                _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
+                await BackupAsync();
             }
             catch (TaskCanceledException)
             {
@@ -121,8 +125,27 @@ public class BackupWatchdog : IBackupWatchdog
 
                 break;
             }
-            
-            _logger.Debug("Watchdog have terminated.");
         }
+        
+        _logger.Debug("Watchdog have terminated");
+    }
+
+    private async Task BackupAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+
+        SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
+        string backupFilePath = await _backupService.BackupAsync(saveInfo, BackupMode.SaveAllAndBackup);
+
+        stopwatch.Stop();
+                
+        TimeSpan timeSpent = stopwatch.Elapsed;
+                
+        _logger.Debug("The world backup has completed successfully!");
+        _logger.Debug($"Time spent: {timeSpent.TotalSeconds:F2} seconds");
+        _logger.Debug($"The backup file location: \"{backupFilePath}\"");
+
+        _chatService?.SendMessage("The world backup has completed successfully!");
+        _chatService?.SendMessage($"Time spent: {timeSpent.TotalSeconds:F2} seconds");
     }
 }
