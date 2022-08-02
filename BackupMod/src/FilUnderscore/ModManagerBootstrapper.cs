@@ -16,10 +16,12 @@ public static class ModManagerBootstrapper
     private static string _generalCustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
     private static bool _autoBackupEnabled = Configuration.Default.AutoBackup.Enabled;
     private static int _autoBackupDelay = Configuration.Default.AutoBackup.Delay;
+    private static bool _autoBackupSkipIfThereIsNoPlayers = Configuration.Default.AutoBackup.SkipIfThereIsNoPlayers;
     private static bool _archiveEnabled = Configuration.Default.Archive.Enabled;
     private static int _archiveBackupsLimit = Configuration.Default.Archive.BackupsLimit;
     private static string _archiveCustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
     private static bool _eventsBackupOnWorldLoaded = Configuration.Default.Events.BackupOnWorldLoaded;
+    private static bool _eventsBackupOnServerIsEmpty = Configuration.Default.Events.BackupOnServerIsEmpty;
     private static bool _utilitiesChatNotificationsEnabled = Configuration.Default.Utilities.ChatNotificationsEnabled;
 
     public static void Initialize(Mod modInstance)
@@ -122,6 +124,26 @@ public static class ModManagerBootstrapper
                     return (val, success);
                 })
             .SetTab("autoBackup_tab");
+        
+        modSettings.Hook(
+                "autoBackup_skipIfThereIsNoPlayers",
+                "autoBackup_skipIfThereIsNoPlayers",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.AutoBackup.SkipIfThereIsNoPlayers = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _autoBackupSkipIfThereIsNoPlayers = value;
+                },
+                () => _autoBackupSkipIfThereIsNoPlayers,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("autoBackup_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
 
         // Archive
         modSettings.Hook(
@@ -204,6 +226,26 @@ public static class ModManagerBootstrapper
                     _eventsBackupOnWorldLoaded = value;
                 },
                 () => _eventsBackupOnWorldLoaded,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("events_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
+        
+        modSettings.Hook(
+                "events_backupOnServerIsEmpty",
+                "events_backupOnServerIsEmpty",
+                value =>
+                {
+                    Configuration configuration = ConfigurationService.GetConfiguration();
+
+                    configuration.Events.BackupOnServerIsEmpty = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _eventsBackupOnServerIsEmpty = value;
+                },
+                () => _eventsBackupOnServerIsEmpty,
                 value => (value.ToString(), value.ToString()),
                 str => (bool.Parse(str), true))
             .SetTab("events_tab")
