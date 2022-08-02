@@ -41,8 +41,8 @@ public class BackupWatchdog : IBackupWatchdog
         var cts = new CancellationTokenSource();
         _ = Task.Run(async () =>
         {
-            var hasBackupOnServerIsEmptyAlreadyMade = false;
-            
+            var hasBackupOnServerIsEmptyAlreadyMade = true;
+
             while (!cts.IsCancellationRequested)
             {
                 await Task.Delay(1000);
