@@ -118,7 +118,7 @@
         <Compile Include="src\Services\Implementations\BackupWatchdog.cs" />
         <Compile Include="src\Services\Implementations\Block.cs" />
         <Compile Include="src\Services\Implementations\ChatService.cs" />
-        <Compile Include="src\Services\Implementations\ConfigurationProvider.cs" />
+        <Compile Include="src\Services\Implementations\ConfigurationService.cs" />
         <Compile Include="src\Services\Implementations\ConnectionManagerProvider.cs" />
         <Compile Include="src\Services\Implementations\DirectoryService.cs" />
         <Compile Include="src\Services\Implementations\FileService.cs" />
