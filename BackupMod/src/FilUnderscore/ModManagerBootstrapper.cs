@@ -16,7 +16,7 @@ public static class ModManagerBootstrapper
     private static string _generalCustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
     private static bool _autoBackupEnabled = Configuration.Default.AutoBackup.Enabled;
     private static int _autoBackupDelay = Configuration.Default.AutoBackup.Delay;
-    private static bool _autoBackupSkipIfThereIsNoPlayers = Configuration.Default.AutoBackup.SkipIfThereAreNoPlayers;
+    private static bool _autoBackupSkipIfThereAreNoPlayers = Configuration.Default.AutoBackup.SkipIfThereAreNoPlayers;
     private static bool _archiveEnabled = Configuration.Default.Archive.Enabled;
     private static int _archiveBackupsLimit = Configuration.Default.Archive.BackupsLimit;
     private static string _archiveCustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
@@ -126,8 +126,8 @@ public static class ModManagerBootstrapper
             .SetTab("autoBackup_tab");
         
         modSettings.Hook(
-                "autoBackup_skipIfThereIsNoPlayers",
-                "autoBackup_skipIfThereIsNoPlayers",
+                "autoBackup_skipIfThereAreNoPlayers",
+                "autoBackup_skipIfThereAreNoPlayers",
                 value =>
                 {
                     Configuration configuration = ConfigurationService.GetConfiguration();
@@ -136,9 +136,9 @@ public static class ModManagerBootstrapper
 
                     ConfigurationService.TryUpdateConfiguration(configuration);
 
-                    _autoBackupSkipIfThereIsNoPlayers = value;
+                    _autoBackupSkipIfThereAreNoPlayers = value;
                 },
-                () => _autoBackupSkipIfThereIsNoPlayers,
+                () => _autoBackupSkipIfThereAreNoPlayers,
                 value => (value.ToString(), value.ToString()),
                 str => (bool.Parse(str), true))
             .SetTab("autoBackup_tab")
