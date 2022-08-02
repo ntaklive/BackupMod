@@ -87,17 +87,10 @@ public class BackupWatchdog : IBackupWatchdog
 
                     await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                 }
-            }
-            catch (TaskCanceledException)
-            {
-                break;
-            }
+                
+                _logger.Debug("The world backup is starting...");
+                _chatService?.SendMessage("The world backup is starting...");
 
-            _logger.Debug("The world backup is starting...");
-            _chatService?.SendMessage("The world backup is starting...");
-
-            try
-            {
                 var stopwatch = Stopwatch.StartNew();
 
                 SaveInfo saveInfo = _worldService.GetCurrentWorldSaveInfo();
@@ -118,14 +111,18 @@ public class BackupWatchdog : IBackupWatchdog
                 _chatService?.SendMessage($"Time spent: {timeSpent.TotalSeconds:F2} seconds.");
                 _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
             }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
             catch (Exception exception)
             {
                 _logger.Exception(exception);
 
                 break;
             }
+            
+            _logger.Debug("Watchdog have terminated.");
         }
-        
-        _logger.Debug("Watchdog have terminated.");
     }
 }
