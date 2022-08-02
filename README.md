@@ -30,9 +30,9 @@ If you changed the configuration when you were in game, you should re-enter to y
     // Default: 1200 (20 minutes)
     "Delay": 1200,
 
-    // Skip the next scheduled backup, if there is no players on the server
+    // Skip the next scheduled backup, if there are no players on the server
     // Default: false
-    "SkipIfThereIsNoPlayers": false
+    "SkipIfThereAreNoPlayers": false
   },
   
   "Archive": {
