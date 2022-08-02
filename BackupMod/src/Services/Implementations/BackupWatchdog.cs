@@ -103,7 +103,7 @@ public class BackupWatchdog : IBackupWatchdog
                     await Task.Delay(1000, cancellationToken);
                 }
 
-                if (_configuration.AutoBackup.SkipIfThereIsNoPlayers && _worldService.GetPlayersCount() == 0)
+                if (_configuration.AutoBackup.SkipIfThereAreNoPlayers && _worldService.GetPlayersCount() == 0)
                 {
                     _logger.Debug("There is no players on the server. Backup was skipped");
                     

@@ -16,7 +16,7 @@ public static class ModManagerBootstrapper
     private static string _generalCustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
     private static bool _autoBackupEnabled = Configuration.Default.AutoBackup.Enabled;
     private static int _autoBackupDelay = Configuration.Default.AutoBackup.Delay;
-    private static bool _autoBackupSkipIfThereIsNoPlayers = Configuration.Default.AutoBackup.SkipIfThereIsNoPlayers;
+    private static bool _autoBackupSkipIfThereIsNoPlayers = Configuration.Default.AutoBackup.SkipIfThereAreNoPlayers;
     private static bool _archiveEnabled = Configuration.Default.Archive.Enabled;
     private static int _archiveBackupsLimit = Configuration.Default.Archive.BackupsLimit;
     private static string _archiveCustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
@@ -132,7 +132,7 @@ public static class ModManagerBootstrapper
                 {
                     Configuration configuration = ConfigurationService.GetConfiguration();
 
-                    configuration.AutoBackup.SkipIfThereIsNoPlayers = value;
+                    configuration.AutoBackup.SkipIfThereAreNoPlayers = value;
 
                     ConfigurationService.TryUpdateConfiguration(configuration);
 

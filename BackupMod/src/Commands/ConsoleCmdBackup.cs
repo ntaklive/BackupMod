@@ -240,7 +240,7 @@ public class ConsoleCmdBackup : ConsoleCmdAbstract
         _logger.Debug($"General.CustomBackupsFolder: {configuration.General.CustomBackupsFolder}");
         _logger.Debug($"AutoBackup.Enabled: {configuration.AutoBackup.Enabled.ToString()}");
         _logger.Debug($"AutoBackup.Delay: {configuration.AutoBackup.Delay.ToString()}");
-        _logger.Debug($"AutoBackup.SkipIfThereIsNoPlayers: {configuration.AutoBackup.SkipIfThereIsNoPlayers.ToString()}");
+        _logger.Debug($"AutoBackup.SkipIfThereAreNoPlayers: {configuration.AutoBackup.SkipIfThereAreNoPlayers.ToString()}");
         _logger.Debug($"Archive.Enabled: {configuration.Archive.Enabled.ToString()}");
         _logger.Debug($"Archive.BackupsLimit: {configuration.Archive.BackupsLimit.ToString()}");
         _logger.Debug($"Archive.CustomArchiveFolder: {configuration.Archive.CustomArchiveFolder}");
