@@ -4,6 +4,7 @@ namespace BackupMod.Services.Abstractions;
 
 public interface IWorldService
 {
+    public int GetPlayersCount();
     public World GetCurrentWorld();
 
     public string GetCurrentWorldSaveFolderPath();

@@ -12,7 +12,9 @@ public class WorldService : IWorldService
     {
         _saveInfoFactory = saveInfoFactory;
     }
-    
+
+    public int GetPlayersCount() => GetCurrentWorld().GetPlayers().Count;
+
     public World GetCurrentWorld() => GameManager.Instance.World;
     public string GetCurrentWorldSaveFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetSaveGameDir());
 
