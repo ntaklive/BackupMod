@@ -4,8 +4,7 @@
 A 7 days to die modlet which makes it possible to automatically backup and restore your game saves
 
 # Settings
-
-You can configure the modlet by modifying the 'settings.json' file.  
+You can configure the modlet by modifying the 'settings.json' file or you can also use [FilUnderscore's Mod Manager](https://github.com/FilUnderscore/ModManager/releases).  
 If you changed the configuration when you were in game, you should re-enter to your world to apply changed settings.
 
 ```
@@ -29,11 +28,16 @@ If you changed the configuration when you were in game, you should re-enter to y
     
     // Auto backup delay (seconds)
     // Default: 1200 (20 minutes)
-    "Delay": 1200
+    "Delay": 1200,
+
+    // Skip the next scheduled backup, if there is no players on the server
+    // Default: false
+    "SkipIfThereIsNoPlayers": false
   },
   
   "Archive": {
     // Keep the last backup of the day
+    // Default: false
     "Enabled": false,
 
     // Backups limit
@@ -48,9 +52,13 @@ If you changed the configuration when you were in game, you should re-enter to y
   },
   
   "Events": {
-    // Backup when entering the world
+    // Backup when world loaded
     // Default: true
-    "BackupOnWorldLoaded": true
+    "BackupOnWorldLoaded": true,
+
+    // Backup when the last player on the server disconnected
+    // Default: false
+    "BackupOnServerIsEmpty": false
   },
   
   "Utilities": {
