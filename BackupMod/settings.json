@@ -27,6 +27,7 @@
   
   "Archive": {
     // Keep the last backup of the day
+    // Default: false
     "Enabled": false,
 
     // Backups limit
