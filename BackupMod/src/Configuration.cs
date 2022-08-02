@@ -14,9 +14,9 @@ public class Configuration
     public static readonly Configuration Default = new()
     {
         General = new GeneralConfiguration(backupsLimit: 10, customBackupsFolder: ""),
-        AutoBackup = new AutoBackupConfiguration(enabled: true, delay: 1200),
+        AutoBackup = new AutoBackupConfiguration(enabled: true, delay: 1200, skipIfThereIsNoPlayers: false),
         Archive = new ArchiveConfiguration(enabled: false, backupsLimit: 10, customArchiveFolder: ""),
-        Events = new EventsConfiguration(backupOnWorldLoaded: true),
+        Events = new EventsConfiguration(backupOnWorldLoaded: true, backupOnServerIsEmpty: false),
         Utilities = new UtilitiesConfiguration(chatNotificationsEnabled: true)
     };
 
@@ -42,14 +42,16 @@ public class Configuration
         {
         }
 
-        public AutoBackupConfiguration(bool enabled, int delay)
+        public AutoBackupConfiguration(bool enabled, int delay, bool skipIfThereIsNoPlayers)
         {
             Enabled = enabled;
             Delay = delay;
+            SkipIfThereIsNoPlayers = skipIfThereIsNoPlayers;
         }
 
         public bool Enabled { get; set; }
         public int Delay { get; set; }
+        public bool SkipIfThereIsNoPlayers { get; set; }
     }
 
     public class ArchiveConfiguration
@@ -76,12 +78,14 @@ public class Configuration
         {
         }
 
-        public EventsConfiguration(bool backupOnWorldLoaded)
+        public EventsConfiguration(bool backupOnWorldLoaded, bool backupOnServerIsEmpty)
         {
             BackupOnWorldLoaded = backupOnWorldLoaded;
+            BackupOnServerIsEmpty = backupOnServerIsEmpty;
         }
 
         public bool BackupOnWorldLoaded { get; set; }
+        public bool BackupOnServerIsEmpty { get; set; }
     }
 
     public class UtilitiesConfiguration
