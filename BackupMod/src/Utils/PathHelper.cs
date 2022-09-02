@@ -10,6 +10,7 @@ public static class PathHelper
     {
         return folderPath
             .Replace('\\', Path.AltDirectorySeparatorChar)
-            .Replace('/', Path.AltDirectorySeparatorChar);
+            .Replace('/', Path.AltDirectorySeparatorChar)
+            .Replace("//", Path.AltDirectorySeparatorChar.ToString());
     }
 }

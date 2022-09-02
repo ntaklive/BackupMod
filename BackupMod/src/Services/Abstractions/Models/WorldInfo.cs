@@ -1,14 +1,14 @@
+using System.Collections.Generic;
+
 namespace BackupMod.Services.Abstractions.Models;
 
 public class WorldInfo
 {
-    public string WorldFolderPath { get; set; }
+    public string Name { get; set; }
     
-    public string BackupsFolderPath { get; set; }
+    public string Md5Hash { get; set; }
     
-    public string ArchiveFolderPath { get; set; }
-
-    public string WorldName { get; set; }
+    public IReadOnlyList<SaveInfo> Saves { get; set; }
     
-    public SaveInfo[] Saves { get; set; }
+    public string WorldDirectoryPath { get; set; }
 }

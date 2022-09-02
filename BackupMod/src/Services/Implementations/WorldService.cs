@@ -1,4 +1,5 @@
 using BackupMod.Services.Abstractions;
+using BackupMod.Services.Abstractions.Filesystem;
 using BackupMod.Services.Abstractions.Models;
 using BackupMod.Utils;
 
@@ -6,21 +7,44 @@ namespace BackupMod.Services;
 
 public class WorldService : IWorldService
 {
-    private readonly ISaveInfoFactory _saveInfoFactory;
+    private readonly IFilesystem _filesystem;
 
-    public WorldService(ISaveInfoFactory saveInfoFactory)
+    public WorldService(
+        IFilesystem filesystem)
     {
-        _saveInfoFactory = saveInfoFactory;
+        _filesystem = filesystem;
     }
 
     public int GetPlayersCount() => GetCurrentWorld().GetPlayers().Count;
-
-    public World GetCurrentWorld() => GameManager.Instance.World;
-    public string GetCurrentWorldSaveFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetSaveGameDir());
-
-    public string GetCurrentPlayerDataLocalFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetPlayerDataLocalDir());
-
-    public string GetCurrentGetPlayerDataFolderPath() => PathHelper.FixFolderPathSeparators(GameIO.GetPlayerDataDir());
     
-    public SaveInfo GetCurrentWorldSaveInfo() => _saveInfoFactory.GetFromSaveFolderPath(GetCurrentWorldSaveFolderPath());
+    public WorldTime GetWorldTime()
+    {
+        ulong worldTime = GameManager.Instance.World.GetWorldTime();
+        int day = GameUtils.WorldTimeToDays(worldTime);
+        int hour = GameUtils.WorldTimeToHours(worldTime);
+        int minute = GameUtils.WorldTimeToMinutes(worldTime);
+
+        return new WorldTime {Day = day, Hour = hour, Minute = minute, Timestamp = worldTime};
+    }
+    
+    public World GetCurrentWorld() => GameManager.Instance.World;
+
+    public string GetCurrentWorldDirectoryPath() => PathHelper.FixFolderPathSeparators(GameIO.GetWorldDir());
+
+    public string GetCurrentWorldName() => _filesystem.Directory.GetDirectoryName(GetCurrentWorldDirectoryPath());
+    
+    public string GetCurrentSaveDirectoryPath() => PathHelper.FixFolderPathSeparators(GameIO.GetSaveGameDir());
+    
+    public string GetCurrentSaveName() => _filesystem.Directory.GetDirectoryName(GetCurrentSaveDirectoryPath());
+    
+    /// <summary>
+    /// Is a local world loaded
+    /// </summary>
+    public bool IsWorldAccessible()
+    {
+        World world = GetCurrentWorld();
+        return world != null && !world.IsRemote();
+    }
+
+    public int GetMaxPlayersCount() => GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount);
 }

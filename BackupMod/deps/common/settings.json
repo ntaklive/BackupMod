@@ -1,0 +1,74 @@
+{
+  "General": {
+    // Backups limit
+    // Default: 10
+    "BackupsLimit": 10,
+    
+    // Custom backups folder path
+    // IMPORTANT: You must escape all '\' characters or use '/'
+    // Example: "C:\\7DaysToDie\\Backups"
+    // Default: ""
+    "CustomBackupsFolder": "",
+    
+    // Log debug information into logs/*logName*
+    "DebugMode": false
+  },
+  
+  "AutoBackup": {
+    // Is automatic backup enabled
+    // Default: true
+    "Enabled": true,
+    
+    // Auto backup delay (seconds)
+    // Min: 10
+    // Default: 1200 (20 minutes)
+    "Delay": 1200,
+
+    // Skip the next scheduled backup, if there are no players on the server
+    // Default: false
+    "SkipIfThereAreNoPlayers": false
+  },
+  
+  "Archive": {
+    // Keep the last backup of the day
+    // Default: false
+    "Enabled": false,
+
+    // Backups limit
+    // Default: 10
+    "BackupsLimit": 10,
+    
+    // Custom archive folder path.
+    // IMPORTANT: You must escape all '\' characters or use '/'
+    // Example: "C:\\7DaysToDie\\Archive".
+    // Default: ""
+    "CustomArchiveFolder": ""
+  },
+  
+  "Events": {
+    // Backup when world loaded
+    // Default: true
+    "BackupOnWorldLoaded": true,
+
+    // Backup when the last player on the server disconnected
+    // Default: false
+    "BackupOnServerIsEmpty": false
+  },
+  
+  "Notifications": {
+    // Are ALL chat notifications enabled
+    // Default: true
+    "Enabled": true,
+
+    "Countdown" : {
+      // Are countdown chat notifications enabled
+      // Default: true
+      "Enabled": true,
+      
+      // Do a countdown * seconds before backup starts
+      // Min: 1
+      // Default: 5
+      "CountFrom": 5
+    }
+  }
+}

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupMod", "BackupMod\BackupMod.csproj", "{016EAA8F-85C1-468A-9197-E4A717805C08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Extensions.Logging", "Serilog.Extensions.Logging\Serilog.Extensions.Logging.csproj", "{625911F2-6820-4AB8-A155-8B8A840444CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{016EAA8F-85C1-468A-9197-E4A717805C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{016EAA8F-85C1-468A-9197-E4A717805C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{016EAA8F-85C1-468A-9197-E4A717805C08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{625911F2-6820-4AB8-A155-8B8A840444CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625911F2-6820-4AB8-A155-8B8A840444CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625911F2-6820-4AB8-A155-8B8A840444CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625911F2-6820-4AB8-A155-8B8A840444CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

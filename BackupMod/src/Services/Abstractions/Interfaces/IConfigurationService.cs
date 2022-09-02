@@ -2,7 +2,7 @@ namespace BackupMod.Services.Abstractions;
 
 public interface IConfigurationService
 {
-    public Configuration GetConfiguration();
+    public ModConfiguration ReadConfiguration();
 
-    public bool TryUpdateConfiguration(Configuration configuration);
+    public bool TryUpdateConfiguration(ModConfiguration configuration);
 }

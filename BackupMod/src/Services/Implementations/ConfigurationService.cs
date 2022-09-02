@@ -1,6 +1,8 @@
 using System;
 using BackupMod.Services.Abstractions;
+using BackupMod.Services.Abstractions.Filesystem;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace BackupMod.Services;
 
@@ -12,79 +14,99 @@ public class ConfigurationService : IConfigurationService
     private readonly ILogger<ConfigurationService> _logger;
 
     public ConfigurationService(
-        string filePath,
+        string filepath,
         IFileService fileService,
         IJsonSerializer jsonSerializer,
         ILogger<ConfigurationService> logger)
     {
-        _filePath = filePath;
+        _filePath = filepath;
         _fileService = fileService;
         _jsonSerializer = jsonSerializer;
         _logger = logger;
     }
 
-    public Configuration GetConfiguration()
+    public ModConfiguration ReadConfiguration()
     {
         try
         {
             IConfigurationRoot configurationRoot = new ConfigurationBuilder().AddJsonFile(_filePath).Build();
             
-            var configuration = configurationRoot.Get<Configuration>();
+            var configuration = configurationRoot.Get<ModConfiguration>();
 
             if (configuration.General.BackupsLimit <= 0)
             {
-                _logger.Error("General.BackupsLimit value must be greater than 0.");
-                _logger.Warning("The default value will be used until then.");
+                _logger.LogError("General.BackupsLimit value must be greater than 0");
+                _logger.LogWarning("The default value will be used until then");
 
-                configuration.General.BackupsLimit = Configuration.Default.General.BackupsLimit;
+                configuration.General.BackupsLimit = ModConfiguration.Default.General.BackupsLimit;
             }
             
             if (configuration.Archive.BackupsLimit <= 0)
             {
-                _logger.Error("Archive.BackupsLimit value must be greater than 0.");
-                _logger.Warning("The default value will be used until then.");
+                _logger.LogError("Archive.BackupsLimit value must be greater than 0");
+                _logger.LogWarning("The default value will be used until then");
 
-                configuration.Archive.BackupsLimit = Configuration.Default.Archive.BackupsLimit;
+                configuration.Archive.BackupsLimit = ModConfiguration.Default.Archive.BackupsLimit;
             }
 
             if (configuration.AutoBackup.Delay < 10)
             {
-                _logger.Error("AutoBackup.Delay value must be greater than 10 or equals.");
-                _logger.Warning("The default value will be used until then.");
+                _logger.LogError("AutoBackup.Delay value must be greater than 10 or equals");
+                _logger.LogWarning("The default value will be used until then");
                 
-                configuration.AutoBackup.Delay = Configuration.Default.AutoBackup.Delay;
+                configuration.AutoBackup.Delay = ModConfiguration.Default.AutoBackup.Delay;
+            }            
+            
+            if (configuration.Notifications.Countdown.CountFrom < 1)
+            {
+                _logger.LogError("Notifications.Countdown.CountFrom value must be greater than 1 or equals");
+                _logger.LogWarning("The default value will be used until then");
+                
+                configuration.Notifications.Countdown.CountFrom = ModConfiguration.Default.Notifications.Countdown.CountFrom;
             }
 
             if (configuration.General.CustomBackupsFolder == null)
             {
-                _logger.Error("General.CustomBackupsFolder value must exist.");
-                _logger.Warning("The default value will be used until then.");
+                _logger.LogError("General.CustomBackupsFolder value must exist");
+                _logger.LogWarning("The default value will be used until then");
                 
-                configuration.General.CustomBackupsFolder = Configuration.Default.General.CustomBackupsFolder;
+                configuration.General.CustomBackupsFolder = ModConfiguration.Default.General.CustomBackupsFolder;
             }
             
             if (configuration.Archive.CustomArchiveFolder == null)
             {
-                _logger.Error("Archive.CustomArchiveFolder value must exist.");
-                _logger.Warning("The default value will be used until then.");
+                _logger.LogError("Archive.CustomArchiveFolder value must exist");
+                _logger.LogWarning("The default value will be used until then");
                 
-                configuration.Archive.CustomArchiveFolder = Configuration.Default.Archive.CustomArchiveFolder;
+                configuration.Archive.CustomArchiveFolder = ModConfiguration.Default.Archive.CustomArchiveFolder;
+            }
+            
+            if (configuration.General.CustomBackupsFolder == configuration.Archive.CustomArchiveFolder &&
+                !string.IsNullOrWhiteSpace(configuration.General.CustomBackupsFolder) && string.IsNullOrWhiteSpace(configuration.Archive.CustomArchiveFolder))
+            {
+                _logger.LogError("General.CustomBackupsFolder must be not equal to Archive.CustomArchiveFolder");
+                _logger.LogWarning("The default value for each property will be used");
+                
+                configuration.General.CustomBackupsFolder = ModConfiguration.Default.General.CustomBackupsFolder;
+                configuration.Archive.CustomArchiveFolder = ModConfiguration.Default.Archive.CustomArchiveFolder;
             }
 
             return configuration;
         }
-        catch
+        catch (Exception exception)
         {
-            _logger.Error("JSON format of your 'settings.json' file is incorrect.");
-            _logger.Error("Make sure that you escaped all the '\\' characters.");
-            _logger.Error("You should fix the configuration file.");
-            _logger.Error("The default configuration will be used until then.");
+            _logger.LogError("JSON format of your 'settings.json' file is incorrect");
+            _logger.LogError("Make sure that you escaped all the '\\' characters");
+            _logger.LogError("You should fix the configuration file");
+            _logger.LogError("The default configuration will be used until then");
             
-            return Configuration.Default;
+            _logger.LogWarning(exception.ToString());
+            
+            return ModConfiguration.Default;
         }
     }
 
-    public bool TryUpdateConfiguration(Configuration configuration)
+    public bool TryUpdateConfiguration(ModConfiguration configuration)
     {
         try
         {
@@ -95,8 +117,8 @@ public class ConfigurationService : IConfigurationService
         }
         catch (Exception exception)
         {
-            _logger.Error("Cannot update the configuration.");
-            _logger.Exception(exception);
+            _logger.LogError("Cannot update the configuration");
+            _logger.LogCritical(exception, "A critical error was occured");
             
             return false;
         }
