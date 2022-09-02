@@ -18,7 +18,10 @@ If you changed the configuration when you were in game, you should re-enter to y
     // IMPORTANT: You must escape all '\' characters or use '/'
     // Example: "C:\\7DaysToDie\\Backups"
     // Default: ""
-    "CustomBackupsFolder": ""
+    "CustomBackupsFolder": "",
+    
+    // Write debug information to the logs/*logName*.txt file
+    "DebugMode": false
   },
   
   "AutoBackup": {
@@ -27,6 +30,7 @@ If you changed the configuration when you were in game, you should re-enter to y
     "Enabled": true,
     
     // Auto backup delay (seconds)
+    // Min: 10
     // Default: 1200 (20 minutes)
     "Delay": 1200,
 
@@ -61,10 +65,21 @@ If you changed the configuration when you were in game, you should re-enter to y
     "BackupOnServerIsEmpty": false
   },
   
-  "Utilities": {
-    // Chat notifications
+  "Notifications": {
+    // Are ALL chat notifications enabled
     // Default: true
-    "ChatNotificationsEnabled": true
+    "Enabled": true,
+
+    "Countdown" : {
+      // Are countdown chat notifications enabled
+      // Default: true
+      "Enabled": true,
+      
+      // Do a countdown * seconds before backup starts
+      // Min: 1
+      // Default: 5
+      "CountFrom": 5
+    }
   }
 }
 ```
