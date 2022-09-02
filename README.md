@@ -4,7 +4,7 @@
 A 7 days to die modlet which makes it possible to automatically backup and restore your game saves
 
 # Settings
-You can configure the modlet by modifying the 'settings.json' file, or you can also use [FilUnderscore's Mod Manager](https://github.com/FilUnderscore/ModManager/releases).  
+You can configure the modlet by modifying the 'settings.json' file, or you can also use the [FilUnderscore's Mod Manager](https://github.com/FilUnderscore/ModManager/releases).  
 If you changed the configuration when you were in game, you should re-enter to your world to apply changed settings.
 
 ```
