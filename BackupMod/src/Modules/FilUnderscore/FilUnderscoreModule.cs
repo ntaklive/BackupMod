@@ -9,6 +9,7 @@ public sealed class FilUnderscoreModule : ModuleBase
 {
     private int _generalBackupsLimit = ModConfiguration.Default.General.BackupsLimit;
     private string _generalCustomBackupsFolder = ModConfiguration.Default.General.CustomBackupsFolder;
+    private bool _generalDebugMode = ModConfiguration.Default.General.DebugMode;
 
     private bool _autoBackupEnabled = ModConfiguration.Default.AutoBackup.Enabled;
     private int _autoBackupDelay = ModConfiguration.Default.AutoBackup.Delay;
@@ -96,6 +97,26 @@ public sealed class FilUnderscoreModule : ModuleBase
                     return (str, success);
                 })
             .SetTab("general_tab");
+        
+        modSettings.Hook(
+                "general_debugMode",
+                "general_debugMode",
+                value =>
+                {
+                    ModConfiguration configuration = ConfigurationService.ReadConfiguration();
+
+                    configuration.General.DebugMode = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _generalDebugMode = value;
+                },
+                () => _generalDebugMode,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("general_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
 
         // AutoBackup
         modSettings.Hook(

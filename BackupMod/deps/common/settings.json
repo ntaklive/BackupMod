@@ -10,7 +10,7 @@
     // Default: ""
     "CustomBackupsFolder": "",
     
-    // Log debug information into logs/*logName*
+    // Write debug information to the logs/*logName*.txt file
     "DebugMode": false
   },
   
