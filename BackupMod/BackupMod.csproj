@@ -99,7 +99,6 @@
         <Compile Include="src\Modules\Serilog\SerilogModule.cs" />
         <Compile Include="src\Services\Abstractions\Enum\ServerAccessibilityState.cs" />
         <Compile Include="src\Services\Abstractions\Enum\ServerFillingState.cs" />
-        <Compile Include="src\Services\Abstractions\EqualityComparers\BackupInfoEqualityComparer.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IArchiveService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IDirectoryService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IFileService.cs" />

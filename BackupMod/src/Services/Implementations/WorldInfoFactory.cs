@@ -68,18 +68,22 @@ public class WorldInfoFactory : IWorldInfoFactory
                 worldName);
 
             string checksumsTxtPath = _filesystem.Path.Combine(localWorldDirectoryPath, "checksums.txt");
-            string localWorldMd5Hash = Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
-
-            if (worldManifest.World.Md5Hash != localWorldMd5Hash)
+            var localWorldMd5Hash = string.Empty;
+            if (_filesystem.File.Exists(checksumsTxtPath))
             {
-                _logger.LogWarning(
-                    "The world named {WorldName} has a different MD5hash, than the one specified in the {ManifestFilepath} manifest",
-                    worldManifest.World.Name, worldManifest.Filepath);
-                _logger.LogWarning("Current: {CurrentMd5Hash}", localWorldMd5Hash);
-                _logger.LogWarning("Required: {RequiredMd5Hash}", worldManifest.World.Md5Hash);
-                continue;
+                localWorldMd5Hash = Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
+                
+                if (worldManifest.World.Md5Hash != localWorldMd5Hash)
+                {
+                    _logger.LogWarning(
+                        "The world named {WorldName} has a different MD5hash, than the one specified in the {ManifestFilepath} manifest",
+                        worldManifest.World.Name, worldManifest.Filepath);
+                    _logger.LogWarning("Current: {CurrentMd5Hash}", localWorldMd5Hash);
+                    _logger.LogWarning("Required: {RequiredMd5Hash}", worldManifest.World.Md5Hash);
+                    continue;
+                }
             }
-        
+            
             worldInfo = new WorldInfo
             {
                 Name = worldName,

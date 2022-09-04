@@ -27,7 +27,11 @@ public class BackupManifestFactory : IBackupManifestFactory
     {
         string localWorldDirectoryPath = _filesystem.Path.Combine(_resources.GetWorldsDirectoryPath(), worldName);
         string checksumsTxtPath = _filesystem.Path.Combine(localWorldDirectoryPath,"checksums.txt");
-        string md5Hash = Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
+        var md5Hash = string.Empty;
+        if (_filesystem.File.Exists(checksumsTxtPath))
+        {
+            md5Hash = Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
+        }
         
         int playersOnlineCount = _worldService.GetPlayersCount();
         
