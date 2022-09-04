@@ -9,4 +9,6 @@ public interface IResources
     public string GetSavesDirectoryPath();
 
     public string GetWorldsDirectoryPath();
+
+    public string GetMd5HashForWorld(string worldName);
 }

@@ -25,14 +25,8 @@ public class BackupManifestFactory : IBackupManifestFactory
     
     public BackupManifest Create(string title, string backupFilename, string worldName, string saveName)
     {
-        string localWorldDirectoryPath = _filesystem.Path.Combine(_resources.GetWorldsDirectoryPath(), worldName);
-        string checksumsTxtPath = _filesystem.Path.Combine(localWorldDirectoryPath,"checksums.txt");
-        var md5Hash = string.Empty;
-        if (_filesystem.File.Exists(checksumsTxtPath))
-        {
-            md5Hash = Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
-        }
-        
+        string md5Hash = _resources.GetMd5HashForWorld(worldName);
+
         int playersOnlineCount = _worldService.GetPlayersCount();
         
         WorldTime worldTime = _worldService.GetWorldTime();

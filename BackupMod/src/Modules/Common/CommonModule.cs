@@ -141,8 +141,7 @@ public sealed partial class CommonModule : ModuleBase
         // Other
         services.AddTransient<IResources>(provider => new Resources(
             ServiceProviderExtensions.GetRequiredService<ModConfiguration>(provider),
-            ServiceProviderExtensions.GetRequiredService<IPathService>(provider),
-            ServiceProviderExtensions.GetRequiredService<IDirectoryService>(provider)
+            ServiceProviderExtensions.GetRequiredService<IFilesystem>(provider)
         ));
         services.AddSingleton<IWorldSaveAlgorithm>(provider => new WorldSaveAlgorithm(
             ServiceProviderExtensions.GetRequiredService<IWorldService>(provider),

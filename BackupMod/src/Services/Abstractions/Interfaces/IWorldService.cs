@@ -21,4 +21,6 @@ public interface IWorldService
     public bool IsWorldAccessible();
 
     public int GetMaxPlayersCount();
+
+    public string GetMd5HashForCurrentWorld();
 }

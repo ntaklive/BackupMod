@@ -47,4 +47,11 @@ public class WorldService : IWorldService
     }
 
     public int GetMaxPlayersCount() => GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount);
+    
+    public string GetMd5HashForCurrentWorld()
+    {
+        string checksumsTxtPath = _filesystem.Path.Combine(GetCurrentWorldDirectoryPath(), Constants.cFileWorldChecksums);
+        
+        return Md5HashHelper.ComputeTextHash(_filesystem.File.ReadAllText(checksumsTxtPath));
+    }
 }
