@@ -121,10 +121,8 @@ public class BackupManager : IBackupManager
         string archiveDirectoryPath = _filesystem.Path.Combine(archivesDirectoryPath, worldName, saveName);
 
         var backupNameWithoutExtension = $"{DateTime.Now:yyyy-dd-M_HH-mm-ss}";
-        var backupNameWithExtension =
-            $"{backupNameWithoutExtension}{ModConfiguration.Constants.BackupArchiveExtension}";
-        var manifestNameWithExtension =
-            $"{backupNameWithoutExtension}{ModConfiguration.Constants.BackupManifestExtension}";
+        var backupNameWithExtension = $"{backupNameWithoutExtension}{ModConfiguration.Constants.BackupArchiveExtension}";
+        var manifestNameWithExtension = $"{backupNameWithoutExtension}{ModConfiguration.Constants.BackupManifestExtension}";
 
         string backupFilepath = _filesystem.Path.Combine(backupDirectoryPath, backupNameWithExtension);
         string backupManifestFilepath = _filesystem.Path.Combine(backupDirectoryPath, manifestNameWithExtension);
@@ -188,7 +186,9 @@ public class BackupManager : IBackupManager
         {
             if (backups.Count >= _configuration.General.BackupsLimit)
             {
-                BackupInfo oldestBackup = backups.OrderBy(info => info.Additional.Time.CreationTime.Timestamp).First();
+                BackupInfo oldestBackup = backups
+                    .OrderBy(info => info.Additional.Time.CreationTime.Timestamp)
+                    .First();
 
                 _filesystem.File.Delete(oldestBackup.Filepath);
                 _filesystem.File.Delete(oldestBackup.ManifestFilepath);
@@ -200,7 +200,8 @@ public class BackupManager : IBackupManager
 
             if (_configuration.Archive.Enabled && archivedBackups.Count > _configuration.Archive.BackupsLimit)
             {
-                BackupInfo oldestBackup = archivedBackups.OrderBy(info => info.Additional.Time.CreationTime.Timestamp)
+                BackupInfo oldestBackup = archivedBackups
+                    .OrderBy(info => info.Additional.Time.CreationTime.Timestamp)
                     .First();
 
                 _filesystem.File.Delete(oldestBackup.Filepath);
