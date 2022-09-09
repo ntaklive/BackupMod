@@ -91,6 +91,8 @@
         <Compile Include="src\Modules\Commands\ConsoleCmdBackupList.cs" />
         <Compile Include="src\Modules\Commands\ConsoleCmdBackupRestore.cs" />
         <Compile Include="src\Modules\Commands\ConsoleCmdBase.cs" />
+        <Compile Include="src\Modules\Commands\Enums\ConsoleCmdType.cs" />
+        <Compile Include="src\Modules\Commands\EventArgs\ConsoleCmdEventArgs.cs" />
         <Compile Include="src\Modules\Common\CommonModule.cs" />
         <Compile Include="src\Modules\Common\EventHandlers.cs" />
         <Compile Include="src\Modules\FilUnderscore\FilUnderscoreModule.cs" />

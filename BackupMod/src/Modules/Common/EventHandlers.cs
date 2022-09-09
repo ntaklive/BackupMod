@@ -1,6 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BackupMod.Modules.Commands;
+using BackupMod.Modules.Commands.Enums;
+using BackupMod.Modules.Commands.EventArgs;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
 using BackupMod.Services.Abstractions.Models;
@@ -35,6 +38,16 @@ public sealed partial class CommonModule
         
         var cts = new CancellationTokenSource();
         CancellationToken token = cts.Token;
+
+        void OnConsoleCmdBaseOnCommandExecuted(object sender, ConsoleCmdEventArgs args)
+        {
+            if (configuration.AutoBackup.ResetDelayTimerAfterManualBackup && args.CommandType == ConsoleCmdType.Backup)
+            {
+                autoBackupService.ResetDelayTimer();
+            }
+        }
+
+        ConsoleCmdBase.CommandExecuted += OnConsoleCmdBaseOnCommandExecuted;
         
         try
         {
@@ -58,11 +71,11 @@ public sealed partial class CommonModule
         {
             logger.LogCritical(exception, "A critical error was occured");
         }
-        finally
-        {
-            cts.Cancel();
-        }
+
+        ConsoleCmdBase.CommandExecuted -= OnConsoleCmdBaseOnCommandExecuted;
         
+        cts.Cancel();
+
         logger.LogDebug("The 'game start done' handler has stopped");
     }
 }

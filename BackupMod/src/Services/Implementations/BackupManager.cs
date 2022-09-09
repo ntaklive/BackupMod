@@ -139,12 +139,13 @@ public class BackupManager : IBackupManager
         if (_configuration.Archive.Enabled)
         {
             BackupManifest[] manifests = _filesystem.Directory
-                .GetFiles(archiveDirectoryPath, $"*{ModConfiguration.Constants.BackupManifestExtension}",
-                    SearchOption.TopDirectoryOnly)
+                .GetFiles(archiveDirectoryPath, $"*{ModConfiguration.Constants.BackupManifestExtension}", SearchOption.TopDirectoryOnly)
                 .Select(filepath => _manifestService.ReadManifest(filepath))
                 .ToArray();
 
-            BackupInfo currentDateBackup = manifests.Select(x => _backupInfoFactory.CreateFromManifest(x)).Where(x => x != null)
+            BackupInfo currentDateBackup = manifests
+                .Select(x => _backupInfoFactory.CreateFromManifest(x))
+                .Where(x => x != null)
                 .FirstOrDefault(backup => backup.Additional.Time.CreationTime.Timestamp.Date == DateTime.UtcNow.Date);
             
             if (currentDateBackup != null)
@@ -164,7 +165,9 @@ public class BackupManager : IBackupManager
 
     private void DeleteRolledBackups(BackupInfo backupInfo)
     {
-        SaveInfo saveInfo = _worldInfoService.GetWorldInfos().SelectMany(world => world.Saves).FirstOrDefault(save => save.DirectoryPath == backupInfo.SaveDirectoryPath);
+        SaveInfo saveInfo = _worldInfoService.GetWorldInfos()
+            .SelectMany(world => world.Saves)
+            .FirstOrDefault(save => save.DirectoryPath == backupInfo.SaveDirectoryPath);
         if (saveInfo == null)
         {
             return;

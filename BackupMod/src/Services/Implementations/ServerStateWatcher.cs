@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
 using BackupMod.Services.Abstractions.Models;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace BackupMod.Services;
@@ -16,7 +15,6 @@ public class ServerStateWatcher : IServerStateWatcher
     private readonly ILogger<ServerStateWatcher> _logger;
     private readonly int _maxPlayersCount;
 
-    [CanBeNull] private CancellationTokenSource _cts;
     private ServerState _state;
 
     public ServerStateWatcher(
@@ -33,40 +31,33 @@ public class ServerStateWatcher : IServerStateWatcher
 
     public event EventHandler<ServerState> StateUpdate;
 
-    public async Task StartAsync(CancellationTokenSource cts)
+    public async Task StartAsync(CancellationToken token)
     {
-        if (_cts != null)
-        {
-            throw new InvalidOperationException("The watcher is already started");
-        }
-        
-        _cts = new CancellationTokenSource();
-        
         _state.AccessibilityState = ServerAccessibilityState.Unknown;
         _state.FillingState = ServerFillingState.Empty;
 
-        while (!cts.IsCancellationRequested)
+        while (!token.IsCancellationRequested)
         {
-            UpdateAccessibilityState();
-            UpdateFillingState();
-
             try
             {
-                await Task.Delay(_updateRate, cts.Token);
+                UpdateAccessibilityState();
+                UpdateFillingState();
+                await Task.Delay(_updateRate, token);
             }
             catch (TaskCanceledException)
             {
                 // ignored
             }
+            catch (Exception exception)
+            {
+                _logger.LogWarning("Cannot update the server state");
+                _logger.LogTrace(exception.ToString());
+            }
         }
-        
-        _cts!.Cancel();
     }
 
-    public ServerState GetServerState()
+    public ServerState GetCurrentServerState()
     {
-        ThrowIfNotStarted();
-
         return _state;
     }
 
@@ -112,13 +103,5 @@ public class ServerStateWatcher : IServerStateWatcher
     {
         _logger.LogTrace("Server state changed: {@State}", state);
         StateUpdate?.Invoke(this, state);
-    }
-
-    private void ThrowIfNotStarted()
-    {
-        if (_cts == null)
-        {
-            throw new InvalidOperationException("The watcher is not started");
-        }
     }
 }

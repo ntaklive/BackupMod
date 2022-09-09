@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using BackupMod.Modules.Commands.Enums;
+using BackupMod.Modules.Commands.EventArgs;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Enum;
 using BackupMod.Services.Abstractions.Game;
@@ -28,7 +30,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         _chatService = Provider.GetService<IChatService>();
         _logger = Provider.GetRequiredService<ILogger<ConsoleCmdBackup>>();
     }
-
+    
     public override bool IsExecuteOnClient => false;
 
     public override bool AllowedInMainMenu => true;
@@ -40,7 +42,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     };
 
     public override string GetDescription() =>
-        "Some commands to simplify the creation of backups (command provided by BackupMod)";
+        "Some commands to simplify the creation of backups (commands are provided by BackupMod)";
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public override async void Execute(List<string> _params, CommandSenderInfo _senderInfo)
@@ -54,7 +56,8 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
             {
                 case 0:
                     await BackupInternal();
-
+                    OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.Backup, _params));
+                    
                     return;
                 case 1:
                 {
@@ -62,15 +65,23 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                     {
                         case "info":
                             BackupInfoInternal();
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupInfo, _params));
+
                             break;
                         case "restore":
                             await BackupRestoreInternal(null, null, null);
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, _params));
+
                             break;
                         case "delete":
                             await BackupDeleteInternal(null, null, null);
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, _params));
+
                             break;
                         case "list":
                             BackupListInternal();
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupList, _params));
+
                             break;
                         default:
                             LogUnknownCommand();
@@ -94,6 +105,8 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                             }
 
                             await BackupRestoreInternal(worldId, saveId, backupId);
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, _params));
+
                             break;
                         }
                         case "delete":
@@ -107,6 +120,8 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                             }
 
                             await BackupDeleteInternal(worldId, saveId, backupId);
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, _params));
+
                             break;
                         }
                         default:
@@ -126,6 +141,24 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         {
             _logger.LogError(exception, "An unexpected exception was occured during executing a command");
         }
+    }
+    
+    private async Task BackupInternal()
+    {
+        if (_worldService.GetCurrentWorld() == null)
+        {
+            _logger.LogError("This command can only be executed when the game is started");
+
+            return;
+        }
+
+        (BackupInfo backupInfo, TimeSpan timeElapsed) result =
+            await _backupManager.CreateAsync("Manual backup", BackupMode.SaveAllAndBackup);
+
+        _logger.LogInformation("The manual backup was successfully completed");
+        _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
+
+        _chatService?.SendMessage("The manual backup was successfully completed");
     }
 
     private bool TryParseArguments(string worldIdParam, string saveIdParam, string backupIdParam, out int worldId,
@@ -156,25 +189,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
 
         return valid;
     }
-
-    private async Task BackupInternal()
-    {
-        if (_worldService.GetCurrentWorld() == null)
-        {
-            _logger.LogError("This command can only be executed when the game is started");
-
-            return;
-        }
-
-        (BackupInfo backupInfo, TimeSpan timeElapsed) result =
-            await _backupManager.CreateAsync("Manual backup", BackupMode.SaveAllAndBackup);
-
-        _logger.LogInformation("The manual backup was successfully completed");
-        _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
-
-        _chatService?.SendMessage("The manual backup was successfully completed");
-    }
-
+    
     private bool ValidateArguments(int? worldId, int? saveId, int? backupId)
     {
         if (worldId == null || saveId == null || backupId == null)

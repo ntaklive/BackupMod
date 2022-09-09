@@ -9,7 +9,7 @@ public interface IServerStateWatcher
 {
     public event EventHandler<ServerState> StateUpdate;  
 
-    public Task StartAsync(CancellationTokenSource cts);
+    public Task StartAsync(CancellationToken token);
     
-    public ServerState GetServerState();
+    public ServerState GetCurrentServerState();
 }
