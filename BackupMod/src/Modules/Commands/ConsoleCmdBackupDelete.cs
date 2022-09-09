@@ -10,13 +10,6 @@ public partial class ConsoleCmdBackup
 {
     private async Task BackupDeleteInternal(int? worldId, int? saveId, int? backupId)
     {
-        if (_worldService.GetCurrentWorld() != null)
-        {
-            _logger.LogError("This command can only be executed in the main menu");
-
-            return;
-        }
-
         IReadOnlyList<WorldInfo> worlds = _worldInfoService.GetWorldInfos();
 
         if (worldId == null || saveId == null || backupId == null)
