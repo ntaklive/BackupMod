@@ -23,6 +23,9 @@
     // Min: 10
     // Default: 1200 (20 minutes)
     "Delay": 1200,
+    
+    //
+    "ResetDelayTimerAfterManualBackup": false,
 
     // Skip the next scheduled backup, if there are no players on the server
     // Default: false

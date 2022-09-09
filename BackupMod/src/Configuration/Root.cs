@@ -15,7 +15,7 @@ public class ModConfiguration
     public static readonly ModConfiguration Default = new()
     {
         General = new GeneralConfiguration(backupsLimit: 10, customBackupsFolder: "", debugMode: false),
-        AutoBackup = new AutoBackupConfiguration(enabled: true, delay: 1200, skipIfThereAreNoPlayers: false),
+        AutoBackup = new AutoBackupConfiguration(enabled: true, delay: 1200, skipIfThereAreNoPlayers: false, resetDelayTimerAfterManualBackup: false),
         Archive = new ArchiveConfiguration(enabled: false, backupsLimit: 10, customArchiveFolder: ""),
         Events = new EventsConfiguration(backupOnWorldLoaded: true, backupOnServerIsEmpty: false),
         Notifications = new NotificationsConfiguration(enabled: true, countdownConfiguration: new NotificationsConfiguration.CountdownConfiguration(enabled: true, countFrom: 5))

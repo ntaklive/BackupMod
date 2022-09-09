@@ -14,6 +14,7 @@ public sealed class FilUnderscoreModule : ModuleBase
     private bool _autoBackupEnabled = ModConfiguration.Default.AutoBackup.Enabled;
     private int _autoBackupDelay = ModConfiguration.Default.AutoBackup.Delay;
     private bool _autoBackupSkipIfThereAreNoPlayers = ModConfiguration.Default.AutoBackup.SkipIfThereAreNoPlayers;
+    private bool _autoBackupResetDelayTimerAfterManualBackup = ModConfiguration.Default.AutoBackup.ResetDelayTimerAfterManualBackup;
 
     private bool _archiveEnabled = ModConfiguration.Default.Archive.Enabled;
     private int _archiveBackupsLimit = ModConfiguration.Default.Archive.BackupsLimit;
@@ -162,6 +163,26 @@ public sealed class FilUnderscoreModule : ModuleBase
             .SetTab("autoBackup_tab")
             .SetMinimumMaximumAndIncrementValues(10, 86400, 10);
 
+        modSettings.Hook(
+                "autoBackup_resetDelayTimerAfterManualBackup",
+                "autoBackup_resetDelayTimerAfterManualBackup",
+                value =>
+                {
+                    ModConfiguration configuration = ConfigurationService.ReadConfiguration();
+
+                    configuration.AutoBackup.ResetDelayTimerAfterManualBackup = value;
+
+                    ConfigurationService.TryUpdateConfiguration(configuration);
+
+                    _autoBackupResetDelayTimerAfterManualBackup = value;
+                },
+                () => _autoBackupResetDelayTimerAfterManualBackup,
+                value => (value.ToString(), value.ToString()),
+                str => (bool.Parse(str), true))
+            .SetTab("autoBackup_tab")
+            .SetAllowedValues(new[] {false, true})
+            .SetWrap(true);
+        
         modSettings.Hook(
                 "autoBackup_skipIfThereAreNoPlayers",
                 "autoBackup_skipIfThereAreNoPlayers",
