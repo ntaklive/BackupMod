@@ -147,8 +147,8 @@ public class BackupManager : IBackupManager
                 .ToArray();
 
             BackupInfo currentDateBackup = manifests.Select(x => _backupInfoFactory.CreateFromManifest(x)).Where(x => x != null)
-                .FirstOrDefault(backup => backup.Additional.Time.CreationTime.Timestamp.ToShortDateString() == DateTime.Today.ToShortDateString());
-
+                .FirstOrDefault(backup => backup.Additional.Time.CreationTime.Timestamp.Date == DateTime.UtcNow.Date);
+            
             if (currentDateBackup != null)
             {
                 _filesystem.File.Delete(currentDateBackup.ManifestFilepath);
@@ -172,7 +172,7 @@ public class BackupManager : IBackupManager
             return;
         }
         
-        IReadOnlyList<BackupInfo> currentSaveBackups = saveInfo.Backups;
+        IReadOnlyList<BackupInfo> currentSaveBackups = saveInfo.Backups.Where(x => !x.Archived).ToArray();
 
         if (!currentSaveBackups.Any())
         {
