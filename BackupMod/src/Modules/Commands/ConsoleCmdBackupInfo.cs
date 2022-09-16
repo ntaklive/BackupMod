@@ -19,6 +19,7 @@ public partial class ConsoleCmdBackup
         _logger.LogInformation("Current settings:");
         _logger.LogInformation($"General.BackupsLimit: {configuration.General.BackupsLimit.ToString()}");
         _logger.LogInformation($"General.CustomBackupsFolder: {configuration.General.CustomBackupsFolder}");
+        _logger.LogInformation($"General.DebugMode: {configuration.General.DebugMode.ToString()}");
         _logger.LogInformation($"AutoBackup.Enabled: {configuration.AutoBackup.Enabled.ToString()}");
         _logger.LogInformation($"AutoBackup.Delay: {configuration.AutoBackup.Delay.ToString()}");
         _logger.LogInformation($"AutoBackup.ResetDelayTimerAfterManualBackup: {configuration.AutoBackup.ResetDelayTimerAfterManualBackup.ToString()}");
