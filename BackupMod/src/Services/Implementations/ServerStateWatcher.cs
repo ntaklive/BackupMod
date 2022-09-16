@@ -33,15 +33,18 @@ public class ServerStateWatcher : IServerStateWatcher
 
     public async Task StartAsync(CancellationToken token)
     {
-        _state.AccessibilityState = ServerAccessibilityState.Unknown;
-        _state.FillingState = ServerFillingState.Empty;
+        _state = new ServerState();
 
         while (!token.IsCancellationRequested)
         {
             try
             {
                 UpdateAccessibilityState();
-                UpdateFillingState();
+                if (_state.AccessibilityState == ServerAccessibilityState.Accessible)
+                {
+                    UpdateFillingState();
+                }
+                
                 await Task.Delay(_updateRate, token);
             }
             catch (TaskCanceledException)
