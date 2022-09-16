@@ -90,6 +90,8 @@
         <Compile Include="src\Modules\Commands\ConsoleCmdBackupInfo.cs" />
         <Compile Include="src\Modules\Commands\ConsoleCmdBackupList.cs" />
         <Compile Include="src\Modules\Commands\ConsoleCmdBackupRestore.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupStart.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupStop.cs" />
         <Compile Include="src\Modules\Commands\ConsoleCmdBase.cs" />
         <Compile Include="src\Modules\Commands\Enums\ConsoleCmdType.cs" />
         <Compile Include="src\Modules\Commands\EventArgs\ConsoleCmdEventArgs.cs" />
@@ -115,6 +117,7 @@
         <Compile Include="src\Services\Abstractions\Interfaces\Game\IPlayerInputRecordingSystemProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\Game\IPlayersProvider.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\Game\IThreadManager.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IAutoBackupService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IBackupInfoFactory.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldInfoService.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IBackupManifestFactory.cs" />
@@ -128,6 +131,7 @@
         <Compile Include="src\Services\Abstractions\Models\ServerState.cs" />
         <Compile Include="src\Services\Abstractions\Models\WorldInfo.cs" />
         <Compile Include="src\Services\Abstractions\Models\WorldTime.cs" />
+        <Compile Include="src\Services\Implementations\AutoBackupService.cs" />
         <Compile Include="src\Services\Implementations\BackupInfoFactory.cs" />
         <Compile Include="src\Services\Implementations\WorldInfoService.cs" />
         <Compile Include="src\Services\Implementations\BackupManifestFactory.cs" />
@@ -150,14 +154,14 @@
         <Compile Include="src\ModApi.cs" />
         <Compile Include="src\Modules\FilUnderscore\ModManagerAPI.cs" />
         <Compile Include="src\Services\Abstractions\Enum\BackupMode.cs" />
-        <Compile Include="src\Services\Abstractions\Interfaces\IAutoBackupService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IAutoBackupProcess.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IResources.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IJsonSerializer.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IBackupManager.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaveAlgorithm.cs" />
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
         <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
-        <Compile Include="src\Services\Implementations\AutoBackupService.cs" />
+        <Compile Include="src\Services\Implementations\AutoBackupProcess.cs" />
         <Compile Include="src\Services\Implementations\GameDirectoriesService.cs" />
         <Compile Include="src\Services\Implementations\JsonSerializer.cs" />
         <Compile Include="src\Services\Implementations\BackupManager.cs" />
