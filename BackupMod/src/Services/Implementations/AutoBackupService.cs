@@ -1,197 +1,55 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BackupMod.Services.Abstractions;
-using BackupMod.Services.Abstractions.Enum;
-using BackupMod.Services.Abstractions.Game;
-using BackupMod.Services.Abstractions.Models;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace BackupMod.Services;
 
 public class AutoBackupService : IAutoBackupService
 {
-    private readonly ModConfiguration _configuration;
-    private readonly IBackupManager _backupManager;
-    private readonly IServerStateWatcher _serverStateWatcher;
-    [CanBeNull] private readonly IChatService _chatService;
+    private readonly IAutoBackupProcess _autoBackupProcess;
     private readonly ILogger<AutoBackupService> _logger;
-
-    private CancellationTokenSource _stateWatcherCts;
-    private CancellationTokenSource _timerCts;
-    private readonly TimeSpan _delay;
-
-    private ServerState _currentServerState;
+    
+    private CancellationTokenSource _cts;
 
     public AutoBackupService(
-        ModConfiguration configuration,
-        IBackupManager backupManager,
-        IServerStateWatcher serverStateWatcher,
-        [CanBeNull] IChatService chatService,
+        IAutoBackupProcess autoBackupProcess,
         ILogger<AutoBackupService> logger)
     {
-        _configuration = configuration;
-        _backupManager = backupManager;
-        _serverStateWatcher = serverStateWatcher;
-        _chatService = chatService;
+        _autoBackupProcess = autoBackupProcess;
         _logger = logger;
         
-        _delay = TimeSpan.FromSeconds(_configuration.AutoBackup.Delay);
-        if (_configuration.Notifications.Countdown.Enabled)
+        _cts = new CancellationTokenSource();
+    }
+    
+    public void Start()
+    {
+        Task task = _autoBackupProcess.StartAsync(_cts.Token);
+        task.ContinueWith(task =>
         {
-            _delay = _delay.Subtract(TimeSpan.FromSeconds(_configuration.Notifications.Countdown.CountFrom));
-        }
+            if (task.IsFaulted)
+            {
+                _logger.LogError(task.Exception, "An unexpected error was occured");
+            }
+
+            IsRunning = false;
+        });
+        
+        IsRunning = true;
     }
 
-    public async Task StartAsync(CancellationToken token)
+    public void Stop()
     {
-        _timerCts = CancellationTokenSource.CreateLinkedTokenSource(token);
-        _stateWatcherCts = CancellationTokenSource.CreateLinkedTokenSource(token);
-
-        async void OnServerStateWatcherOnStateUpdate(object sender, ServerState state) => await ServerStateWatcherOnStateUpdate(state);
-
-        try
-        {
-            Task watcherTask = _serverStateWatcher.StartAsync(_stateWatcherCts.Token);
-
-            _serverStateWatcher.StateUpdate += OnServerStateWatcherOnStateUpdate;
-
-            _logger.LogInformation("AutoBackup process started");
-            while (!_stateWatcherCts.IsCancellationRequested)
-            {
-                try
-                {
-                    await Task.Delay(_delay, _timerCts.Token);
-                }
-                catch (TaskCanceledException) when (_timerCts.IsCancellationRequested)
-                {
-                    LogNextBackupTime(alsoLogInChat:true);
-                    _timerCts = new CancellationTokenSource();
-                    continue;
-                }
-
-                ServerState serverState = _serverStateWatcher.GetCurrentServerState();
-                if (_configuration.AutoBackup.SkipIfThereAreNoPlayers &&
-                    serverState.FillingState == ServerFillingState.Empty)
-                {
-                    _logger.LogInformation("There are no players on the server. The current backup has been skipped");
-                    LogNextBackupTime();
-
-                    continue;
-                }
-                
-                if (_configuration.Notifications.Countdown.Enabled)
-                {
-                    await ChatCountdown(_stateWatcherCts.Token);
-                }
-
-                await BackupAsync(_stateWatcherCts.Token);
-
-                LogNextBackupTime(alsoLogInChat:true);
-            }
-            
-            if (watcherTask.Status != TaskStatus.RanToCompletion)
-            {
-                _stateWatcherCts.Cancel();
-                _timerCts.Cancel();
-                await watcherTask;
-            }
-        }
-        catch (TaskCanceledException) 
-        {
-            // ignored
-        }
-        finally
-        {
-            _serverStateWatcher.StateUpdate -= OnServerStateWatcherOnStateUpdate;
-            
-            _logger.LogInformation("AutoBackup process terminated");
-        }
+        IsRunning = false;
+        
+        _cts.Cancel();
+        _cts = new CancellationTokenSource();
     }
 
     public void ResetDelayTimer()
     {
-        _timerCts.Cancel();
+        _autoBackupProcess.ResetDelayTimer();
     }
 
-    private async Task ServerStateWatcherOnStateUpdate(ServerState state)
-    {
-        try
-        {
-            if (state.AccessibilityState == ServerAccessibilityState.Inaccessible)
-            {
-                _stateWatcherCts.Cancel();
-                _timerCts.Cancel();
-                return;
-            }
-            
-            if (_configuration.Events.BackupOnServerIsEmpty &&
-                _currentServerState.FillingState != ServerFillingState.Empty &&
-                state.FillingState == ServerFillingState.Empty)
-            {
-                _logger.LogInformation("The server is empty. Performing a backup");
-                
-                await BackupAsync(_stateWatcherCts.Token);
-            }
-        }
-        catch (TaskCanceledException)
-        {
-            // ignored
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "An event cannot be handled properly");
-        }
-        finally
-        {
-            _currentServerState = state;
-        }
-    }
-
-    private async Task ChatCountdown(CancellationToken token)
-    {
-        if (_chatService == null)
-        {
-            return;
-        }
-        
-        for (int i = _configuration.Notifications.Countdown.CountFrom; i > 0; i--)
-        {
-            _chatService.SendMessage($"Backup in {i}...");
-            await Task.Delay(TimeSpan.FromSeconds(1), token);
-        }
-    }
-
-    private async Task BackupAsync(CancellationToken token)
-    {
-        try
-        {
-            _logger.LogInformation("The world backup is starting...");
-
-            (BackupInfo backupInfo, TimeSpan timeElapsed) result =
-                await _backupManager.CreateAsync("Automatic backup", BackupMode.SaveAllAndBackup, token);
-
-            _logger.LogInformation("The world backup has completed successfully!");
-            _logger.LogInformation($"Time spent: {result.timeElapsed.TotalSeconds:F2} seconds");
-            _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
-
-            _chatService?.SendMessage("The world backup has completed successfully!");
-            _chatService?.SendMessage($"Time spent: {result.timeElapsed.TotalSeconds:F2} seconds");
-        }
-        catch (TaskCanceledException)
-        {
-            // ignored
-        }
-    }
-
-    private void LogNextBackupTime(bool alsoLogInChat = false)
-    {
-        string nextBackupTime = DateTime.Now.Add(_delay).ToShortTimeString();
-        _logger.LogInformation($"The next backup will be at {nextBackupTime}");
-        if (alsoLogInChat)
-        {
-            _chatService?.SendMessage($"The next backup will be at {nextBackupTime}");
-        }
-    }
+    public bool IsRunning { get; private set; }
 }

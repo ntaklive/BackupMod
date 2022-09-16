@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using BackupMod.Modules.Commands;
 using BackupMod.Modules.Commands.Enums;
@@ -14,68 +13,77 @@ namespace BackupMod.Modules.Common;
 
 public sealed partial class CommonModule
 {
+    private static ModConfiguration _configuration = null!;
+
     private static async Task GameStartDoneHandlerFuncAsync(IServiceProvider provider)
     {
+        _configuration = provider.GetRequiredService<ModConfiguration>();
+        
         var autoBackupService = provider.GetRequiredService<IAutoBackupService>();
-        var configuration = provider.GetRequiredService<ModConfiguration>();
-        var backupManager = provider.GetRequiredService<IBackupManager>();
-        var logger = provider.GetRequiredService<ILogger<CommonModule>>();
-        
-        var worldService = provider.GetRequiredService<IWorldService>();
-        var resources = provider.GetRequiredService<IResources>();
-        
-        logger.LogDebug("A 'game start done' handler has started");
-        
-        logger.LogTrace("Current save directory path: {Path}", worldService.GetCurrentSaveDirectoryPath());
-        logger.LogTrace("Current save name: {Name}", worldService.GetCurrentSaveName());
-        logger.LogTrace("Current world directory path: {Path}", worldService.GetCurrentWorldDirectoryPath());
-        logger.LogTrace("Current world name: {Name}", worldService.GetCurrentWorldName());
-        
-        logger.LogTrace("Archive directory path: {Path}", resources.GetArchiveDirectoryPath());
-        logger.LogTrace("Backups directory path: {Path}", resources.GetBackupsDirectoryPath());
-        logger.LogTrace("Saves directory path: {Path}", resources.GetSavesDirectoryPath());
-        logger.LogTrace("Worlds directory path: {Path}", resources.GetWorldsDirectoryPath());
-        
-        var cts = new CancellationTokenSource();
-        CancellationToken token = cts.Token;
 
-        void OnConsoleCmdBaseOnCommandExecuted(object sender, ConsoleCmdEventArgs args)
+        _logger.LogDebug("A 'game start done' handler has started");
+
+        _logger.LogTrace("Current save directory path: {Path}", _worldService.GetCurrentSaveDirectoryPath());
+        _logger.LogTrace("Current save name: {Name}", _worldService.GetCurrentSaveName());
+        _logger.LogTrace("Current world directory path: {Path}", _worldService.GetCurrentWorldDirectoryPath());
+        _logger.LogTrace("Current world name: {Name}", _worldService.GetCurrentWorldName());
+
+        _logger.LogTrace("Archive directory path: {Path}", _resources.GetArchiveDirectoryPath());
+        _logger.LogTrace("Backups directory path: {Path}", _resources.GetBackupsDirectoryPath());
+        _logger.LogTrace("Saves directory path: {Path}", _resources.GetSavesDirectoryPath());
+        _logger.LogTrace("Worlds directory path: {Path}", _resources.GetWorldsDirectoryPath());
+
+
+        void OnConsoleCommandExecuted(object sender, ConsoleCmdEventArgs args)
         {
-            if (configuration.AutoBackup.ResetDelayTimerAfterManualBackup && args.CommandType == ConsoleCmdType.Backup)
+            if (args.CommandType == ConsoleCmdType.BackupStop)
+            {
+                if (autoBackupService.IsRunning)
+                {
+                    autoBackupService.Stop();
+                    
+                    _logger.LogDebug("The current AutoBackup process has been terminated");
+                }
+                else
+                {
+                    _logger.LogDebug("There is no AutoBackup process to stop");
+                }
+            }
+
+            if (args.CommandType == ConsoleCmdType.BackupStart)
+            {
+                if (!autoBackupService.IsRunning)
+                {
+                    autoBackupService.Start();
+                    
+                    _logger.LogDebug("The AutoBackup process for the current world was manually started");
+                }
+                else
+                {
+                    _logger.LogDebug("An AutoBackup process is already started");
+                }
+            }
+
+            if (_configuration.AutoBackup.ResetDelayTimerAfterManualBackup &&
+                args.CommandType == ConsoleCmdType.Backup)
             {
                 autoBackupService.ResetDelayTimer();
             }
         }
 
-        ConsoleCmdBase.CommandExecuted += OnConsoleCmdBaseOnCommandExecuted;
-        
-        try
-        {
-            if (configuration.Events.BackupOnWorldLoaded)
-            {
-                (BackupInfo backupInfo, TimeSpan timeElapsed) result = await backupManager.CreateAsync("Initial backup", BackupMode.BackupOnly, token);
-                logger.LogInformation("The initial backup has completed successfully");
-                logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
-            }
+        ConsoleCmdBase.CommandExecuted += OnConsoleCommandExecuted;
 
-            if (configuration.AutoBackup.Enabled)
-            {
-                await autoBackupService.StartAsync(cts.Token);
-            }
-        }
-        catch (TaskCanceledException)
+        if (_configuration.Events.BackupOnWorldLoaded)
         {
-            // ignored
-        }
-        catch (Exception exception)
-        {
-            logger.LogCritical(exception, "A critical error was occured");
+            (BackupInfo backupInfo, TimeSpan timeElapsed) result =
+                await _backupManager.CreateAsync("Initial backup", BackupMode.BackupOnly);
+            _logger.LogInformation("The initial backup has completed successfully");
+            _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
         }
 
-        ConsoleCmdBase.CommandExecuted -= OnConsoleCmdBaseOnCommandExecuted;
-        
-        cts.Cancel();
-
-        logger.LogDebug("The 'game start done' handler has stopped");
+        if (_configuration.AutoBackup.Enabled)
+        {
+            autoBackupService.Start();
+        }
     }
 }

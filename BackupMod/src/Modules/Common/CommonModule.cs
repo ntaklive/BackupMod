@@ -18,9 +18,21 @@ namespace BackupMod.Modules.Common;
 
 public sealed partial class CommonModule : ModuleBase
 {
+    private static IBackupManager _backupManager = null!;
+    private static IWorldService _worldService = null!;
+    private static IResources _resources = null!;
+    private static IDirectoryService _directoryService = null!;
+    private static ILogger<CommonModule> _logger = null!;
+    
     public override void InitializeModule(IServiceProvider provider)
     {
-        CreateRequiredFolders(provider);
+        _backupManager = ServiceProviderExtensions.GetRequiredService<IBackupManager>(provider);
+        _worldService = ServiceProviderExtensions.GetRequiredService<IWorldService>(provider);
+        _resources = ServiceProviderExtensions.GetRequiredService<IResources>(provider);
+        _directoryService = ServiceProviderExtensions.GetRequiredService<IDirectoryService>(provider);
+        _logger = ServiceProviderExtensions.GetRequiredService<ILogger<CommonModule>>(provider);
+
+        CreateRequiredFolders();
 
         ModEvents.GameStartDone.RegisterHandler(() => _ = GameStartDoneHandlerFuncAsync(provider));
     }
@@ -99,12 +111,12 @@ public sealed partial class CommonModule : ModuleBase
         services.AddSingleton<IWorldService>(provider => new WorldService(
             ServiceProviderExtensions.GetRequiredService<IFilesystem>(provider)
         ));
-        services.AddTransient<IAutoBackupService>(provider => new AutoBackupService(
+        services.AddTransient<IAutoBackupProcess>(provider => new AutoBackupProcess(
             ServiceProviderExtensions.GetRequiredService<ModConfiguration>(provider),
             ServiceProviderExtensions.GetRequiredService<IBackupManager>(provider),
             ServiceProviderExtensions.GetRequiredService<IServerStateWatcher>(provider),
             ServiceProviderExtensions.GetService<IChatService>(provider),
-            ServiceProviderExtensions.GetRequiredService<ILogger<AutoBackupService>>(provider)
+            ServiceProviderExtensions.GetRequiredService<ILogger<AutoBackupProcess>>(provider)
         ));
         
         services.AddSingleton<IWorldInfoService>(provider => new WorldInfoService(
@@ -170,15 +182,16 @@ public sealed partial class CommonModule : ModuleBase
             TimeSpan.FromSeconds(1),
             ServiceProviderExtensions.GetRequiredService<IWorldService>(provider),
             ServiceProviderExtensions.GetRequiredService<ILogger<ServerStateWatcher>>(provider)
+        ));        
+        services.AddTransient<IAutoBackupService>(provider => new AutoBackupService(
+            ServiceProviderExtensions.GetRequiredService<IAutoBackupProcess>(provider),
+            ServiceProviderExtensions.GetRequiredService<ILogger<AutoBackupService>>(provider)
         ));
     }
 
-    private static void CreateRequiredFolders(IServiceProvider provider)
+    private static void CreateRequiredFolders()
     {
-        var resources = ServiceProviderExtensions.GetRequiredService<IResources>(provider);
-        var directoryService = ServiceProviderExtensions.GetRequiredService<IDirectoryService>(provider);
-
-        directoryService.Create(resources.GetBackupsDirectoryPath());
-        directoryService.Create(resources.GetArchiveDirectoryPath());
+        _directoryService.Create(_resources.GetBackupsDirectoryPath());
+        _directoryService.Create(_resources.GetArchiveDirectoryPath());
     }
 }
