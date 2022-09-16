@@ -4,7 +4,6 @@ using BackupMod.Manifest;
 using BackupMod.Services.Abstractions;
 using BackupMod.Services.Abstractions.Filesystem;
 using BackupMod.Services.Abstractions.Models;
-using BackupMod.Utils;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
