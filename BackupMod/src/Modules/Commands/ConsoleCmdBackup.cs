@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using BackupMod.Modules.Commands.Enums;
 using BackupMod.Modules.Commands.EventArgs;
@@ -11,6 +12,7 @@ using BackupMod.Services.Abstractions.Models;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Theraot.Collections;
 
 namespace BackupMod.Modules.Commands;
 
@@ -47,40 +49,51 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public override async void Execute(List<string> _params, CommandSenderInfo _senderInfo)
     {
-        _logger.LogDebug("The 'backup' command was invoked with params: '{Params}'", _params);
-        _logger.LogTrace("Sender info: {@SenderInfo}", _senderInfo);
+        IReadOnlyList<string> args = _params.Select(arg => arg.ToLowerInvariant()).AsIReadOnlyList();
+        
+        _logger.LogDebug("The 'backup' command was invoked with params: '{Params}'", args);
 
         try
         {
-            switch (_params.Count)
+            switch (args.Count)
             {
                 case 0:
                     await BackupInternal();
-                    OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.Backup, _params));
+                    OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.Backup, args));
                     
                     return;
                 case 1:
                 {
-                    switch (_params[0])
+                    switch (args[0])
                     {
                         case "info":
                             BackupInfoInternal();
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupInfo, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupInfo, args));
 
                             break;
                         case "restore":
                             await BackupRestoreInternal(null, null, null);
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, args));
 
                             break;
                         case "delete":
                             await BackupDeleteInternal(null, null, null);
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, args));
 
                             break;
                         case "list":
                             BackupListInternal();
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupList, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupList, args));
+
+                            break;
+                        case "start":
+                            BackupStartInternal();
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupStart, args));
+
+                            break;
+                        case "stop":
+                            BackupStopInternal();
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupStop, args));
 
                             break;
                         default:
@@ -92,12 +105,12 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                 }
                 case 4:
                 {
-                    switch (_params[0])
+                    switch (args[0])
                     {
                         case "restore":
                         {
                             if (!TryParseArguments(
-                                    _params[1], _params[2], _params[3],
+                                    args[1], args[2], args[3],
                                     out int worldId, out int saveId, out int backupId)
                                )
                             {
@@ -105,14 +118,14 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                             }
 
                             await BackupRestoreInternal(worldId, saveId, backupId);
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupRestore, args));
 
                             break;
                         }
                         case "delete":
                         {
                             if (!TryParseArguments(
-                                    _params[1], _params[2], _params[3],
+                                    args[1], args[2], args[3],
                                     out int worldId, out int saveId, out int backupId)
                                )
                             {
@@ -120,7 +133,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
                             }
 
                             await BackupDeleteInternal(worldId, saveId, backupId);
-                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, _params));
+                            OnCommandExecuted(new ConsoleCmdEventArgs(ConsoleCmdType.BackupDelete, args));
 
                             break;
                         }
@@ -158,6 +171,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         _logger.LogInformation("The manual backup was successfully completed");
         _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
 
+        _chatService?.SendMessage("The manual backup was successfully completed");
         _chatService?.SendMessage("The manual backup was successfully completed");
     }
 

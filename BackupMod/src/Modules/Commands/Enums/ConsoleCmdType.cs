@@ -6,5 +6,7 @@ public enum ConsoleCmdType
     BackupList,
     BackupInfo,
     BackupRestore,
-    BackupDelete
+    BackupDelete,
+    BackupStart,
+    BackupStop
 }
