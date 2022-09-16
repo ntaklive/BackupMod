@@ -14,31 +14,37 @@ public sealed class SerilogModule : ModuleBase
     public override void InitializeModule(IServiceProvider provider)
     {
         var configuration = ServiceProviderExtensions.GetRequiredService<ModConfiguration>(provider);
-        
-        string logsDirectoryPath = AssemblyInfo.AssemblyDirectoryPath;
 
+        string logsDirectoryPath = AssemblyInfo.AssemblyDirectoryPath;
+        
         LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
-            .WriteTo.GameConsole(
-                restrictedToMinimumLevel: LogEventLevel.Information
-            );
+            .MinimumLevel.Verbose();
 
         if (configuration.General.DebugMode)
         {
             loggerConfiguration
+                .WriteTo.GameConsole(
+                    restrictedToMinimumLevel: LogEventLevel.Verbose
+                )
                 .Enrich.WithExceptionDetails()
                 .Enrich.FromLogContext()
                 .WriteTo.File(
-                    $"{logsDirectoryPath}/logs/log{Guid.NewGuid().ToString().Replace("-", "")}.txt",
+                    $"{logsDirectoryPath}/logs/log.txt",
                     restrictedToMinimumLevel: LogEventLevel.Verbose,
-                    outputTemplate:
-                    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}",
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day
+                );
+        }
+        else
+        {
+            loggerConfiguration
+                .WriteTo.GameConsole(
+                    restrictedToMinimumLevel: LogEventLevel.Information
                 );
         }
 
         Logger = loggerConfiguration.CreateLogger();
-        
+
         ModEvents.GameShutdown.RegisterHandler(CloseAndFlush);
     }
 
