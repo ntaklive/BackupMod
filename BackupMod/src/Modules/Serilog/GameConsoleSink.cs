@@ -7,12 +7,12 @@ namespace BackupMod.Modules.Serilog;
 public class GameConsoleSink : ILogEventSink
 {
     private const string Template = "[BackupMod]: {0}";
-    private const string VerboseTemplate = $"VRB {Template}";
-    private const string DebugTemplate = $"DBG {Template}";
-    private const string InformationTemplate = $"INF {Template}";
-    private const string WarningTemplate = $"WRN {Template}";
-    private const string ErrorTemplate = $"ERR {Template}";
-    private const string FatalTemplate = $"FTL {Template}";
+    private const string VerboseTemplate = $"(VRB) {Template}";
+    private const string DebugTemplate = $"(DBG) {Template}";
+    private const string InformationTemplate = $"(INF) {Template}";
+    private const string WarningTemplate = $"(WRN) {Template}";
+    private const string ErrorTemplate = $"(ERR) {Template}";
+    private const string FatalTemplate = $"(FTL) {Template}";
     
     private readonly IFormatProvider _formatProvider;
 
