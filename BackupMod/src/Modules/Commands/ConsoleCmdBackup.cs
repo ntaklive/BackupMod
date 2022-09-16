@@ -172,7 +172,6 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
 
         _chatService?.SendMessage("The manual backup was successfully completed");
-        _chatService?.SendMessage("The manual backup was successfully completed");
     }
 
     private bool TryParseArguments(string worldIdParam, string saveIdParam, string backupIdParam, out int worldId,
