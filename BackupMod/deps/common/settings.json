@@ -10,7 +10,8 @@
     // Default: ""
     "CustomBackupsFolder": "",
     
-    // Write debug information to the logs/*logName*.txt file
+    // Write debug information to the logs/log.txt file and to the in-game/server console
+    // Default: false
     "DebugMode": false
   },
   
