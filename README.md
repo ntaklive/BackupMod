@@ -20,7 +20,8 @@ If you changed the configuration when you were in game, you should re-enter to y
     // Default: ""
     "CustomBackupsFolder": "",
     
-    // Write debug information to the logs/*logName*.txt file
+    // Write debug information to the logs/log.txt file and to the in-game/server console
+    // Default: false
     "DebugMode": false
   },
   
@@ -33,6 +34,10 @@ If you changed the configuration when you were in game, you should re-enter to y
     // Min: 10
     // Default: 1200 (20 minutes)
     "Delay": 1200,
+    
+    // Reset the delay timer after a manual backup
+    // Default: false
+    "ResetDelayTimerAfterManualBackup": false,
 
     // Skip the next scheduled backup, if there are no players on the server
     // Default: false
@@ -83,8 +88,8 @@ If you changed the configuration when you were in game, you should re-enter to y
   }
 }
 ```
-By default, your backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Backups/%WorldName%/%SaveName%**' folder  
-and your archived backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder.
+By default, your backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Backups/%WorldName%/%SaveName%**' directory (on windows).  
+and your archived backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder (on windows).
 
 # Commands
 You can use the '**backup**' command or its shortened version - the '**bp**' command
@@ -93,7 +98,9 @@ You can use the '**backup**' command or its shortened version - the '**bp**' com
 '**backup info**' - show the current configuration of the mod  
 '**backup list**' - show all available backups  
 '**backup restore**' - restore a save from a backup  
-'**backup delete**' - delete a backup
+'**backup delete**' - delete a backup  
+'**backup start**' - start an AutoBackup process (even if disabled in settings.json)  
+'**backup stop**' - stop the current AutoBackup process  
 
 # Installation
 1. Extract the downloaded .zip archive
