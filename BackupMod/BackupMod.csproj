@@ -162,7 +162,7 @@
         <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
         <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
         <Compile Include="src\Services\Implementations\AutoBackupProcess.cs" />
-        <Compile Include="src\Services\Implementations\GameDirectoriesService.cs" />
+        <Compile Include="src\Services\Implementations\Resources.cs" />
         <Compile Include="src\Services\Implementations\JsonSerializer.cs" />
         <Compile Include="src\Services\Implementations\BackupManager.cs" />
         <Compile Include="src\Services\Implementations\SaveInfoFactory.cs" />
