@@ -89,7 +89,11 @@ If you changed the configuration when you were in game, you should re-enter to y
 }
 ```
 By default, your backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Backups/%WorldName%/%SaveName%**' directory (on windows).  
-and your archived backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder (on windows).
+and your archived backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder (on windows).  
+
+P.S. You can also change the **UserGameData** property in your serverconfig.xml or in the game startup arguments. Then by default it will use the next directories:
+'**%UserGameData%/Backups/%WorldName%/%SaveName%**' for backups, and  
+'**%UserGameData%/Archive/%WorldName%/%SaveName%**' for archive
 
 # Commands
 You can use the '**backup**' command or its shortened version - the '**bp**' command
