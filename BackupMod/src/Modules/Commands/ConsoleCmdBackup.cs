@@ -40,7 +40,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
             { "list", "show all available backups" },
             { "restore", "restore a save from a backup" },
             { "delete", "delete a backup" },
-            { "start", "start an AutoBackup process (even if disabled in settings.json)" },
+            { "start", "start an auto backup process (even if disabled in settings.json)" },
             { "stop", "stop the current AutoBackup process" },
         };
         
