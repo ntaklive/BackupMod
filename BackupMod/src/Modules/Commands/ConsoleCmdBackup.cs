@@ -23,6 +23,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     private readonly IWorldInfoService _worldInfoService;
     [CanBeNull] private readonly IChatService _chatService;
     private readonly ILogger<ConsoleCmdBackup> _logger;
+    private readonly string HelpText;
 
     public ConsoleCmdBackup()
     {
@@ -31,6 +32,19 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         _worldInfoService = Provider.GetRequiredService<IWorldInfoService>();
         _chatService = Provider.GetService<IChatService>();
         _logger = Provider.GetRequiredService<ILogger<ConsoleCmdBackup>>();
+
+        Dictionary<string, string> dict = new()
+        {
+            { "", "perform a forceful backup" },
+            { "info", "show the current configuration of the mod" },
+            { "list", "show all available backups" },
+            { "restore", "restore a save from a backup" },
+            { "delete", "delete a backup" },
+            { "start", "start an AutoBackup process (even if disabled in settings.json)" },
+            { "stop", "stop the current AutoBackup process" },
+        };
+        int i = 1; int j = 1;
+        HelpText = $"Usage:\n  {string.Join("\n  ", dict.Keys.Select(command => $"{i++}. {GetCommands()[0]} {command}").ToList())}\nDescription Overview\n{string.Join("\n", dict.Values.Select(description => $"{j++}. {description}").ToList())}";
     }
     
     public override bool IsExecuteOnClient => false;
@@ -45,6 +59,8 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
 
     public override string GetDescription() =>
         "Some commands to simplify the creation of backups (commands are provided by BackupMod)";
+
+    public override string GetHelp() => HelpText;
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public override async void Execute(List<string> _params, CommandSenderInfo _senderInfo)
