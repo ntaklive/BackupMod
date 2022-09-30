@@ -23,7 +23,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     private readonly IWorldInfoService _worldInfoService;
     [CanBeNull] private readonly IChatService _chatService;
     private readonly ILogger<ConsoleCmdBackup> _logger;
-    private readonly string HelpText;
+    private readonly string _helpText;
 
     public ConsoleCmdBackup()
     {
@@ -33,7 +33,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
         _chatService = Provider.GetService<IChatService>();
         _logger = Provider.GetRequiredService<ILogger<ConsoleCmdBackup>>();
 
-        Dictionary<string, string> dict = new()
+        Dictionary<string, string> commandDescriptionDictionary = new()
         {
             { "", "perform a forceful backup" },
             { "info", "show the current configuration of the mod" },
@@ -43,8 +43,10 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
             { "start", "start an AutoBackup process (even if disabled in settings.json)" },
             { "stop", "stop the current AutoBackup process" },
         };
-        int i = 1; int j = 1;
-        HelpText = $"Usage:\n  {string.Join("\n  ", dict.Keys.Select(command => $"{i++}. {GetCommands()[0]} {command}").ToList())}\nDescription Overview\n{string.Join("\n", dict.Values.Select(description => $"{j++}. {description}").ToList())}";
+        
+        var i = 1;
+        var j = 1;
+        _helpText = $"Usage:\n  {string.Join("\n  ", commandDescriptionDictionary.Keys.Select(command => $"{i++}. {GetCommands()[0]} {command}").ToList())}\nDescription Overview\n{string.Join("\n", commandDescriptionDictionary.Values.Select(description => $"{j++}. {description}").ToList())}";
     }
     
     public override bool IsExecuteOnClient => false;
@@ -60,7 +62,7 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     public override string GetDescription() =>
         "Some commands to simplify the creation of backups (commands are provided by BackupMod)";
 
-    public override string GetHelp() => HelpText;
+    public override string GetHelp() => _helpText;
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public override async void Execute(List<string> _params, CommandSenderInfo _senderInfo)
