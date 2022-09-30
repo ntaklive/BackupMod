@@ -103,7 +103,7 @@ You can use the '**backup**' command or its shortened version - the '**bp**' com
 '**backup list**' - show all available backups  
 '**backup restore**' - restore a save from a backup  
 '**backup delete**' - delete a backup  
-'**backup start**' - start an AutoBackup process (even if disabled in settings.json)  
+'**backup start**' - start an auto backup process (even if disabled in settings.json)  
 '**backup stop**' - stop the current AutoBackup process  
 
 # Installation
