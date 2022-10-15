@@ -31,7 +31,7 @@ public partial class ConsoleCmdBackup
         string currentSaveName = _worldService.GetCurrentSaveName();
         string selectedWorldName = worldInfos[worldId.Value].Name;
         string selectedSaveName = worldInfos[worldId.Value].Saves[saveId.Value].Name;
-        if (currentWorldName == selectedWorldName && currentSaveName == selectedSaveName)
+        if (_worldService.GetCurrentWorld() != null && currentWorldName == selectedWorldName && currentSaveName == selectedSaveName)
         {
             _logger.LogError("This command cannot be executed on an active world save. Try to specify another parameters");
 
