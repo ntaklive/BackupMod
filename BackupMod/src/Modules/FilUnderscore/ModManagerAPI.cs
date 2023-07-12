@@ -37,7 +37,7 @@ namespace BackupMod.Modules.FilUnderscore
         {
             if(!IsModManagerLoaded())
             {
-                Log.Warning($"[{modInstance.ModInfo.Name.Value}] [Mod Manager API] Attempted to create mod settings while mod manager is not installed");
+                Log.Warning($"[{modInstance.Name}] [Mod Manager API] Attempted to create mod settings while mod manager is not installed");
                 return new ModSettings(modInstance, null);
             }
 
@@ -47,7 +47,7 @@ namespace BackupMod.Modules.FilUnderscore
             }
             catch
             {
-                Log.Warning($"[{modInstance.ModInfo.Name.Value}] [Mod Manager API] Failed to locate ModSettings instance in Mod Manager. Perhaps an out-of-date API version is being used?");
+                Log.Warning($"[{modInstance.Name}] [Mod Manager API] Failed to locate ModSettings instance in Mod Manager. Perhaps an out-of-date API version is being used?");
 
                 return new ModSettings(modInstance, null);
             }
@@ -75,7 +75,7 @@ namespace BackupMod.Modules.FilUnderscore
                 }
                 catch
                 {
-                    Log.Warning($"[{_modInstance.ModInfo.Name.Value}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
+                    Log.Warning($"[{_modInstance.Name}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
                 }
 
                 return new ModSetting<T>(this, key, null);
@@ -101,7 +101,7 @@ namespace BackupMod.Modules.FilUnderscore
                 }
                 catch
                 {
-                    Log.Warning($"[{_modInstance.ModInfo.Name.Value}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
+                    Log.Warning($"[{_modInstance.Name}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
                 }
 
                 return new ModSetting<string>(this, key, null);
@@ -118,7 +118,7 @@ namespace BackupMod.Modules.FilUnderscore
                 }
                 catch
                 {
-                    Log.Warning($"[{_modInstance.ModInfo.Name.Value}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
+                    Log.Warning($"[{_modInstance.Name}] [Mod Manager API] Failed to create Mod Setting instance. Perhaps an out-of-date API version is being used?");
                 }
 
                 return new ModSetting<string>(this, key, null);
@@ -133,7 +133,7 @@ namespace BackupMod.Modules.FilUnderscore
                 }
                 catch
                 {
-                    Log.Warning($"[{_modInstance.ModInfo.Name.Value}] [Mod Manager API] Failed to create Mod Setting tab. Perhaps an out-of-date API version is being used?");
+                    Log.Warning($"[{_modInstance.Name}] [Mod Manager API] Failed to create Mod Setting tab. Perhaps an out-of-date API version is being used?");
                 }
             }
 
@@ -158,7 +158,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to set allowed values for mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to set allowed values for mod setting {this._key}");
                     }
 
                     return this;
@@ -172,7 +172,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to set tab key {tabKey} for mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to set tab key {tabKey} for mod setting {this._key}");
                     }
 
                     return this;
@@ -186,7 +186,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to set minimum/maximum/increment values for mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to set minimum/maximum/increment values for mod setting {this._key}");
                     }
 
                     return this;
@@ -200,7 +200,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to set wrap flag for mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to set wrap flag for mod setting {this._key}");
                     }
 
                     return this;
@@ -214,7 +214,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to update mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to update mod setting {this._key}");
                     }
                 }
 
@@ -226,7 +226,7 @@ namespace BackupMod.Modules.FilUnderscore
                     }
                     catch
                     {
-                        Log.Warning($"[{_settingsInstance._modInstance.ModInfo.Name.Value}] [Mod Manager API] [Mod Settings] Failed to set enabled selector for mod setting {this._key}");
+                        Log.Warning($"[{_settingsInstance._modInstance.Name}] [Mod Manager API] [Mod Settings] Failed to set enabled selector for mod setting {this._key}");
                     }
 
                     return this;

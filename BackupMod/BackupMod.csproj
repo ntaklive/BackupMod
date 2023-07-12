@@ -58,13 +58,13 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include="FodyWeavers.xml" />
-        <Content Include="sdk\Alpha20.3b3\Assembly-CSharp.dll" />
-        <Content Include="sdk\Alpha20.3b3\LogLibrary.dll" />
-        <Content Include="sdk\Alpha20.3b3\System.Core.dll" />
-        <Content Include="sdk\Alpha20.3b3\System.dll" />
-        <Content Include="sdk\Alpha20.3b3\UnityEngine.AudioModule.dll" />
-        <Content Include="sdk\Alpha20.3b3\UnityEngine.CoreModule.dll" />
-        <Content Include="sdk\Alpha20.3b3\UnityEngine.dll" />
+        <Content Include="sdk\Alpha21b326\Assembly-CSharp.dll" />
+        <Content Include="sdk\Alpha21b326\LogLibrary.dll" />
+        <Content Include="sdk\Alpha21b326\System.Core.dll" />
+        <Content Include="sdk\Alpha21b326\System.dll" />
+        <Content Include="sdk\Alpha21b326\UnityEngine.AudioModule.dll" />
+        <Content Include="sdk\Alpha21b326\UnityEngine.CoreModule.dll" />
+        <Content Include="sdk\Alpha21b326\UnityEngine.dll" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="src\AssemblyInfo.cs" />
@@ -188,32 +188,32 @@
         <Reference Include="System.ServiceProcess" />
         <Reference Include="System.Transactions" />
         <Reference Include="Assembly-CSharp">
-            <HintPath>sdk\Alpha20.3b3\Assembly-CSharp.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\Assembly-CSharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="LogLibrary">
-            <HintPath>sdk\Alpha20.3b3\LogLibrary.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\LogLibrary.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System">
-            <HintPath>sdk\Alpha20.3b3\System.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\System.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.Core">
-            <HintPath>sdk\Alpha20.3b3\System.Core.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\System.Core.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
-            <HintPath>sdk\Alpha20.3b3\UnityEngine.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\UnityEngine.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.AudioModule">
-            <HintPath>sdk\Alpha20.3b3\UnityEngine.AudioModule.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\UnityEngine.AudioModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>sdk\Alpha20.3b3\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>sdk\Alpha21b326\UnityEngine.CoreModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.IO.Compression.Filesystem">

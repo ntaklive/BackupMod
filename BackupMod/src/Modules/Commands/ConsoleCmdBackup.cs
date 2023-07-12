@@ -53,13 +53,13 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
 
     public override bool AllowedInMainMenu => true;
 
-    public override string[] GetCommands() => new[]
+    protected override string[] getCommands() => new[]
     {
         "backup",
         "bp"
     };
 
-    public override string GetDescription() =>
+    protected override string getDescription() =>
         "Some commands to simplify the creation of backups (commands are provided by BackupMod)";
 
     public override string GetHelp() => _helpText;
