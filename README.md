@@ -1,11 +1,11 @@
 # BackupMod
 ![BackupModDemonstrationScreenV1.1.2](docs/demo.png)
 
-A 7 days to die modlet which makes it possible to automatically backup and restore your game saves
+A 7 days to die modlet which makes it possible to automatically backup and restore your game saves.
 
 # Settings
-You can configure the modlet by modifying the 'settings.json' file, or you can also use the [FilUnderscore's Mod Manager](https://github.com/FilUnderscore/ModManager/releases).  
-If you changed the configuration when you were in game, you should re-enter to your world to apply changed settings.
+You can configure the modlet by modifying the 'settings.json' file, or you can also use [FilUnderscore's Mod Manager](https://github.com/FilUnderscore/ModManager/releases).  
+If you changed the configuration when you were in game, you should re-enter your world to apply the changed settings.
 
 ```
 {
@@ -88,23 +88,25 @@ If you changed the configuration when you were in game, you should re-enter to y
   }
 }
 ```
-By default, your backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Backups/%WorldName%/%SaveName%**' directory (on windows).  
-and your archived backups for each save will be saved in the '**%AppData%/Roaming/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder (on windows).  
+By default, your backups for each save will be saved in the '**%AppData%/7DaysToDie/Backups/%WorldName%/%SaveName%**' directory (on windows).  
+and your archived backups for each save will be saved in the '**%AppData%/7DaysToDie/Archive/%WorldName%/%SaveName%**' folder (on windows).  
 
-P.S. You can also change the **UserGameData** property in your serverconfig.xml or in the game startup arguments. Then by default it will use the next directories:
+P.S. You can also change the **UserGameData** property in your serverconfig.xml or in the game startup arguments. Then by default it will use these directories:
 '**%UserGameData%/Backups/%WorldName%/%SaveName%**' for backups, and  
 '**%UserGameData%/Archive/%WorldName%/%SaveName%**' for archive
 
 # Commands
-You can use the '**backup**' command or its shortened version - the '**bp**' command
+You can use the '**backup**' command or its shortened version - the '**bp**' command:
 
-'**backup**' - perform a forceful backup  
-'**backup info**' - show the current configuration of the mod  
-'**backup list**' - show all available backups  
-'**backup restore**' - restore a save from a backup  
-'**backup delete**' - delete a backup  
-'**backup start**' - start an auto backup process (even if disabled in settings.json)  
-'**backup stop**' - stop the current AutoBackup process  
+| Command        | Explanation                                                |
+| ---            | ---                                                        |
+| backup         | Perform an immediate backup                                |
+| backup info    | Show the current configuration of this mod                 |
+| backup list    | Show all available backups                                 |
+| backup restore | Restore a save from a backup                               |
+| backup delete  | Delete a backup                                            |
+| backup start   | Start an auto-backup (even if disabled in `settings.json`) |
+| backup stop    | Stop the auto-backup currently in progress                 |
 
 # Installation
 1. Extract the downloaded .zip archive
