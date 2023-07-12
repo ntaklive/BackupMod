@@ -19,7 +19,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     /// <summary>
     /// A dynamically-modifiable collection of <see cref="ILoggerProvider"/>s.

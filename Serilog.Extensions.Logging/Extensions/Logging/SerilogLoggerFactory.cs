@@ -16,7 +16,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using Serilog.Debugging;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     /// <summary>
     /// A complete Serilog-backed implementation of the .NET Core logging infrastructure.

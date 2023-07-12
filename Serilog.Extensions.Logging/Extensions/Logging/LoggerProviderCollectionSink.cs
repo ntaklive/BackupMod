@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     class LoggerProviderCollectionSink : ILogEventSink, IDisposable
     {

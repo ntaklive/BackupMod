@@ -15,9 +15,9 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog.Extensions.Logging;
+using Serilog.Extensions.Logging.Extensions.Logging;
 
-namespace Serilog
+namespace Serilog.Extensions.Logging
 {
     /// <summary>
     /// Extends <see cref="ILoggingBuilder"/> with Serilog configuration methods.

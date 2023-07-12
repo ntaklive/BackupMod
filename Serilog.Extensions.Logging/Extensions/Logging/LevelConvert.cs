@@ -17,7 +17,7 @@ using Serilog.Events;
 
 // ReSharper disable RedundantCaseLabel
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     /// <summary>
     /// Converts between Serilog and Microsoft.Extensions.Logging level enum values.

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     class SerilogLoggerScope : IDisposable
     {

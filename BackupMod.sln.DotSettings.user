@@ -8,13 +8,38 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002EAudioModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005C7DaysToDie_0020mods_005CBackupMod_005Csdk_005CAlpha20_002E3b3_005CUnityEngine_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=20470383_002D4208_002D4900_002Dbea0_002Daf9e5d73f099/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;BackupModTests&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="E:\7DaysToDie mods\BackupMod\BackupModv2\sdk\Alpha21b324\Assembly-CSharp.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=20470383_002D4208_002D4900_002Dbea0_002Daf9e5d73f099/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BackupModTests&amp;gt; #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="E:\7DaysToDie mods\BackupMod\BackupModTests" Presentation="&amp;lt;BackupModTests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=305a6d71_002Db9d9_002D49c2_002D967d_002D656e3604a1db/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Parse_BackupCommandWithTitleArg_Success" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommandWithTitleArg_Success&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommandWithInvalidTitleArg_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommand_Success&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommandWithInvalidArgument_Fail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=49bb7ee9_002D3e84_002D4abd_002Db391_002D59bf7b1aa62b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9197f52c_002D3934_002D42f6_002Daaf5_002Ded69a8fd22ef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BackupModTests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="E:\7DaysToDie mods\BackupMod\BackupModTests" Presentation="&amp;lt;BackupModTests&amp;gt;" /&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c2ef6a23_002D2750_002D4ab8_002D92da_002D154d5a113600/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Parse_BackupCommandWithInvalidTitleArg_Fail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommandWithInvalidTitleArg_Fail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ca0a1533_002D9d53_002D494a_002Da64c_002D0f5220aa3b5e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Parse_BackupCommandWithInvalidArgument_Fail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::FF904850-C12E-4B8F-B651-9688A54B20E2::.NETFramework,Version=v4.8::ntaklive.BackupMod.Tests.CommandParserSpecs.Parse_BackupCommandWithInvalidArgument_Fail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	
+	
+	
+	
 	</wpf:ResourceDictionary>

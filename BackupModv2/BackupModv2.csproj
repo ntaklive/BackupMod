@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{016EAA8F-85C1-468A-9197-E4A717805C08}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>BackupMod</RootNamespace>
+        <AssemblyName>BackupModv2</AssemblyName>
+        <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PostBuildEvent>
+            RD /S /Q "$(SolutionDir)BackupModv2\bin\Publish"
+            del "$(TargetDir)*.xml" /q /s
+            del "$(TargetDir)*.pdb" /q /s
+            del "$(TargetDir)*.dll.config" /q /s
+            xcopy "$(SolutionDir)BackupModv2\bin\Release\*.*" "$(SolutionDir)BackupModv2\bin\Publish" /Y /I
+            xcopy "$(SolutionDir)BackupModv2\deps\common\libs\*.*" "$(SolutionDir)BackupModv2\bin\Publish" /Y /I
+            xcopy "$(SolutionDir)BackupModv2\deps\common\ModInfo.xml" "$(SolutionDir)BackupModv2\bin\Publish" /Y /I
+            xcopy "$(SolutionDir)BackupModv2\deps\common\settings.json" "$(SolutionDir)BackupModv2\bin\Publish" /Y /I
+            xcopy "$(SolutionDir)BackupModv2\deps\FilUnderscore\Manifest.xml" "$(SolutionDir)BackupModv2\bin\Publish" /Y /I
+            mkdir "$(SolutionDir)BackupModv2\bin\Publish\config"
+            xcopy "$(SolutionDir)BackupModv2\deps\FilUnderscore\config\localization.txt" "$(SolutionDir)BackupModv2\bin\Publish\config" /Y /I
+        </PostBuildEvent>
+    </PropertyGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="deps\common\libs\Serilog.dll" />
+        <AdditionalFiles Include="deps\common\libs\System.IO.Compression.dll" />
+        <AdditionalFiles Include="deps\common\libs\System.IO.Compression.FileSystem.dll" />
+        <AdditionalFiles Include="deps\common\ModInfo.xml" />
+        <AdditionalFiles Include="deps\common\settings.json" />
+        <AdditionalFiles Include="deps\FilUnderscore\config\localization.txt" />
+        <AdditionalFiles Include="deps\FilUnderscore\Manifest.xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="FodyWeavers.xml" />
+        <Content Include="sdk\Alpha21b324\Assembly-CSharp.dll" />
+        <Content Include="sdk\Alpha21b324\LogLibrary.dll" />
+        <Content Include="sdk\Alpha21b324\System.Core.dll" />
+        <Content Include="sdk\Alpha21b324\System.dll" />
+        <Content Include="sdk\Alpha21b324\UnityEngine.AudioModule.dll" />
+        <Content Include="sdk\Alpha21b324\UnityEngine.CoreModule.dll" />
+        <Content Include="sdk\Alpha21b324\UnityEngine.dll" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="src\AssemblyInfo.cs" />
+        <Compile Include="src\Configuration\Archive.cs" />
+        <Compile Include="src\Configuration\AutoBackup.cs" />
+        <Compile Include="src\Configuration\Root.cs" />
+        <Compile Include="src\Configuration\Events.cs" />
+        <Compile Include="src\Configuration\General.cs" />
+        <Compile Include="src\Configuration\Notifications.cs" />
+        <Compile Include="src\Manifest\AdditionalInfo.cs" />
+        <Compile Include="src\Manifest\CreationTime.cs" />
+        <Compile Include="src\Manifest\Root.cs" />
+        <Compile Include="src\Manifest\Save.cs" />
+        <Compile Include="src\Manifest\World.cs" />
+        <Compile Include="src\Modules\Base\EnumerableExtensions.cs" />
+        <Compile Include="src\Modules\Base\IModule.cs" />
+        <Compile Include="src\Modules\Base\ModuleBase.cs" />
+        <Compile Include="src\Modules\Base\ModuleExtensions.cs" />
+        <Compile Include="src\Modules\Base\ServiceProviderExtensions.cs" />
+        <Compile Include="src\Modules\Commands\CommandsModule.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackup.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupDelete.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupInfo.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupList.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupRestore.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupStart.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBackupStop.cs" />
+        <Compile Include="src\Modules\Commands\ConsoleCmdBase.cs" />
+        <Compile Include="src\Modules\Commands\Enums\ConsoleCmdType.cs" />
+        <Compile Include="src\Modules\Commands\EventArgs\ConsoleCmdEventArgs.cs" />
+        <Compile Include="src\Modules\Common\CommonModule.cs" />
+        <Compile Include="src\Modules\Common\EventHandlers.cs" />
+        <Compile Include="src\Modules\FilUnderscore\FilUnderscoreModule.cs" />
+        <Compile Include="src\Modules\Serilog\GameConsoleSink.cs" />
+        <Compile Include="src\Modules\Serilog\GameConsoleSinkExtensions.cs" />
+        <Compile Include="src\Modules\Serilog\SerilogModule.cs" />
+        <Compile Include="src\Services\Abstractions\Enum\ServerAccessibilityState.cs" />
+        <Compile Include="src\Services\Abstractions\Enum\ServerFillingState.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IArchiveService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IDirectoryService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IFileService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IFilesystem.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Filesystem\IPathService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IBlock.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IChatService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IConnectionManagerProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IGamePrefsProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IItem.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IPlatformManager.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IPlayerInputRecordingSystemProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IPlayersProvider.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\Game\IThreadManager.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IAutoBackupService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IBackupInfoFactory.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IWorldInfoService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IBackupManifestFactory.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IBackupManifestService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IConfigurationService.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\ISaveInfoFactory.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IServerStateWatcher.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IWorldInfoFactory.cs" />
+        <Compile Include="src\Services\Abstractions\Models\PlayerInfo.cs" />
+        <Compile Include="src\Services\Abstractions\Models\SaveInfo.cs" />
+        <Compile Include="src\Services\Abstractions\Models\ServerState.cs" />
+        <Compile Include="src\Services\Abstractions\Models\WorldInfo.cs" />
+        <Compile Include="src\Services\Abstractions\Models\WorldTime.cs" />
+        <Compile Include="src\Services\Implementations\AutoBackupService.cs" />
+        <Compile Include="src\Services\Implementations\BackupInfoFactory.cs" />
+        <Compile Include="src\Services\Implementations\WorldInfoService.cs" />
+        <Compile Include="src\Services\Implementations\BackupManifestFactory.cs" />
+        <Compile Include="src\Services\Implementations\BackupManifestService.cs" />
+        <Compile Include="src\Services\Implementations\ConfigurationService.cs" />
+        <Compile Include="src\Services\Implementations\Filesystem\ZipArchiveService.cs" />
+        <Compile Include="src\Services\Implementations\Filesystem\DirectoryService.cs" />
+        <Compile Include="src\Services\Implementations\Filesystem\FileService.cs" />
+        <Compile Include="src\Services\Implementations\Filesystem\Filesystem.cs" />
+        <Compile Include="src\Services\Implementations\Filesystem\PathService.cs" />
+        <Compile Include="src\Services\Implementations\Game\Block.cs" />
+        <Compile Include="src\Services\Implementations\Game\ChatService.cs" />
+        <Compile Include="src\Services\Implementations\Game\ConnectionManagerProvider.cs" />
+        <Compile Include="src\Services\Implementations\Game\GamePrefsProvider.cs" />
+        <Compile Include="src\Services\Implementations\Game\Item.cs" />
+        <Compile Include="src\Services\Implementations\Game\PlatformManager.cs" />
+        <Compile Include="src\Services\Implementations\Game\PlayerInputRecordingSystemProvider.cs" />
+        <Compile Include="src\Services\Implementations\Game\PlayersProvider.cs" />
+        <Compile Include="src\Services\Implementations\Game\ThreadManager.cs" />
+        <Compile Include="src\ModApi.cs" />
+        <Compile Include="src\Modules\FilUnderscore\ModManagerAPI.cs" />
+        <Compile Include="src\Services\Abstractions\Enum\BackupMode.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IAutoBackupProcess.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IResources.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IJsonSerializer.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IBackupManager.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IWorldSaveAlgorithm.cs" />
+        <Compile Include="src\Services\Abstractions\Interfaces\IWorldService.cs" />
+        <Compile Include="src\Services\Abstractions\Models\BackupInfo.cs" />
+        <Compile Include="src\Services\Implementations\AutoBackupProcess.cs" />
+        <Compile Include="src\Services\Implementations\Resources.cs" />
+        <Compile Include="src\Services\Implementations\JsonSerializer.cs" />
+        <Compile Include="src\Services\Implementations\BackupManager.cs" />
+        <Compile Include="src\Services\Implementations\SaveInfoFactory.cs" />
+        <Compile Include="src\Services\Implementations\ServerStateWatcher.cs" />
+        <Compile Include="src\Services\Implementations\WorldInfoFactory.cs" />
+        <Compile Include="src\Services\Implementations\WorldSaveAlgorithm.cs" />
+        <Compile Include="src\Services\Implementations\WorldService.cs" />
+        <Compile Include="src\Utils\Md5HashHelper.cs" />
+        <Compile Include="src\Utils\PathHelper.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="mscorlib" />
+        <Reference Include="System.ComponentModel.Composition" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Configuration" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Data.OracleClient" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.Net" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Security" />
+        <Reference Include="System.ServiceProcess" />
+        <Reference Include="System.Transactions" />
+        <Reference Include="Assembly-CSharp">
+            <HintPath>sdk\Alpha21b324\Assembly-CSharp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="LogLibrary">
+            <HintPath>sdk\Alpha21b324\LogLibrary.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System">
+            <HintPath>sdk\Alpha21b324\System.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System.Core">
+            <HintPath>sdk\Alpha21b324\System.Core.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine">
+            <HintPath>sdk\Alpha21b324\UnityEngine.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>sdk\Alpha21b324\UnityEngine.AudioModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>sdk\Alpha21b324\UnityEngine.CoreModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System.IO.Compression.Filesystem">
+            <HintPath>lib\System.IO.Compression.Filesystem.dll</HintPath>            
+            <Private>False</Private>
+        </Reference>
+<!--        <Reference Include="System.IO.Compression">-->
+<!--            <HintPath>lib\System.IO.Compression.dll</HintPath>-->
+<!--            <Private>False</Private>-->
+<!--        </Reference>-->
+        <Reference Include="Serilog">
+            <HintPath>lib\Serilog.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="WindowsBase" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="App.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Serilog.Extensions.Logging\Serilog.Extensions.Logging.csproj">
+        <Project>{625911f2-6820-4ab8-a155-8b8a840444ca}</Project>
+        <Name>Serilog.Extensions.Logging</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Costura.Fody" Version="5.7.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Fody" Version="6.6.3">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
+      <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.5" />
+      <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+      <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+      <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+      <PackageReference Include="System.AppContext" Version="4.3.0" />
+      <PackageReference Include="System.Buffers" Version="4.5.1" />
+      <PackageReference Include="System.Collections" Version="4.3.0" />
+      <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+      <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+      <PackageReference Include="System.Console" Version="4.3.1" />
+      <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+      <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
+      <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+      <PackageReference Include="System.Globalization.Calendars" Version="4.3.0" />
+      <PackageReference Include="System.IO" Version="4.3.0" />
+      <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+      <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+      <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+      <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Linq" Version="4.3.0" />
+      <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+      <PackageReference Include="System.Memory" Version="4.5.5" />
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+      <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
+      <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+      <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+      <PackageReference Include="System.ObjectModel" Version="4.3.0" />
+      <PackageReference Include="System.Reflection" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+      <PackageReference Include="System.Runtime" Version="4.3.1" />
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+      <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+      <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+      <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
+      <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+      <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
+      <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
+      <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+      <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
+      <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+      <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+      <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+      <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
+      <PackageReference Include="System.Text.Json" Version="6.0.5" />
+      <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+      <PackageReference Include="System.Threading" Version="4.3.0" />
+      <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+      <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+      <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+      <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
+      <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
+      <PackageReference Include="Theraot.Core" Version="3.2.11" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

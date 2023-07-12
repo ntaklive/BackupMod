@@ -3,9 +3,9 @@
 
 using System;
 using Microsoft.Extensions.Logging;
-using Serilog.Extensions.Logging;
+using Serilog.Extensions.Logging.Extensions.Logging;
 
-namespace Serilog
+namespace Serilog.Extensions.Logging
 {
     /// <summary>
     /// Extends <see cref="ILoggerFactory"/> with Serilog configuration methods.

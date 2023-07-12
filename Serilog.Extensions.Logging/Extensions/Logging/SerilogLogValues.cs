@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Serilog.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Serilog.Events;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     readonly struct SerilogLogValues : IReadOnlyList<KeyValuePair<string, object>>
     {

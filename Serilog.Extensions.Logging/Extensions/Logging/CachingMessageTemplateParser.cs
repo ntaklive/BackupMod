@@ -14,11 +14,11 @@
 
 
 using System;
+using System.Collections;
 using Serilog.Events;
 using Serilog.Parsing;
-using System.Collections;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     class CachingMessageTemplateParser
     {

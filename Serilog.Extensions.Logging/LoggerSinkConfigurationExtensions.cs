@@ -16,9 +16,9 @@ using System;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
-using Serilog.Extensions.Logging;
+using Serilog.Extensions.Logging.Extensions.Logging;
 
-namespace Serilog
+namespace Serilog.Extensions.Logging
 {
     /// <summary>
     /// Extensions for <see cref="LoggerSinkConfiguration"/>.

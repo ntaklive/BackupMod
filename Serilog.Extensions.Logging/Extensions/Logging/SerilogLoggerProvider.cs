@@ -2,15 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
 using FrameworkLogger = Microsoft.Extensions.Logging.ILogger;
-using System.Collections.Generic;
-using System.Threading;
-using Serilog.Context;
 
-namespace Serilog.Extensions.Logging
+namespace Serilog.Extensions.Logging.Extensions.Logging
 {
     /// <summary>
     /// An <see cref="ILoggerProvider"/> that pipes events through Serilog.

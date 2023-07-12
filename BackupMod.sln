@@ -1,8 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupMod", "BackupMod\BackupMod.csproj", "{016EAA8F-85C1-468A-9197-E4A717805C08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupModv2", "BackupModv2\BackupModv2.csproj", "{016EAA8F-85C1-468A-9197-E4A717805C08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Extensions.Logging", "Serilog.Extensions.Logging\Serilog.Extensions.Logging.csproj", "{625911F2-6820-4AB8-A155-8B8A840444CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntaklive.BackupMod", "ntaklive.BackupMod\ntaklive.BackupMod.csproj", "{3C82BC80-616B-4020-9515-C441D409AFCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntaklive.BackupMod.Tests", "ntaklive.BackupMod.Tests\ntaklive.BackupMod.Tests.csproj", "{FF904850-C12E-4B8F-B651-9688A54B20E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +22,13 @@ Global
 		{625911F2-6820-4AB8-A155-8B8A840444CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{625911F2-6820-4AB8-A155-8B8A840444CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{625911F2-6820-4AB8-A155-8B8A840444CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C82BC80-616B-4020-9515-C441D409AFCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C82BC80-616B-4020-9515-C441D409AFCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C82BC80-616B-4020-9515-C441D409AFCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C82BC80-616B-4020-9515-C441D409AFCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF904850-C12E-4B8F-B651-9688A54B20E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF904850-C12E-4B8F-B651-9688A54B20E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF904850-C12E-4B8F-B651-9688A54B20E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF904850-C12E-4B8F-B651-9688A54B20E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
