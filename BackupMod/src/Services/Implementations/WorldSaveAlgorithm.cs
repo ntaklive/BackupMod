@@ -90,8 +90,6 @@ public class WorldSaveAlgorithm : IWorldSaveAlgorithm
         World world = _worldService.GetCurrentWorld();
 
         world.Save();
-        world.SaveDecorations();
-        world.SaveWorldState();
     }
 
     protected virtual void SavePrimaryPlayerData()
@@ -124,7 +122,7 @@ public class WorldSaveAlgorithm : IWorldSaveAlgorithm
 
         _threadManager.AddSingleTask(
             primaryPlayer.ChunkObserver.mapDatabase.SaveAsync,
-            new MapChunkDatabase.DirectoryPlayerId(currentPlayerDataFolderPath, combinedString));
+            new IMapChunkDatabase.DirectoryPlayerId(currentPlayerDataFolderPath, combinedString));
     }
 
     protected virtual void SavePersistentPlayersData()

@@ -9,7 +9,7 @@ using BackupMod.Services.Abstractions.Filesystem;
 using BackupMod.Services.Abstractions.Game;
 using BackupMod.Services.Filesystem;
 using BackupMod.Services.Game;
-using BackupMod.Utils;
+using BackupMod.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using JsonSerializer = BackupMod.Services.JsonSerializer;
@@ -70,6 +70,7 @@ public sealed partial class CommonModule : ModuleBase
             return configuration.Notifications.Enabled
                 ? new ChatService(
                     ServiceProviderExtensions.GetRequiredService<IConnectionManagerProvider>(provider),
+                    ServiceProviderExtensions.GetRequiredService<IWorldService>(provider),
                     ServiceProviderExtensions.GetRequiredService<ILogger<ChatService>>(provider)
                 )
                 : null;
