@@ -29,7 +29,7 @@ public class ChatService : IChatService
     
     public void SendMessage(string text)
     {
-        ChatMessageServer(null, EChatType.Global, -1, Utils.CreateGameMessage("BackupMod", text), null, EMessageSender.Server);
+        ChatMessageServer(null, EChatType.Global, -1, Utils.CreateGameMessage("BackupMod", text), null, EMessageSender.None);
     }
 
     // The official Release 1.1 b14 implementation but just without junk logging
