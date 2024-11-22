@@ -10,6 +10,7 @@
         <RootNamespace>BackupMod</RootNamespace>
         <AssemblyName>BackupMod</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <RuntimeIdentifier>win</RuntimeIdentifier>
         <FileAlignment>512</FileAlignment>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
@@ -39,25 +40,24 @@
             del "$(TargetDir)*.pdb" /q /s
             del "$(TargetDir)*.dll.config" /q /s
             xcopy "$(SolutionDir)BackupMod\bin\Release\*.*" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
-            xcopy "$(SolutionDir)BackupMod\deps\common\libs\*.*" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             xcopy "$(SolutionDir)BackupMod\deps\common\ModInfo.xml" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             xcopy "$(SolutionDir)BackupMod\deps\common\settings.json" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             xcopy "$(SolutionDir)BackupMod\deps\FilUnderscore\Manifest.xml" "$(SolutionDir)BackupMod\bin\Publish" /Y /I
             mkdir "$(SolutionDir)BackupMod\bin\Publish\config"
             xcopy "$(SolutionDir)BackupMod\deps\FilUnderscore\config\localization.txt" "$(SolutionDir)BackupMod\bin\Publish\config" /Y /I
+            del "$(SolutionDir)BackupMod\bin\Publish\System.Runtime.dll" /q /s
+            del "$(SolutionDir)BackupMod\bin\Publish\System.Runtime.CompilerServices.Unsafe.dll" /q /s
+            del "$(SolutionDir)BackupMod\bin\Publish\System.Runtime.InteropServices.dll" /q /s
+            del "$(SolutionDir)BackupMod\bin\Publish\System.Runtime.InteropServices.RuntimeInformation.dll" /q /s
         </PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
-        <AdditionalFiles Include="deps\common\libs\Serilog.dll" />
-        <AdditionalFiles Include="deps\common\libs\System.IO.Compression.dll" />
-        <AdditionalFiles Include="deps\common\libs\System.IO.Compression.FileSystem.dll" />
         <AdditionalFiles Include="deps\common\ModInfo.xml" />
         <AdditionalFiles Include="deps\common\settings.json" />
         <AdditionalFiles Include="deps\FilUnderscore\config\localization.txt" />
         <AdditionalFiles Include="deps\FilUnderscore\Manifest.xml" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="FodyWeavers.xml" />
         <Content Include="sdk\Release1.1b14\Assembly-CSharp.dll" />
         <Content Include="sdk\Release1.1b14\LogLibrary.dll" />
         <Content Include="sdk\Release1.1b14\System.Core.dll" />
@@ -240,14 +240,6 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Costura.Fody" Version="5.7.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Fody" Version="6.6.3">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
       <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
       <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
