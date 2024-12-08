@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using BackupMod.Services.Abstractions.Filesystem;
 using BackupMod.Utilities;
 using Microsoft.Extensions.Logging;
@@ -26,9 +27,21 @@ public class FileService : IFileService
         string fixedSourceFilepath = PathHelper.FixFolderPathSeparators(sourceFilepath);
         string fixedDestinationFilepath = PathHelper.FixFolderPathSeparators(destinationFilepath);
 
-        File.Copy(fixedSourceFilepath, fixedDestinationFilepath, overwrite);
-        
-        _logger.LogDebug("");
+        var isFileLocked = true;
+        while (isFileLocked)
+        {
+            try
+            {
+                using var sourceFileStream = new FileStream(fixedSourceFilepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var destinationFileStream = new FileStream(fixedDestinationFilepath, FileMode.Create, FileAccess.Write, FileShare.None);
+                sourceFileStream.CopyTo(destinationFileStream);
+                isFileLocked = false;
+            }
+            catch (IOException)
+            {
+                Task.Delay(100).Wait();
+            }
+        }
     }
 
     public void WriteAllText(string filepath, string text)

@@ -9,10 +9,12 @@ namespace BackupMod.Services.Filesystem;
 
 public class DirectoryService : IDirectoryService
 {
+    private readonly IFileService _fileService;
     private readonly ILogger<DirectoryService> _logger;
 
-    public DirectoryService(ILogger<DirectoryService> logger)
+    public DirectoryService(IFileService fileService, ILogger<DirectoryService> logger)
     {
+        _fileService = fileService;
         _logger = logger;
     }
     
@@ -33,7 +35,7 @@ public class DirectoryService : IDirectoryService
             string targetFilepath = Path.Combine(destinationPath, file.Name);
             
             _logger.LogTrace("Copying the file from '{SourcePath}' to '{DestinationPath}' ", targetFilepath, destinationPath);
-            file.CopyTo(targetFilepath);
+            _fileService.Copy(file.FullName, targetFilepath, true);
         }
 
         if (recursive)
