@@ -24,10 +24,12 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
     [CanBeNull] private readonly IChatService _chatService;
     private readonly ILogger<ConsoleCmdBackup> _logger;
     private readonly string _helpText;
+    private readonly IWorldSaveAlgorithm _worldSaveAlgorithm;
 
     public ConsoleCmdBackup()
     {
         _worldService = Provider.GetRequiredService<IWorldService>();
+        _worldSaveAlgorithm = Provider.GetRequiredService<IWorldSaveAlgorithm>();
         _backupManager = Provider.GetRequiredService<IBackupManager>();
         _worldInfoService = Provider.GetRequiredService<IWorldInfoService>();
         _chatService = Provider.GetService<IChatService>();
@@ -182,9 +184,13 @@ public partial class ConsoleCmdBackup : ConsoleCmdBase
 
             return;
         }
+        _chatService?.SendMessage("The manual backup will be made in 5 seconds");
 
+        _worldSaveAlgorithm.Save();
+        await Task.Delay(5000);
+        
         (BackupInfo backupInfo, TimeSpan timeElapsed) result =
-            await _backupManager.CreateAsync("Manual backup", BackupMode.SaveAllAndBackup);
+            await _backupManager.CreateAsync("Manual backup");
 
         _logger.LogInformation("The manual backup was successfully completed");
         _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");

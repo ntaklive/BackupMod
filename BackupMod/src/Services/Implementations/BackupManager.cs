@@ -51,10 +51,10 @@ public class BackupManager : IBackupManager
         _logger = logger;
     }
 
-    public Task<(BackupInfo backupInfo, TimeSpan timeElapsed)> CreateAsync(string title, BackupMode mode,
+    public Task<(BackupInfo backupInfo, TimeSpan timeElapsed)> CreateAsync(string title,
         CancellationToken token = default)
     {
-        return Task.Factory.StartNew(() => Create(title, mode), token);
+        return Task.Factory.StartNew(() => Create(title), token);
     }
 
     public Task RestoreAsync(BackupInfo backupInfo, CancellationToken token = default)
@@ -67,14 +67,9 @@ public class BackupManager : IBackupManager
         return Task.Factory.StartNew(() => Delete(backupInfo), token);
     }
 
-    private (BackupInfo backupInfo, TimeSpan timeElapsed) Create(string title, BackupMode mode)
+    private (BackupInfo backupInfo, TimeSpan timeElapsed) Create(string title)
     {
         var stopwatch = Stopwatch.StartNew();
-
-        if (mode == BackupMode.SaveAllAndBackup)
-        {
-            _saveAlgorithm.Save();
-        }
 
         string worldName = _worldService.GetCurrentWorldName();
         string saveName = _worldService.GetCurrentSaveName();

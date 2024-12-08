@@ -34,7 +34,12 @@ public sealed partial class CommonModule : ModuleBase
 
         CreateRequiredFolders();
 
-        ModEvents.GameStartDone.RegisterHandler(() => _ = GameStartDoneHandlerFuncAsync(provider));
+        ModEvents.GameStartDone.RegisterHandler(() => _ = GameStartDoneHandlerFuncAsync(provider).ContinueWith(x => {
+            if (x.IsFaulted)
+            {
+                _logger.LogError(x.Exception,"fail.");
+            }
+        }));
     }
 
     public override void ConfigureServices(IServiceCollection services)
@@ -53,6 +58,7 @@ public sealed partial class CommonModule : ModuleBase
             ServiceProviderExtensions.GetRequiredService<ILogger<FileService>>(provider)
         ));
         services.AddSingleton<IDirectoryService>(provider => new DirectoryService(
+            ServiceProviderExtensions.GetRequiredService<IFileService>(provider),
             ServiceProviderExtensions.GetRequiredService<ILogger<DirectoryService>>(provider)
         ));
         services.AddSingleton<IPathService>(_ => new PathService());
@@ -116,6 +122,7 @@ public sealed partial class CommonModule : ModuleBase
             ServiceProviderExtensions.GetRequiredService<ModConfiguration>(provider),
             ServiceProviderExtensions.GetRequiredService<IBackupManager>(provider),
             ServiceProviderExtensions.GetRequiredService<IServerStateWatcher>(provider),
+            ServiceProviderExtensions.GetService<IWorldSaveAlgorithm>(provider),
             ServiceProviderExtensions.GetService<IChatService>(provider),
             ServiceProviderExtensions.GetRequiredService<ILogger<AutoBackupProcess>>(provider)
         ));

@@ -33,7 +33,6 @@ public sealed partial class CommonModule
         _logger.LogTrace("Saves directory path: {Path}", _resources.GetSavesDirectoryPath());
         _logger.LogTrace("Worlds directory path: {Path}", _resources.GetWorldsDirectoryPath());
 
-
         void OnConsoleCommandExecuted(object sender, ConsoleCmdEventArgs args)
         {
             if (args.CommandType == ConsoleCmdType.BackupStop)
@@ -75,8 +74,7 @@ public sealed partial class CommonModule
 
         if (_configuration.Events.BackupOnWorldLoaded)
         {
-            (BackupInfo backupInfo, TimeSpan timeElapsed) result =
-                await _backupManager.CreateAsync("Initial backup", BackupMode.BackupOnly);
+            (BackupInfo backupInfo, TimeSpan timeElapsed) result = await _backupManager.CreateAsync("Initial backup");
             _logger.LogInformation("The initial backup has completed successfully");
             _logger.LogInformation($"The backup file location: \"{result.backupInfo.Filepath}\"");
         }

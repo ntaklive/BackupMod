@@ -8,7 +8,7 @@ namespace BackupMod.Services.Abstractions;
 
 public interface IBackupManager
 {
-    public Task<(BackupInfo backupInfo, TimeSpan timeElapsed)> CreateAsync(string title, BackupMode mode, CancellationToken token = default);
+    public Task<(BackupInfo backupInfo, TimeSpan timeElapsed)> CreateAsync(string title, CancellationToken token = default);
 
     public Task RestoreAsync(BackupInfo backupInfo, CancellationToken token = default);
     
