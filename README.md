@@ -113,7 +113,7 @@ You can use the '**backup**' command or its shortened version - the '**bp**' com
 2. Move the extracted 'BackupMod' folder to your 'Mods' folder
 
 # Compatibility
-Required game version: Alpha 20
+Required game version: V1.1+
 
 # EAC Compatibility
 Server only. To load in single-player mode, you must disable EAC.
