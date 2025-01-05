@@ -124,4 +124,6 @@ Server only. To load in single-player mode, you must disable EAC.
 [Unofficial] [7daystodiemods.com](https://7daystodiemods.com/backup-mod/)
 
 # Support
-[!["Buy Me A Coffee"](docs/buymeacoffee.svg)](https://www.buymeacoffee.com/ntaklive)
+Coin: USDT
+Network: BSC - BNB Smart Chain (BEP20)
+Address: 0xb7a5bf6e55739aaf848a0a54161a45e9b580a5a2
