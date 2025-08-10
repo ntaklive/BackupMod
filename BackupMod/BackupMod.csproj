@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>BackupMod</RootNamespace>
         <AssemblyName>BackupMod</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <RuntimeIdentifier>win</RuntimeIdentifier>
         <FileAlignment>512</FileAlignment>
         <LangVersion>10</LangVersion>
@@ -58,13 +58,13 @@
         <AdditionalFiles Include="deps\FilUnderscore\Manifest.xml" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="sdk\Release1.1b14\Assembly-CSharp.dll" />
-        <Content Include="sdk\Release1.1b14\LogLibrary.dll" />
-        <Content Include="sdk\Release1.1b14\System.Core.dll" />
-        <Content Include="sdk\Release1.1b14\System.dll" />
-        <Content Include="sdk\Release1.1b14\UnityEngine.AudioModule.dll" />
-        <Content Include="sdk\Release1.1b14\UnityEngine.CoreModule.dll" />
-        <Content Include="sdk\Release1.1b14\UnityEngine.dll" />
+        <Content Include="sdk\Release2.2b3\Assembly-CSharp.dll" />
+        <Content Include="sdk\Release2.2b3\LogLibrary.dll" />
+        <Content Include="sdk\Release2.2b3\System.Core.dll" />
+        <Content Include="sdk\Release2.2b3\System.dll" />
+        <Content Include="sdk\Release2.2b3\UnityEngine.AudioModule.dll" />
+        <Content Include="sdk\Release2.2b3\UnityEngine.CoreModule.dll" />
+        <Content Include="sdk\Release2.2b3\UnityEngine.dll" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="src\AssemblyInfo.cs" />
@@ -188,32 +188,32 @@
         <Reference Include="System.ServiceProcess" />
         <Reference Include="System.Transactions" />
         <Reference Include="Assembly-CSharp">
-            <HintPath>sdk\Release1.1b14\Assembly-CSharp.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\Assembly-CSharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="LogLibrary">
-            <HintPath>sdk\Release1.1b14\LogLibrary.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\LogLibrary.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System">
-            <HintPath>sdk\Release1.1b14\System.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\System.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.Core">
-            <HintPath>sdk\Release1.1b14\System.Core.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\System.Core.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
-            <HintPath>sdk\Release1.1b14\UnityEngine.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\UnityEngine.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.AudioModule">
-            <HintPath>sdk\Release1.1b14\UnityEngine.AudioModule.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\UnityEngine.AudioModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>sdk\Release1.1b14\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>sdk\Release2.2b3\UnityEngine.CoreModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.IO.Compression.Filesystem">
@@ -307,8 +307,8 @@
       <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
       <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
       <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-      <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
-      <PackageReference Include="System.Text.Json" Version="6.0.5" />
+      <PackageReference Include="System.Text.Encodings.Web" Version="6.0.1" />
+      <PackageReference Include="System.Text.Json" Version="6.0.11" />
       <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
       <PackageReference Include="System.Threading" Version="4.3.0" />
       <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />

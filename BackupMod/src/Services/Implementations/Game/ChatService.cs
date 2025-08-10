@@ -45,23 +45,23 @@ public class ChatService : IChatService
       {
           if (_connectionManager.IsServer)
           {
-              ChatMessageClient(_chatType, _senderEntityId, _msg, _recipientEntityIds, _msgSender);
+              ChatMessageClient(_chatType, _senderEntityId, _msg, _recipientEntityIds);
               if (_recipientEntityIds != null)
               {
                   foreach (int recipientEntityId in _recipientEntityIds)
                       SingletonMonoBehaviour<ConnectionManager>.Instance.Clients.ForEntityId(recipientEntityId)
                           ?.SendPackage((NetPackage)NetPackageManager.GetPackage<NetPackageChat>()
-                              .Setup(_chatType, _senderEntityId, _msg, (List<int>)null, _msgSender));
+                              .Setup(_chatType, _senderEntityId, _msg, (List<int>)null, _msgSender, GeneratedTextManager.BbCodeSupportMode.Supported));
               }
               else
                   SingletonMonoBehaviour<ConnectionManager>.Instance.SendPackage(
                       (NetPackage)NetPackageManager.GetPackage<NetPackageChat>().Setup(_chatType, _senderEntityId, _msg,
-                          (List<int>)null, _msgSender), true);
+                          (List<int>)null, _msgSender, GeneratedTextManager.BbCodeSupportMode.Supported), true);
           }
           else
               SingletonMonoBehaviour<ConnectionManager>.Instance.SendToServer((NetPackage)NetPackageManager
                   .GetPackage<NetPackageChat>()
-                  .Setup(_chatType, _senderEntityId, _msg, _recipientEntityIds, _msgSender));
+                  .Setup(_chatType, _senderEntityId, _msg, _recipientEntityIds, _msgSender, GeneratedTextManager.BbCodeSupportMode.Supported));
       }
       catch
       {
@@ -73,8 +73,7 @@ public class ChatService : IChatService
     EChatType _chatType,
     int _senderEntityId,
     string _msg,
-    List<int> _recipientEntityIds,
-    EMessageSender _msgSender)
+    List<int> _recipientEntityIds)
   {
     if (GameManager.IsDedicatedServer)
       return;
@@ -84,7 +83,7 @@ public class ChatService : IChatService
     foreach (EntityPlayerLocal localPlayer in world.GetLocalPlayers())
     {
       if (_recipientEntityIds == null || _recipientEntityIds.Contains(localPlayer.entityId))
-        XUiC_ChatOutput.AddMessage(LocalPlayerUI.GetUIForPlayer(localPlayer).xui, EnumGameMessages.Chat, _chatType, _msg, _senderEntityId, _msgSender, GeneratedTextManager.TextFilteringMode.Filter);
+        XUiC_ChatOutput.AddMessage(LocalPlayerUI.GetUIForPlayer(localPlayer).xui, EnumGameMessages.Chat, _msg, _chatType, EChatDirection.None, _senderEntityId);
     }
   }
 }

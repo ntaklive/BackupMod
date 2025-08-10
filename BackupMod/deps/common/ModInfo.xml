@@ -2,7 +2,7 @@
 <xml>
     <Name value="ntaklive_BackupMod" />
     <DisplayName value="Backup mod" />
-    <Version value="2.3.3.0" />
+    <Version value="2.4.0.0" />
     <Description value="This modlet makes it possible to automatically backup your game saves" />
     <Author value="ntaklive" />
     <Website value="https://github.com/ntaklive/BackupMod" />

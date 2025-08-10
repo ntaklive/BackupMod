@@ -45,7 +45,7 @@ public sealed class SerilogModule : ModuleBase
 
         Logger = loggerConfiguration.CreateLogger();
 
-        ModEvents.GameShutdown.RegisterHandler(CloseAndFlush);
+        ModEvents.GameShutdown.RegisterHandler((ref ModEvents.SGameShutdownData _) => CloseAndFlush());
     }
 
     public override void ConfigureServices(IServiceCollection services)

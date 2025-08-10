@@ -34,7 +34,7 @@ public sealed partial class CommonModule : ModuleBase
 
         CreateRequiredFolders();
 
-        ModEvents.GameStartDone.RegisterHandler(() => _ = GameStartDoneHandlerFuncAsync(provider).ContinueWith(x => {
+        ModEvents.GameStartDone.RegisterHandler((ref ModEvents.SGameStartDoneData _) => GameStartDoneHandlerFuncAsync(provider).ContinueWith(x => {
             if (x.IsFaulted)
             {
                 _logger.LogError(x.Exception,"fail.");
